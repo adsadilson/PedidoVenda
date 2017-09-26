@@ -7,25 +7,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "categoria_produto")
-@SequenceGenerator(name = "CATEGORIA_PRODUTO_ID", sequenceName = "CATEGORIA_PRODUTO_SEQ", allocationSize = 1)
-public class CategoriaProduto implements Serializable {
+@Table(name = "subcategoria_produto")
+@SequenceGenerator(name = "SUBCATEGORIA_PRODUTO_ID", sequenceName = "SUBCATEGORIA_PRODUTO_SEQ", allocationSize = 1)
+public class SubCategoriaProduto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "CATEGORIA_PRODUTO_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SUBCATEGORIA_PRODUTO_ID")
 	private Long id;
 
 	@Column(name = "nome", nullable = true, length = 80)
 	private String nome;
 
 	@Column(name = "status", nullable = false, length = 1)
-	private Boolean status = true;
+	private Boolean status;
+
+	@ManyToOne
+	@JoinColumn(name = "categoria_produto_id")
+	private CategoriaProduto categoria;
 
 	public Long getId() {
 		return id;
@@ -51,6 +57,14 @@ public class CategoriaProduto implements Serializable {
 		this.status = status;
 	}
 
+	public CategoriaProduto getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(CategoriaProduto categoria) {
+		this.categoria = categoria;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,7 +81,7 @@ public class CategoriaProduto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CategoriaProduto other = (CategoriaProduto) obj;
+		SubCategoriaProduto other = (SubCategoriaProduto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

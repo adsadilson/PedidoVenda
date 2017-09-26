@@ -28,7 +28,7 @@ public class UnidadeMedida implements Serializable {
 	private String descricao;
 
 	@Column(name = "status", nullable = false, length = 1)
-	private Boolean status;
+	private Boolean status = true;
 
 	public Long getId() {
 		return id;

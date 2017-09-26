@@ -8,6 +8,7 @@ public class CategoriaProdutoFilter implements Serializable {
 
 	private String nome;
 	private Boolean status;
+	private String origem;
 
 	public String getNome() {
 		return nome;
@@ -23,6 +24,14 @@ public class CategoriaProdutoFilter implements Serializable {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+	public void setOrigem(String origem) {
+		this.origem = origem;
+	}
+
+	public String getOrigem() {
+		return origem;
 	}
 
 }

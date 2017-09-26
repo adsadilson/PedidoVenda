@@ -43,8 +43,9 @@
 					<p:separator />
 					<p:submenu label="Produtos">
 						<p:menuitem value="Produto" />
-						<p:menuitem value="Categoria de Produto" />
-						<p:menuitem value="Unidade de Medida" />
+						<p:menuitem value="Categorias" outcome="/pages/cadastros/categoria_produtos/lista-categoria-produto.xhtml"/>
+						<p:menuitem value="Sub-Categorias" outcome="/pages/cadastros/categoria_produtos/lista-categoria-produto.xhtml"/>
+						<p:menuitem value="Unidade de Medida" outcome="/pages/cadastros/unidade_medidas/lista-unidade-medida.xhtml"/>
 					</p:submenu>
 					<p:menuitem value="Produtos" />
 				</p:submenu>
@@ -59,7 +60,7 @@
 	<div style="clear: both"></div>
 	</header>
 
-	<div id="conteudo">
+	<div id="conteudo" style="height: 500px;">
 		<ui:insert name="corpo" />
 	</div>
 
