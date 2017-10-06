@@ -176,10 +176,10 @@ public class Pessoa implements Serializable {
 	private BigDecimal renda;
 
 	@Column(name = "tipo_pessoa", length = 1)
-	private String tipoPessoa;
+	private String tipoPessoa = "F";
 
 	@Column(name = "status", length = 1)
-	private Boolean status;
+	private Boolean status = true;
 
 	@Column(name = "trabalha", length = 1)
 	private Boolean trabalha;

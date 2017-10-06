@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.br.apss.pedidovenda.enums.TipoEndereco;
 
 @Entity
 @Table(name = "endereco")
@@ -43,6 +47,10 @@ public class Endereco implements Serializable {
 
 	@Column(length = 10)
 	private String cep;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_endereco", length = 25)
+	private TipoEndereco tipo;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", nullable = false)
@@ -118,6 +126,14 @@ public class Endereco implements Serializable {
 
 	public String getBairro() {
 		return bairro;
+	}
+
+	public TipoEndereco getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoEndereco tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override

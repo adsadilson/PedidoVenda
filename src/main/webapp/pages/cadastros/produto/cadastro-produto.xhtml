@@ -1,0 +1,162 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Manutenção de Produto</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.rotulo {
+	width: 100px;
+}
+</style>
+
+		<f:metadata>
+			<o:viewParam name="codigo" value="#{cadastroProdutoBean.idProduto}"
+				converter="javax.faces.Long" />
+			<o:viewAction action="#{cadastroProdutoBean.inicializar()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			<h1>#{cadastroProdutoBean.produto.id != null ? 'Edição de
+				Produto' : 'Novo Produto'}</h1>
+
+			<p:growl autoUpdate="true" />
+
+			<p:focus for="nome" />
+
+
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
+						action="#{cadastroProdutoBean.salvar}" update="painel" />
+					<p:button value="Limpar" icon="fa fa-eraser"
+						outcome="/pages/cadastros/produto/cadastro-produto" />
+					<p:button value="Voltar" icon="fa fa-refresh"
+						outcome="/pages/cadastros/produto/lista-produto" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panel style="margin-top: 20px">
+
+				<h:panelGrid columns="2" id="painel" style="width: 100%;"
+					columnClasses="rotulo">
+
+					<p:outputLabel value="Sku" for="sku" />
+					<p:inputText id="sku" style="width:10%" maxlength="5"
+						required="true" requiredMessage="O campo 'SKU' é obrigatório."
+						value="#{cadastroProdutoBean.produto.sku}" />
+
+					<p:outputLabel value="Código de Barra" />
+					<p:inputText style="width:15%" maxlength="13"
+						value="#{cadastroProdutoBean.produto.codigoBarra}" />
+
+					<p:outputLabel value="Descrição" for="nome" />
+					<p:inputText id="nome" style="width:25%" maxlength="80"
+						required="true" requiredMessage="O campo 'NOME' é obrigatório."
+						value="#{cadastroProdutoBean.produto.nome}" />
+
+					<p:outputLabel value="Categoria" for="categoria" />
+					<p:selectOneMenu id="categoria" required="true"
+						converter="omnifaces.SelectItemsConverter" autoWidth="true"
+						style="width:23.5%;" filter="true" filterMatchMode="contains"
+						requiredMessage="O campo 'CATEGORIA' é obrigatório."
+						value="#{cadastroProdutoBean.produto.categoria}">
+						<f:selectItem itemLabel="Selecione..." value="#{null}" />
+						<f:selectItems value="#{cadastroProdutoBean.categorias}"
+							var="categoria" itemValue="#{categoria}"
+							itemLabel="#{categoria.nome}" />
+						<p:ajax
+							listener="#{cadastroProdutoBean.listarSubCategoriasFiltrada()}"
+							update="subcategoria" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="SubCategoria" for="subcategoria" />
+					<p:selectOneMenu id="subcategoria" required="true" autoWidth="true"
+						style="width:23.5%;" converter="omnifaces.SelectItemsConverter"
+						filter="true" filterMatchMode="contains"
+						requiredMessage="O campo 'SUBCATEGORIA' é obrigatório."
+						value="#{cadastroProdutoBean.produto.subCategoria}">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{cadastroProdutoBean.subCategorias}"
+							var="subcategoria" itemValue="#{subcategoria}"
+							itemLabel="#{subcategoria.nome}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Unidade" for="unidade" />
+					<p:selectOneMenu id="unidade" required="true" autoWidth="true"
+						style="width:23.5%;" converter="omnifaces.SelectItemsConverter"
+						filter="true" filterMatchMode="contains"
+						requiredMessage="O campo 'UNIDADE DE MEDIDA' é obrigatório."
+						value="#{cadastroProdutoBean.produto.unidade}">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{cadastroProdutoBean.unidades}"
+							var="unidade" itemValue="#{unidade}"
+							itemLabel="#{unidade.nome} - #{unidade.descricao}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Tipo" for="tipo" />
+					<p:selectOneMenu id="tipo" required="true" autoWidth="true"
+						style="width:23.5%;" converter="omnifaces.SelectItemsConverter"
+						filter="true" filterMatchMode="contains"
+						requiredMessage="O campo 'TIPO' é obrigatório."
+						value="#{cadastroProdutoBean.produto.tipoProduto}">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{cadastroProdutoBean.tipos}" var="tipo"
+							itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Valor Venda" for="txtVenda" />
+					<p:inputNumber size="10" id="txtVenda" required="true"
+						emptyValue="empty" value="#{cadastroProdutoBean.produto.vlrVenda}"
+						symbol="R$ " decimalSeparator="," thousandSeparator=".">
+						<p:ajax process="@this txtCusto" update="txtMarLucro txtLucro"
+							listener="#{cadastroProdutoBean.calcVenda}" />
+					</p:inputNumber>
+
+					<p:outputLabel value="Valor Custo" for="txtCusto" />
+					<p:inputNumber size="10" id="txtCusto" required="true"
+						emptyValue="empty" value="#{cadastroProdutoBean.produto.vlrCusto}"
+						symbol="R$ " decimalSeparator="," thousandSeparator=".">
+						<p:ajax process="txtVenda @this"
+							update="txtMarLucro txtCusto txtLucro"
+							listener="#{cadastroProdutoBean.calcVenda}" />
+					</p:inputNumber>
+
+					<p:outputLabel value="Margem L (%)" />
+					<p:inputNumber id="txtMarLucro" size="10" required="true"
+						emptyValue="empty"
+						value="#{cadastroProdutoBean.produto.margLucro}" symbol="%"
+						symbolPosition="s">
+						<p:ajax process="@this, txtCusto" update="txtVenda txtLucro"
+							listener="#{cadastroProdutoBean.calcMargem}" />
+					</p:inputNumber>
+
+					<p:outputLabel for="txtLucro" value="Lucro" />
+					<p:inputNumber size="10" id="txtLucro" readonly="true"
+						value="#{cadastroProdutoBean.produto.lucro}" symbol="R$ "
+						decimalSeparator="," thousandSeparator="." />
+
+					<p:outputLabel value="Estoque" for="estoque" />
+					<p:inputText id="estoque" size="10" maxlength="5"
+						value="#{cadastroProdutoBean.produto.quantidade}" />
+
+					<p:outputLabel value="Ativo" />
+					<p:selectBooleanCheckbox
+						value="#{cadastroProdutoBean.produto.status}" />
+
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

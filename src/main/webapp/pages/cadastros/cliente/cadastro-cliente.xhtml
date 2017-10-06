@@ -1,0 +1,324 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Manutenção de Cliente</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.rotulo {
+	width: 100px;
+}
+</style>
+
+		<f:metadata>
+			<o:viewParam name="codigo" value="#{cadastroClienteBean.idCliente}"
+				converter="javax.faces.Long" />
+			<o:viewAction action="#{cadastroClienteBean.inicializar()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			<h1>#{cadastroClienteBean.cliente.id != null ? 'Edição de
+				Cliente' : 'Novo Cliente'}</h1>
+
+			<p:growl autoUpdate="true" />
+
+			<p:focus for="nome" />
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
+						action="#{cadastroClienteBean.salvar}" update="painel" />
+					<p:button value="Limpar" icon="fa fa-eraser"
+						outcome="/pages/cadastros/cliente/cadastro-cliente" />
+					<p:button value="Voltar" icon="fa fa-refresh"
+						outcome="/pages/cadastros/cliente/lista-cliente" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panel style="margin-top: 20px; margin-bottom:5px;">
+
+				<h:panelGrid columns="2" id="painel" style="width: 100%;"
+					columnClasses="rotulo">
+
+					<p:outputLabel value="Tipo" for="tipo" />
+					<p:selectOneRadio id="tipo"
+						value="#{cadastroClienteBean.cliente.tipoPessoa}">
+						<f:selectItem itemLabel="Física" itemValue="F" />
+						<f:selectItem itemLabel="Jurídica" itemValue="J" />
+						<p:ajax event="change" process="@this" update="txtCpf labelCpf" />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" style="width:25%" maxlength="80"
+						required="true" requiredMessage="O campo 'NOME' é obrigatório."
+						value="#{cadastroClienteBean.cliente.nome}" />
+
+
+					<h:panelGroup id="labelCpf">
+						<p:outputLabel value="CNPJ/CPF" for="cpf"
+							rendered="#{cadastroClienteBean.cliente.tipoPessoa=='F'}" />
+						<p:outputLabel value="CNPJ/CPF" for="cnpj"
+							rendered="#{cadastroClienteBean.cliente.tipoPessoa=='J'}" />
+					</h:panelGroup>
+					<h:panelGroup id="txtCpf">
+						<p:inputMask id="cpf" mask="999.999.999-99" required="true"
+							requiredMessage="O campo 'CNPJ/CPF' é obrigatório."
+							rendered="#{cadastroClienteBean.cliente.tipoPessoa=='F'}"
+							value="#{cadastroClienteBean.cliente.cpfCnpj}" />
+						<p:inputMask id="cnpj" mask="99.999.999/9999-99" required="true"
+							requiredMessage="O campo 'CNPJ/CPF' é obrigatório."
+							rendered="#{cadastroClienteBean.cliente.tipoPessoa=='J'}"
+							value="#{cadastroClienteBean.cliente.cpfCnpj}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Email" for="email" />
+					<p:inputText id="email" style="text-transform: lowercase;"
+						value="#{cadastroClienteBean.cliente.email}" />
+
+					<p:outputLabel value="Ativo" />
+					<p:selectBooleanCheckbox
+						value="#{cadastroClienteBean.cliente.status}" />
+
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+		<p:tabView style="width: 100%; height: 230px;" prependId="false">
+			<p:tab title="Endereço(s)">
+
+				<p:commandButton value="Adicionar Endereço"
+					action="#{cadastroClienteBean.prepararNovoEndereco}"
+					update="form2:panelGridInclusaoEndereco" style="margin-top: 5px;"
+					onclick="PF('inclusaoEndereco').show();">
+					<p:resetInput target="form2:panelGridInclusaoEndereco" />
+				</p:commandButton>
+
+				<p:dataTable id="tabelaEndereços"
+					value="#{cadastroClienteBean.cliente.enderecos}" var="endereco"
+					style="margin-top:5px;" paginator="true"
+					paginatorAlwaysVisible="false" paginatorPosition="top" rows="3"
+					emptyMessage="Nenhum Endereço foi encontrado">
+
+					<p:column headerText="Ação" style="width: 70px;">
+						<p:commandButton icon="ui-icon-pencil" title="Editar"
+							styleClass="semPreenchimento"
+							action="#{cadastroClienteBean.prepararEdicaoEndereco}"
+							oncomplete="PF('inclusaoEndereco').show(); return false;"
+							process="@this" update="form2:panelGridInclusaoEndereco">
+							<f:setPropertyActionListener
+								target="#{cadastroClienteBean.novoEndereco}" value="#{endereco}" />
+						</p:commandButton>
+						<p:button icon="ui-icon-trash" title="Excluir"
+							styleClass="semPreenchimento"
+							onclick="PF('confirmacaoExclusao').show(); return false;" />
+					</p:column>
+
+					<p:column headerText="Tipo" style="width: 90px;">
+						<p:outputLabel value="#{endereco.tipo}" />
+					</p:column>
+
+					<p:column headerText="Logradouro">
+						<p:outputLabel value="#{endereco.logradouro}" />
+					</p:column>
+
+					<p:column headerText="Número" style="width: 90px;">
+						<p:outputLabel value="#{endereco.numero}" />
+					</p:column>
+
+					<p:column headerText="Complemento" style="width: 200px;">
+						<p:outputLabel value="#{endereco.complemento}" />
+					</p:column>
+
+					<p:column headerText="CEP" style="width: 80px; text-align:center;">
+						<p:outputLabel value="#{endereco.cep}"></p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Cidade/UF" style="width: 300px;">
+						<p:outputLabel value="#{endereco.cidade} / #{endereco.uf}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</p:tab>
+			<p:tab title="Telefone(s)">
+
+				<p:commandButton value="Adicionar Telefone"
+					update="form3:panelGridInclusaoTelefone" style="margin-top: 5px;"
+					onclick="PF('inclusaoTelefone').show();">
+					<p:resetInput target="form3:panelGridInclusaoTelefone" />
+				</p:commandButton>
+
+				<p:dataTable id="tabelaTelefones"
+					value="#{pesquisaClientesBean.clientesFiltrados}" var="telefone"
+					style="margin-top:5px;" paginator="true" scrollable="true"
+					scrollHeight="150" paginatorAlwaysVisible="false"
+					paginatorPosition="botton"
+					emptyMessage="Nenhum Endereço foi encontrado" rows="20">
+
+					<p:column headerText="Tipo" style="width: 130px;">
+						<p:outputLabel value="RESIDENCIAL" />
+					</p:column>
+
+					<p:column headerText="Número" style="width: 200px;">
+						<p:outputLabel value="123" />
+					</p:column>
+
+					<p:column headerText="Contato" style="width: 200px;">
+						<p:outputLabel value="complemento" />
+					</p:column>
+
+					<p:column headerText="Ação" style="width: 100px;">
+						<p:button icon="ui-icon-pencil" title="Editar"
+							styleClass="semPreenchimento" />
+						<p:button icon="ui-icon-trash" title="Excluir"
+							styleClass="semPreenchimento"
+							onclick="PF('confirmacaoExclusao').show(); return false;" />
+					</p:column>
+
+					<p:column />
+
+				</p:dataTable>
+
+			</p:tab>
+		</p:tabView>
+
+		<h:form id="form2">
+			<p:dialog header="Inclusão de Endereço" widgetVar="inclusaoEndereco"
+				resizable="false" modal="true" id="inclusao">
+
+				<h:panelGrid columns="2" id="panelGridInclusaoEndereco">
+
+
+
+					<p:outputLabel value="Tipo" for="tipoEnd" />
+					<h:panelGroup>
+						<p:selectOneMenu id="tipoEnd" style="width:150px;"
+							autoWidth="false" required="true"
+							requiredMessage="O campo 'TIPO' é obrigatório."
+							value="#{cadastroClienteBean.novoEndereco.tipo}">
+							<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+							<f:selectItems value="#{cadastroClienteBean.tipoEnderecos}"
+								var="tipoEnd" itemLabel="#{tipoEnd.descricao}"
+								itemValue="#{tipoEnd}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="CEP" for="cep"
+							style="margin-left: 10px; margin-right:16px;" />
+						<p:inputMask mask="99999-999" id="cep" required="true"
+							requiredMessage="O campo 'CEP' é obrigatório."
+							readonly="#{cadastroClienteBean.editandoEnd}"
+							value="#{cadastroClienteBean.novoEndereco.cep}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Logradouro" for="logradouro" />
+					<h:panelGroup>
+						<p:inputText id="logradouro" style="width: 78%" required="true"
+							requiredMessage="O campo 'LOGRADOURO' é obrigatório."
+							value="#{cadastroClienteBean.novoEndereco.logradouro}" />
+						<p:inputText id="numero" style="width: 16%; margin-left:5px;"
+							value="#{cadastroClienteBean.novoEndereco.numero}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Complemento" for="complemento" />
+					<h:panelGroup>
+						<p:inputText id="complemento"
+							value="#{cadastroClienteBean.novoEndereco.complemento}" />
+						<p:outputLabel value="Bairro" for="bairro"
+							style="margin-left: 10px; margin-right:12px;" />
+						<p:inputText id="bairro" required="true"
+							requiredMessage="O campo 'BAIRRO' é obrigatório."
+							value="#{cadastroClienteBean.novoEndereco.bairro}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="UF" for="uf" />
+					<h:panelGroup>
+						<p:inputText id="uf"
+							value="#{cadastroClienteBean.novoEndereco.uf}" required="true"
+							requiredMessage="O campo 'UF' é obrigatório." />
+						<p:outputLabel value="Cidade" for="cidade"
+							style="margin-left: 10px; margin-right:5px;" />
+						<p:inputText id="cidade" required="true"
+							requiredMessage="O campo 'CIDADE' é obrigatório."
+							value="#{cadastroClienteBean.novoEndereco.cidade}" />
+					</h:panelGroup>
+
+					<p:outputLabel />
+					<p:commandButton value="Incluir"
+						oncomplete="if(args.sucesso == true) PF('inclusaoEndereco').hide()"
+						update="form2:panelGridInclusaoEndereco tabelaEndereços"
+						actionListener="#{cadastroClienteBean.incluirEndereco}"
+						process="@this inclusao ">
+					</p:commandButton>
+
+				</h:panelGrid>
+			</p:dialog>
+
+			<p:confirmDialog header="Exclusão de endereços"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza de que deseja excluir esse Endereço?">
+				<p:button value="não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="sim"
+					oncomplete="PF('confirmacaoExclusao').hide();" />
+			</p:confirmDialog>
+		</h:form>
+
+
+		<h:form id="form3">
+			<p:dialog header="Inclusão de Telefone" widgetVar="inclusaoTelefone"
+				resizable="false" modal="true" id="inclusaoTelefone">
+
+				<h:panelGrid columns="2" id="panelGridInclusaoTelefone">
+
+					<p:outputLabel value="Tipo" for="tipo" />
+					<p:selectOneMenu id="tipo" required="true" autoWidth="true"
+						style="width:85%;" converter="omnifaces.SelectItemsConverter"
+						filter="true" filterMatchMode="contains"
+						requiredMessage="O campo 'TIPO' é obrigatório."
+						value="#{cadastroProdutoBean.produto.unidade}">
+						<f:selectItem itemLabel="Selecione..." />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Número" for="num" />
+					<p:inputMask mask="(99)?9999-9999" id="num" required="true"
+						requiredMessage="O campo 'NÚMERO' é obrigatório."
+						value="#{cadastroClienteBean.novoEndereco.cep}" />
+
+
+					<p:outputLabel value="Contato" />
+					<p:inputText id="complemento"
+						value="#{cadastroClienteBean.novoEndereco.complemento}" />
+
+
+					<p:outputLabel />
+					<p:commandButton value="Incluir" update="panelGridInclusaoTelefone"
+						actionListener="#{cadastroClienteBean.incluirEndereco}"
+						process="@this inclusaoTelefone "
+						oncomplete="if(!args.validationFailed) PF('inclusaoTelefone').hide();">
+					</p:commandButton>
+
+				</h:panelGrid>
+			</p:dialog>
+
+			<p:confirmDialog header="Exclusão de Telefone"
+				widgetVar="confirmacaoExclusaoTelefone"
+				message="Tem certeza de que deseja excluir esse Telefone?">
+				<p:button value="não"
+					onclick="PF('confirmacaoExclusaoTelefone').hide(); return false;" />
+				<p:commandButton value="sim"
+					oncomplete="PF('confirmacaoExclusaoTelefone').hide();" />
+			</p:confirmDialog>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

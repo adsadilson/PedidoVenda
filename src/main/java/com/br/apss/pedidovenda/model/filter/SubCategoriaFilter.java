@@ -2,13 +2,13 @@ package com.br.apss.pedidovenda.model.filter;
 
 import java.io.Serializable;
 
-public class CategoriaProdutoFilter implements Serializable {
+public class SubCategoriaFilter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String nome;
-	private Boolean status;
 	private String origem;
+	private Boolean status;
 
 	public String getNome() {
 		return nome;
@@ -18,20 +18,23 @@ public class CategoriaProdutoFilter implements Serializable {
 		this.nome = nome;
 	}
 
+	public void setOrigem(String origem) {
+		if (origem.equals("principal")) {
+			this.status = null;
+		}
+		this.origem = origem;
+	}
+
+	public String getOrigem() {
+		return origem;
+	}
+
 	public Boolean getStatus() {
 		return status;
 	}
 
 	public void setStatus(Boolean status) {
 		this.status = status;
-	}
-
-	public void setOrigem(String origem) {
-		this.origem = origem;
-	}
-
-	public String getOrigem() {
-		return origem;
 	}
 
 }

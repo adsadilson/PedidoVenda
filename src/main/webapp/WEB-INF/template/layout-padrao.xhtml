@@ -38,16 +38,16 @@
 		<h:form style="display: inline-block">
 			<p:menubar styleClass="menu-sistema">
 				<p:submenu label="Cadastros">
-					<p:menuitem value="Clientes" />
+					<p:menuitem value="Clientes" outcome="/pages/cadastros/cliente/lista-cliente.xhtml"/>
 					<p:menuitem value="Usuários" />
 					<p:separator />
 					<p:submenu label="Produtos">
-						<p:menuitem value="Produto" />
-						<p:menuitem value="Categorias" outcome="/pages/cadastros/categoria_produtos/lista-categoria-produto.xhtml"/>
-						<p:menuitem value="Sub-Categorias" outcome="/pages/cadastros/categoria_produtos/lista-categoria-produto.xhtml"/>
-						<p:menuitem value="Unidade de Medida" outcome="/pages/cadastros/unidade_medidas/lista-unidade-medida.xhtml"/>
+						<p:menuitem value="Produto" outcome="/pages/cadastros/produto/lista-produto.xhtml"/>
+						<p:menuitem value="Categorias" outcome="/pages/cadastros/categoria/lista-categoria.xhtml"/>
+						<p:menuitem value="SubCategorias" outcome="/pages/cadastros/subcategoria/lista-subcategoria.xhtml"/>
+						<p:menuitem value="Unidade de Medida" outcome="/pages/cadastros/unidade/lista-unidade.xhtml"/>
 					</p:submenu>
-					<p:menuitem value="Produtos" />
+					<p:menuitem value="Outros" />
 				</p:submenu>
 				<p:submenu label="Pedidos">
 					<p:menuitem value="Novo pedido" />

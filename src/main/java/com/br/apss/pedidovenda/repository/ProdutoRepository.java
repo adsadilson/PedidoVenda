@@ -16,44 +16,43 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import com.br.apss.pedidovenda.enums.Status;
-import com.br.apss.pedidovenda.model.UnidadeMedida;
-import com.br.apss.pedidovenda.model.filter.UnidadeMedidaFilter;
+import com.br.apss.pedidovenda.model.Produto;
+import com.br.apss.pedidovenda.model.filter.ProdutoFilter;
 import com.br.apss.pedidovenda.util.NegocioException;
 
-public class UnidadeMedidaRepository implements Serializable {
+public class ProdutoRepository implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private EntityManager manager;
 
-	public UnidadeMedida salvar(UnidadeMedida obj) {
+	public Produto salvar(Produto obj) {
 		return manager.merge(obj);
 	}
 
-	public void excluir(UnidadeMedida obj) {
+	public void excluir(Produto obj) {
 		try {
 			obj = porId(obj.getId());
 			manager.remove(obj);
 			manager.flush();
 
 		} catch (Exception e) {
-			throw new NegocioException("Unidade de Medida não pode ser excluída");
+			throw new NegocioException("Produto não pode ser excluída");
 		}
 	}
 
-	public UnidadeMedida porId(Long id) {
-		return manager.find(UnidadeMedida.class, id);
+	public Produto porId(Long id) {
+		return manager.find(Produto.class, id);
 	}
 
-	public List<UnidadeMedida> listarTodos() {
-		return manager.createQuery("from UnidadeMedida order by nome", UnidadeMedida.class).getResultList();
+	public List<Produto> listarTodos() {
+		return manager.createQuery("from Produto order by nome", Produto.class).getResultList();
 	}
 
-	public UnidadeMedida porNome(String nome) {
+	public Produto porNome(String nome) {
 		try {
-			return manager.createQuery("from UnidadeMedida where upper(nome) = :nome", UnidadeMedida.class)
+			return manager.createQuery("from Produto where upper(nome) = :nome", Produto.class)
 					.setParameter("nome", nome.toUpperCase()).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
@@ -61,34 +60,40 @@ public class UnidadeMedidaRepository implements Serializable {
 	}
 
 	@SuppressWarnings({ "deprecation" })
-	private Criteria criarCriteriaParaFiltro(UnidadeMedidaFilter filtro) {
+	private Criteria criarCriteriaParaFiltro(ProdutoFilter filtro) {
 
 		Session session = manager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(UnidadeMedida.class);
+		Criteria criteria = session.createCriteria(Produto.class);
 
 		if (StringUtils.isNotBlank(filtro.getOrigem())) {
 
 			Criterion p1 = Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE);
 			Criterion p2 = Restrictions.ilike("descricao", filtro.getNome(), MatchMode.ANYWHERE);
+			Criterion p3 = Restrictions.ilike("sku", filtro.getNome(), MatchMode.ANYWHERE);
 
 			if (filtro.getOrigem().equals("principal")) {
 
 				p1 = Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE);
-				p2 = Restrictions.ilike("descricao", filtro.getNome(), MatchMode.ANYWHERE);
-				criteria.add(Restrictions.or(p1, p2));
+				p2 = Restrictions.ilike("codigoBarra", filtro.getNome(), MatchMode.ANYWHERE);
+				p3 = Restrictions.ilike("sku", filtro.getNome(), MatchMode.ANYWHERE);
+				criteria.add(Restrictions.or(p1, p2, p3));
 
 			}
 		} else {
 			if (StringUtils.isNotBlank(filtro.getNome())) {
 				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 			}
+			
+			if (StringUtils.isNotBlank(filtro.getSku())) {
+				criteria.add(Restrictions.ilike("sku", filtro.getSku(), MatchMode.ANYWHERE));
+			}
 
-			if (StringUtils.isNotBlank(filtro.getDescricao())) {
-				criteria.add(Restrictions.ilike("descricao", filtro.getDescricao(), MatchMode.ANYWHERE));
+			if (StringUtils.isNotBlank(filtro.getCodigoBarra())) {
+				criteria.add(Restrictions.ilike("codigoBarra", filtro.getCodigoBarra(), MatchMode.ANYWHERE));
 			}
 
 			if (filtro.getStatus() != null) {
-				if (filtro.getStatus() == Status.ATIVO) {
+				if (filtro.getStatus()) {
 					criteria.add(Restrictions.eq("status", true));
 				} else {
 					criteria.add(Restrictions.eq("status", false));
@@ -100,7 +105,7 @@ public class UnidadeMedidaRepository implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UnidadeMedida> filtrados(UnidadeMedidaFilter filtro) {
+	public List<Produto> filtrados(ProdutoFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
 
 		criteria.setFirstResult(filtro.getPrimeiroRegistro());
@@ -117,7 +122,7 @@ public class UnidadeMedidaRepository implements Serializable {
 		return criteria.list();
 	}
 
-	public int quantidadeFiltrados(UnidadeMedidaFilter filtro) {
+	public int quantidadeFiltrados(ProdutoFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
 		criteria.setProjection(Projections.rowCount());
 		return ((Number) criteria.uniqueResult()).intValue();

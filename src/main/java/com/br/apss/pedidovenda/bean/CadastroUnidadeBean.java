@@ -6,7 +6,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
 import com.br.apss.pedidovenda.model.UnidadeMedida;
 import com.br.apss.pedidovenda.service.UnidadeMedidaService;
 import com.br.apss.pedidovenda.util.FacesUtil;
@@ -14,30 +13,30 @@ import com.br.apss.pedidovenda.util.NegocioException;
 
 @Named
 @ViewScoped
-public class CadastroUnidadeMedidaBean implements Serializable {
+public class CadastroUnidadeBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private UnidadeMedida unidade = new UnidadeMedida();
 
-	private Long idUnidadeMedida;
+	private Long idUnidade;
 
 	@Inject
-	private UnidadeMedidaService unidadeMedidaService;
+	private UnidadeMedidaService unidadeService;
 
 	public void inicializar() {
-		if (idUnidadeMedida != null) {
-			unidade = unidadeMedidaService.porId(idUnidadeMedida);
+		if (idUnidade != null) {
+			unidade = unidadeService.porId(idUnidade);
 		}
 	}
 
 	public void salvar() {
 		
-		UnidadeMedida unidadeMedidaExistente = unidadeMedidaService.porNome(unidade.getNome());
-		if (unidadeMedidaExistente != null && !unidadeMedidaExistente.equals(unidade)) {
+		UnidadeMedida unidadeExistente = unidadeService.porNome(unidade.getNome());
+		if (unidadeExistente != null && !unidadeExistente.equals(unidade)) {
 			throw new NegocioException("Já existe uma Unidade de Medida com esse nome informado.");
 		}
 		
-		unidadeMedidaService.salvar(unidade);
+		unidadeService.salvar(unidade);
 		FacesUtil.addInfoMessage("Registro salvor com sucesso.");
 		//Messages.addGlobalInfo("Registro salvor com sucesso.");
 		limpar();
@@ -49,24 +48,24 @@ public class CadastroUnidadeMedidaBean implements Serializable {
 	}
 
 	public void excluir() {
-		unidadeMedidaService.excluir(unidade);
-		// return "lista-UnidadeMedida.xhtml?faces-redirect=true";
+		unidadeService.excluir(unidade);
+		// return "lista-Unidade.xhtml?faces-redirect=true";
 	}
 
-	public UnidadeMedida getUnidadeMedida() {
+	public UnidadeMedida getUnidade() {
 		return unidade;
 	}
 
-	public void setUnidadeMedida(UnidadeMedida unidade) {
+	public void setUnidade(UnidadeMedida unidade) {
 		this.unidade = unidade;
 	}
 
-	public Long getIdUnidadeMedida() {
-		return idUnidadeMedida;
+	public Long getIdUnidade() {
+		return idUnidade;
 	}
 
-	public void setIdUnidadeMedida(Long idUnidadeMedida) {
-		this.idUnidadeMedida = idUnidadeMedida;
+	public void setIdUnidade(Long idUnidade) {
+		this.idUnidade = idUnidade;
 	}
 
 }

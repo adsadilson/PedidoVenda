@@ -15,22 +15,22 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import com.br.apss.pedidovenda.model.CategoriaProduto;
-import com.br.apss.pedidovenda.model.filter.CategoriaProdutoFilter;
+import com.br.apss.pedidovenda.model.Categoria;
+import com.br.apss.pedidovenda.model.filter.CategoriaFilter;
 import com.br.apss.pedidovenda.util.NegocioException;
 
-public class CategoriaProdutoRepository implements Serializable {
+public class CategoriaRepository implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private EntityManager manager;
 
-	public CategoriaProduto salvar(CategoriaProduto obj) {
+	public Categoria salvar(Categoria obj) {
 		return manager.merge(obj);
 	}
 
-	public void excluir(CategoriaProduto obj) {
+	public void excluir(Categoria obj) {
 		try {
 			obj = porId(obj.getId());
 			manager.remove(obj);
@@ -41,17 +41,17 @@ public class CategoriaProdutoRepository implements Serializable {
 		}
 	}
 
-	public CategoriaProduto porId(Long id) {
-		return manager.find(CategoriaProduto.class, id);
+	public Categoria porId(Long id) {
+		return manager.find(Categoria.class, id);
 	}
 
-	public List<CategoriaProduto> listarTodos() {
-		return manager.createQuery("from CategoriaProduto order by nome", CategoriaProduto.class).getResultList();
+	public List<Categoria> listarTodos() {
+		return manager.createQuery("from Categoria order by nome", Categoria.class).getResultList();
 	}
 
-	public CategoriaProduto porNome(String nome) {
+	public Categoria porNome(String nome) {
 		try {
-			return manager.createQuery("from CategoriaProduto where upper(nome) = :nome", CategoriaProduto.class)
+			return manager.createQuery("from Categoria where upper(nome) = :nome", Categoria.class)
 					.setParameter("nome", nome.toUpperCase()).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
@@ -59,29 +59,43 @@ public class CategoriaProdutoRepository implements Serializable {
 	}
 
 	@SuppressWarnings({ "deprecation" })
-	private Criteria criarCriteriaParaFiltro(CategoriaProdutoFilter filtro) {
+	private Criteria criarCriteriaParaFiltro(CategoriaFilter filtro) {
 
 		Session session = manager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(CategoriaProduto.class);
+		Criteria criteria = session.createCriteria(Categoria.class);
 
 		if (StringUtils.isNotBlank(filtro.getNome())) {
 			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 		}
-		
-		if (filtro.getStatus()!=null) {
+
+		if (filtro.getStatus() != null) {
 			criteria.add(Restrictions.eq("status", filtro.getStatus()));
 		}
-		
+
 		return criteria;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<CategoriaProduto> filtrados(CategoriaProdutoFilter filtro) {
+	public List<Categoria> filtrados(CategoriaFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
+		
+		if (StringUtils.isNotBlank(filtro.getNome())) {
+			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+		}
+		
+		if (filtro.getStatus() != null) {
+			if (filtro.getStatus()) {
+				criteria.add(Restrictions.eq("status", true));
+			} else {
+				criteria.add(Restrictions.eq("status", false));
+			}
+
+		}
+		
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 
-	public int quantidadeFiltrados(CategoriaProdutoFilter filtro) {
+	public int quantidadeFiltrados(CategoriaFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
 		criteria.setProjection(Projections.rowCount());
 		return ((Number) criteria.uniqueResult()).intValue();

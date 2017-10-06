@@ -5,13 +5,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="titulo">Pesquisa Categoria de Produto</ui:define>
+	<ui:define name="titulo">Pesquisa de Produto</ui:define>
 
 	<ui:define name="corpo">
 
 		<h:form prependId="false">
 
-			<h1>Pesquisa Categoria de Produto</h1>
+			<h1>Pesquisa de Produto</h1>
 
 			<p:growl autoUpdate="true" showDetail="3000" />
 
@@ -20,33 +20,36 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Nova" icon="fa fa-file-o"
-						outcome="/pages/cadastros/categoria_produtos/cadastro-categoria-produto" />
+						outcome="/pages/cadastros/produto/cadastro-produto" />
+
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
-						update="dgFiltro" action="#{listaCategoriaProdutoBean.novoFiltro}"
+						update="dgFiltro" action="#{listaProdutoBean.novoFiltro}"
 						style="margin-left:5px;" oncomplete="PF('dialogFiltro').show()" />
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-categoria"
-							fileName="categorias" />
+						<p:dataExporter type="xls" target="tbl-produto"
+							fileName="produtos" />
 					</p:commandButton>
+
+					<!-- <p:commandButton icon="fa fa-filter" title="Filtro Avançado" /> -->
 
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
 
 					<p:inputText size="30" placeholder="digite o texto"
-						title="Pesquisa pelo campo sigla ou descrição"
+						title="Pesquisa pelo campo nome ou codigo de barra"
 						style="margin-left:5px; margin-right:5px;" id="txtPesquisar"
-						value="#{listaCategoriaProdutoBean.filtro.nome}" />
+						value="#{listaProdutoBean.filtro.nome}" />
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-categoria" id="btnPesquisar"
-						action="#{listaCategoriaProdutoBean.pesquisar()}">
+						update="tbl-produto" id="btnPesquisar"
+						action="#{listaProdutoBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
-							target="#{listaCategoriaProdutoBean.filtro.origem}" />
+							target="#{listaProdutoBean.filtro.origem}" />
 					</p:commandButton>
 
 					<p:defaultCommand target="btnPesquisar" />
@@ -57,9 +60,8 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-categoria"
-				value="#{listaCategoriaProdutoBean.categorias}" var="categoria"
-				style="margin-top: 20px" lazy="true"
+			<p:dataTable id="tbl-produto" value="#{listaProdutoBean.dataModel}"
+				var="produto" style="margin-top: 20px" lazy="true"
 				emptyMessage="Nenhum registro encontrado." rows="11"
 				paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom"
@@ -69,31 +71,65 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/categoria_produtos/cadastro-categoria-produto"
+						outcome="/pages/cadastros/produto/cadastro-produto"
 						styleClass="semPreenchimento">
-						<f:param name="codigo" value="#{categoria.id}" />
+						<f:param name="codigo" value="#{produto.id}" />
 					</p:button>
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						styleClass="semPreenchimento"
 						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update="confirmacaoExclusaoDialog">
 						<f:setPropertyActionListener
-							target="#{listaCategoriaProdutoBean.categoriaProdutoSelecionada}"
-							value="#{categoria}" />
+							target="#{listaProdutoBean.produtoSelecionada}"
+							value="#{produto}" />
 					</p:commandButton>
 				</p:column>
 
-				<p:column headerText="Descrição" sortBy="#{categoria.nome}">
-					<h:outputText value="#{categoria.nome}" />
+				<p:column headerText="SKU" sortBy="#{produto.codigoBarra}"
+					style="text-align: center; width: 60px">
+					<h:outputText value="#{produto.sku}" />
 				</p:column>
 
-				<p:column headerText="Status" sortBy="#{categoria.status}"
+				<p:column headerText="Codigo de Barra"
+					sortBy="#{produto.codigoBarra}" style="width: 130px">
+					<h:outputText value="#{produto.codigoBarra}" />
+				</p:column>
+
+				<p:column headerText="Descrição" sortBy="#{produto.nome}">
+					<h:outputText value="#{produto.nome}" />
+				</p:column>
+
+				<p:column headerText="Tipo" style="text-align: center; width: 90px"
+					sortBy="#{produto.tipoProduto.descricao}">
+					<h:outputText value="#{produto.tipoProduto.descricao}" />
+				</p:column>
+
+				<p:column headerText="Unidade"
+					style="text-align: center; width: 80px"
+					sortBy="#{produto.unidade.nome}">
+					<h:outputText value="#{produto.unidade.nome}" />
+				</p:column>
+
+				<p:column headerText="Estoque" style="width: 80px"
+					sortBy="#{produto.quantidade}">
+					<h:outputText value="#{produto.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Prç. Custo" style="width: 100px"
+					sortBy="#{produto.vlrCusto}">
+					<h:outputText value="#{produto.vlrCusto}" />
+				</p:column>
+
+				<p:column headerText="Prç. Venda" style="width: 100px"
+					sortBy="#{produto.vlrVenda}">
+					<h:outputText value="#{produto.vlrVenda}" />
+				</p:column>
+
+				<!-- <p:column headerText="Status" sortBy="#{produto.s}"
 					style="text-align: center; width: 100px">
-					<h:outputText value="#{categoria.status ? 'ATIVO' : 'INATIVO'}" />
-				</p:column>
+					<h:outputText value="#{produto.status ? 'ATIVO' : 'INATIVO'}" />
+				</p:column> -->
 
-				<p:column headerText="">
-				</p:column>
 			</p:dataTable>
 
 			<p:confirmDialog header="Confirmação de Exclusão"
@@ -102,36 +138,45 @@
 					<h:outputText value="Tem certeza que deseja excluir o registro:" />
 					<br />
 					<h:outputText
-						value="#{listaCategoriaProdutoBean.categoriaProdutoSelecionada.nome} ?" />
+						value="#{listaProdutoBean.produtoSelecionada.codigoBarra} -  
+						#{listaProdutoBean.produtoSelecionada.nome} ?" />
 				</f:facet>
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
-					oncomplete="PF('confirmacaoExclusao').hide();"
-					update="tbl-categoria" action="#{listaCategoriaProdutoBean.excluir()}"
-					process="@this" />
+					oncomplete="PF('confirmacaoExclusao').hide();" update="tbl-produto"
+					action="#{listaProdutoBean.excluir()}" process="@this" />
 			</p:confirmDialog>
 
 		</h:form>
 
 		<p:dialog header="Filtro" widgetVar="dialogFiltro" modal="true"
-			width="280" height="140" resizable="false" draggable="true"
+			width="auto" height="180" resizable="false" draggable="true"
 			id="dgFiltro" visible="false" closeOnEscape="true" appendTo="@(body)">
 			<h:form prependId="false">
-				<p:focus for="txtFilterDescricao" />
+				<p:focus for="txtFilterNome" />
 
 				<h:panelGrid columns="2" id="panelFiltro">
 
+					<p:outputLabel value="SKU" />
+					<p:inputText id="txtFilterNome"
+						value="#{listaProdutoBean.filtro.sku}" style="width:98%;" />
+
+					<p:outputLabel value="Codigo de Barra" />
+					<p:inputText value="#{listaProdutoBean.filtro.codigoBarra}"
+						style="width:98%;" />
+
 					<p:outputLabel value="Descrição" />
-					<p:inputText id="txtFilterDescricao"
-						value="#{listaCategoriaProdutoBean.filtro.nome}" style="width:98%;" />
+					<p:inputText value="#{listaProdutoBean.filtro.nome}"
+						style="width:98%;" />
 
 					<p:outputLabel value="Ativo" />
 					<p:selectOneMenu autoWidth="false" style="width:88%;"
-						value="#{listaCategoriaProdutoBean.filtro.status}">
+						value="#{listaProdutoBean.filtro.status}"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-						<f:selectItems value="#{listaCategoriaProdutoBean.status}" var="tipo"
-							itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+						<f:selectItems value="#{listaProdutoBean.status}" var="statu"
+							itemLabel="#{statu.descricao}" itemValue="#{statu}" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>
@@ -141,9 +186,9 @@
 					<p:toolbarGroup align="right" style="margin-right: 0px;">
 						<p:commandButton value="Pesquisar" icon="fa fa-search"
 							id="btnPesquisarFiltro" process="@this panelFiltro"
-							action="#{listaCategoriaProdutoBean.pesquisar}"
+							action="#{listaProdutoBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-categoria panelFiltro" />
+							update="tbl-produto panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>

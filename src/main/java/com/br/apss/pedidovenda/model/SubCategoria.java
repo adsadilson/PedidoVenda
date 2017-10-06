@@ -13,25 +13,25 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "subcategoria_produto")
-@SequenceGenerator(name = "SUBCATEGORIA_PRODUTO_ID", sequenceName = "SUBCATEGORIA_PRODUTO_SEQ", allocationSize = 1)
-public class SubCategoriaProduto implements Serializable {
+@Table(name = "subcategoria")
+@SequenceGenerator(name = "SUBCATEGORIA_ID", sequenceName = "SUBCATEGORIA_SEQ", allocationSize = 1)
+public class SubCategoria implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SUBCATEGORIA_PRODUTO_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SUBCATEGORIA_ID")
 	private Long id;
 
 	@Column(name = "nome", nullable = true, length = 80)
 	private String nome;
 
 	@Column(name = "status", nullable = false, length = 1)
-	private Boolean status;
+	private Boolean status = true;
 
 	@ManyToOne
-	@JoinColumn(name = "categoria_produto_id")
-	private CategoriaProduto categoria;
+	@JoinColumn(name = "categoria_id")
+	private Categoria categoria;
 
 	public Long getId() {
 		return id;
@@ -57,11 +57,11 @@ public class SubCategoriaProduto implements Serializable {
 		this.status = status;
 	}
 
-	public CategoriaProduto getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(CategoriaProduto categoria) {
+	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
 
@@ -81,7 +81,7 @@ public class SubCategoriaProduto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SubCategoriaProduto other = (SubCategoriaProduto) obj;
+		SubCategoria other = (SubCategoria) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
-	<ui:define name="titulo">Manutenção de Uni. Medida</ui:define>
+	<ui:define name="titulo">Manutenção de Categoria de Produto</ui:define>
 
 	<ui:define name="corpo">
 
@@ -17,14 +17,14 @@
 
 		<f:metadata>
 			<o:viewParam name="codigo"
-				value="#{cadastroUnidadeMedidaBean.idUnidadeMedida}"
+				value="#{cadastroCategoriaBean.idCategoria}"
 				converter="javax.faces.Long" />
-			<o:viewAction action="#{cadastroUnidadeMedidaBean.inicializar()}" />
+			<o:viewAction action="#{cadastroCategoriaBean.inicializar()}" />
 		</f:metadata>
 
 		<h:form prependId="false">
-			<h1>#{cadastroUnidadeMedidaBean.unidadeMedida.id != null ?
-				'Edição de Unidade de Medida' : 'Nova Unidade de Medida'}</h1>
+			<h1>#{cadastroCategoriaBean.categoria.id != null ?
+				'Edição de Categoria de Produto' : 'Nova Categoria de Produto'}</h1>
 
 			<p:growl autoUpdate="true" />
 
@@ -35,11 +35,11 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
-						action="#{cadastroUnidadeMedidaBean.salvar}" update="painel" />
+						action="#{cadastroCategoriaBean.salvar}" update="painel" />
 					<p:button value="Limpar" icon="fa fa-eraser"
-						outcome="/pages/cadastros/unidade_medidas/cadastro-unidade-medida.xhtml" />
+						outcome="/pages/cadastros/categoria/cadastro-categoria" />
 					<p:button value="Voltar" icon="fa fa-refresh"
-						outcome="/pages/cadastros/unidade_medidas/lista-unidade-medida" />
+						outcome="/pages/cadastros/categoria/lista-categoria" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:button value="Fechar" outcome="/home" />
@@ -51,20 +51,16 @@
 				<h:panelGrid columns="2" id="painel" style="width: 100%;"
 					columnClasses="rotulo">
 
-					<p:outputLabel value="Sigla" for="nome" />
-					<p:inputText id="nome" style="width:10%" maxlength="5"
-						required="true" requiredMessage="O campo 'SIGLA' é obrigatório."
-						value="#{cadastroUnidadeMedidaBean.unidadeMedida.nome}" />
 
-					<p:outputLabel value="Descrição" for="descricao" />
-					<p:inputText id="descricao" style="width:25%" maxlength="80"
+					<p:outputLabel value="Descrição" for="nome" />
+					<p:inputText id="nome" style="width:25%" maxlength="80"
 						required="true"
-						requiredMessage="O campo 'DESCRIÇÃO' é obrigatório."
-						value="#{cadastroUnidadeMedidaBean.unidadeMedida.descricao}" />
+						requiredMessage="O campo 'NOME' é obrigatório."
+						value="#{cadastroCategoriaBean.categoria.nome}" />
 
 					<p:outputLabel value="Ativo" />
 					<p:selectBooleanCheckbox
-						value="#{cadastroUnidadeMedidaBean.unidadeMedida.status}" />
+						value="#{cadastroCategoriaBean.categoria.status}" />
 
 				</h:panelGrid>
 			</p:panel>

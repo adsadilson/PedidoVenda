@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
+
+import com.br.apss.pedidovenda.enums.TipoProduto;
 
 @Entity
 @Table(name = "produto")
@@ -30,15 +35,53 @@ public class Produto implements Serializable {
 	@Column(nullable = false, length = 20, unique = true)
 	private String sku;
 
-	@Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
-	private BigDecimal valorUnitario;
+	@Column(name = "nome_reduzido", length = 80)
+	private String nomeReduzido;
 
-	@Column(name = "quantidade_estoque", nullable = false, length = 5)
-	private Integer quantidadeEstoque;
+	@Column(name = "codigo_barra", length = 15)
+	private String codigoBarra;
+
+	@Column(name = "tipo_produto", length = 10)
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto;
+
+	@Column(name = "quantidade", precision = 12, scale = 2)
+	@DecimalMin(value="0.01", message="O campo 'ESTOQUE' tem quer ser maior que 0")
+	private BigDecimal quantidade = BigDecimal.ZERO;
+
+	@Column(name = "qtd_minima", precision = 12, scale = 2)
+	private BigDecimal qtdMinma = BigDecimal.ZERO;
+
+	@Column(name = "qtd_maxima", precision = 12, scale = 2)
+	private BigDecimal qtdMaxima = BigDecimal.ZERO;
+
+	@Column(name = "vlr_custo", precision = 12, scale = 2)
+	@DecimalMin(value="0.01", message="O campo 'CUSTO' tem quer ser maior que 0,00")
+	private BigDecimal vlrCusto = BigDecimal.ZERO;
+
+	@Column(name = "vlr_venda", precision = 12, scale = 2)
+	@DecimalMin(value="0.01", message="O campo 'VENDA' tem quer ser maior que 0,00")
+	private BigDecimal vlrVenda = BigDecimal.ZERO;;
+
+	@Column(name = "marg_lucro", precision = 12, scale = 2)
+	private BigDecimal margLucro = BigDecimal.ZERO;
+
+	@Column(name = "lucro", precision = 12, scale = 2)
+	private BigDecimal lucro = BigDecimal.ZERO;
 
 	@ManyToOne
-	@JoinColumn(name = "grupo_produto_id", nullable = false)
-	private CategoriaProduto grupoProduto;
+	@JoinColumn(name = "unidade_medida_id")
+	private UnidadeMedida unidade;
+
+	@ManyToOne
+	@JoinColumn(name = "categoria_id", nullable = false)
+	private Categoria categoria;
+
+	@ManyToOne
+	@JoinColumn(name = "subcategoria_id", nullable = false)
+	private SubCategoria subCategoria;
+
+	private Boolean status = true;
 
 	public Long getId() {
 		return id;
@@ -53,7 +96,7 @@ public class Produto implements Serializable {
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nome = nome.toUpperCase();
 	}
 
 	public String getSku() {
@@ -61,31 +104,119 @@ public class Produto implements Serializable {
 	}
 
 	public void setSku(String sku) {
-		this.sku = sku == null ? null : sku.toUpperCase();
+		this.sku = sku.toUpperCase();
 	}
 
-	public BigDecimal getValorUnitario() {
-		return valorUnitario;
+	public String getNomeReduzido() {
+		return nomeReduzido;
 	}
 
-	public void setValorUnitario(BigDecimal valorUnitario) {
-		this.valorUnitario = valorUnitario;
+	public void setNomeReduzido(String nomeReduzido) {
+		this.nomeReduzido = nomeReduzido;
 	}
 
-	public Integer getQuantidadeEstoque() {
-		return quantidadeEstoque;
+	public String getCodigoBarra() {
+		return codigoBarra;
 	}
 
-	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
-		this.quantidadeEstoque = quantidadeEstoque;
+	public void setCodigoBarra(String codigoBarra) {
+		this.codigoBarra = codigoBarra;
 	}
 
-	public CategoriaProduto getGrupoProduto() {
-		return grupoProduto;
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
 	}
 
-	public void setGrupoProduto(CategoriaProduto grupoProduto) {
-		this.grupoProduto = grupoProduto;
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
+	}
+
+	public BigDecimal getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(BigDecimal quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public BigDecimal getQtdMinma() {
+		return qtdMinma;
+	}
+
+	public void setQtdMinma(BigDecimal qtdMinma) {
+		this.qtdMinma = qtdMinma;
+	}
+
+	public BigDecimal getQtdMaxima() {
+		return qtdMaxima;
+	}
+
+	public void setQtdMaxima(BigDecimal qtdMaxima) {
+		this.qtdMaxima = qtdMaxima;
+	}
+
+	public BigDecimal getVlrCusto() {
+		return vlrCusto;
+	}
+
+	public void setVlrCusto(BigDecimal vlrCusto) {
+		this.vlrCusto = vlrCusto;
+	}
+
+	public BigDecimal getVlrVenda() {
+		return vlrVenda;
+	}
+
+	public void setVlrVenda(BigDecimal vlrVenda) {
+		this.vlrVenda = vlrVenda;
+	}
+
+	public BigDecimal getMargLucro() {
+		return margLucro;
+	}
+
+	public void setMargLucro(BigDecimal margLucro) {
+		this.margLucro = margLucro;
+	}
+
+	public BigDecimal getLucro() {
+		return lucro;
+	}
+
+	public void setLucro(BigDecimal lucro) {
+		this.lucro = lucro;
+	}
+
+	public UnidadeMedida getUnidade() {
+		return unidade;
+	}
+
+	public void setUnidade(UnidadeMedida unidade) {
+		this.unidade = unidade;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public SubCategoria getSubCategoria() {
+		return subCategoria;
+	}
+
+	public void setSubCategoria(SubCategoria subCategoria) {
+		this.subCategoria = subCategoria;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	@Override
@@ -111,6 +242,11 @@ public class Produto implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
 	}
 
 }
