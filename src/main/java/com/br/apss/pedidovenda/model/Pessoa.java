@@ -25,7 +25,6 @@ import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.enums.EstadoCivil;
 import com.br.apss.pedidovenda.enums.Sexo;
 
-
 @Entity
 @Table(name = "pessoa")
 @SequenceGenerator(name = "PESSOA_ID", sequenceName = "PESSOA_SEQ", allocationSize = 1)
@@ -97,10 +96,10 @@ public class Pessoa implements Serializable {
 	@Column(name = "nome_mae", length = 80)
 	private String mae;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Endereco> enderecos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Telefone> telefones = new ArrayList<>();
 
 	@Column(name = "num_doc", length = 25)
@@ -188,16 +187,16 @@ public class Pessoa implements Serializable {
 	private Boolean empresa;
 
 	@Column(name = "funcionario", length = 1)
-	private Boolean funcionario;
+	private Boolean funcionario = false;
 
 	@Column(name = "cliente", length = 1)
-	private Boolean cliente;
+	private Boolean cliente = false;
 
 	@Column(name = "fornecedor", length = 1)
-	private Boolean fornecedor;
+	private Boolean fornecedor = false;
 
 	@Column(name = "profissional", length = 1)
-	private Boolean profissional;
+	private Boolean profissional = false;
 
 	public Long getId() {
 		return id;

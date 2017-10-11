@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -57,11 +58,11 @@ public class PessoaRepository implements Serializable {
 			return null;
 		}
 	}
-	
+
 	public Pessoa porCpf(String cpf) {
 		try {
-			return manager.createQuery("from Pessoa where cpf_cnpj = :cpf", Pessoa.class)
-					.setParameter("cpf", cpf).getSingleResult();
+			return manager.createQuery("from Pessoa where cpf_cnpj = :cpf", Pessoa.class).setParameter("cpf", cpf)
+					.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -73,12 +74,42 @@ public class PessoaRepository implements Serializable {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(Pessoa.class);
 
-		if (StringUtils.isNotBlank(filtro.getNome())) {
-			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+		if (filtro.getCliente()) {
+			criteria.add(Restrictions.eq("cliente", true));
+		}
+		if (filtro.getFonecedor()) {
+			criteria.add(Restrictions.eq("fornecedor", true));
+		}
+		if (filtro.getFuncionario()) {
+			criteria.add(Restrictions.eq("funcionario", true));
 		}
 
-		if (filtro.getStatus() != null) {
-			criteria.add(Restrictions.eq("status", filtro.getStatus()));
+		if (StringUtils.isNotBlank(filtro.getOrigem())) {
+
+			if (filtro.getOrigem().equals("principal")) {
+
+				Criterion p1 = Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE);
+				Criterion p2 = Restrictions.ilike("cpfCnpj", filtro.getNome(), MatchMode.ANYWHERE);
+				criteria.add(Restrictions.or(p1, p2));
+
+			}
+		} else {
+			if (StringUtils.isNotBlank(filtro.getNome())) {
+				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+			}
+
+			if (StringUtils.isNotBlank(filtro.getCpf())) {
+				criteria.add(Restrictions.ilike("cpfCnpj", filtro.getCpf(), MatchMode.ANYWHERE));
+			}
+
+			if (filtro.getStatus() != null) {
+				if (filtro.getStatus()) {
+					criteria.add(Restrictions.eq("status", true));
+				} else {
+					criteria.add(Restrictions.eq("status", false));
+				}
+
+			}
 		}
 
 		return criteria;
@@ -87,20 +118,18 @@ public class PessoaRepository implements Serializable {
 	@SuppressWarnings("unchecked")
 	public List<Pessoa> filtrados(PessoaFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
-		
-		if (StringUtils.isNotBlank(filtro.getNome())) {
-			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
-		}
-		
-		if (filtro.getStatus() != null) {
-			if (filtro.getStatus()) {
-				criteria.add(Restrictions.eq("status", true));
-			} else {
-				criteria.add(Restrictions.eq("status", false));
-			}
 
+		criteria.setFirstResult(filtro.getPrimeiroRegistro());
+		criteria.setMaxResults(filtro.getQuantidadeRegistros());
+
+		if (filtro.getCampoOrdenacao() != null) {
+			if (filtro.isAscendente()) {
+				criteria.addOrder(Order.asc(filtro.getCampoOrdenacao()));
+			} else {
+				criteria.addOrder(Order.desc(filtro.getCampoOrdenacao()));
+			}
 		}
-		
+
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 

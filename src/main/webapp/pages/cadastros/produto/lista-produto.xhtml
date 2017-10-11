@@ -9,6 +9,14 @@
 
 	<ui:define name="corpo">
 
+		<style>
+<!--
+.rotulo {
+	width: 110px !important;
+}
+-->
+</style>
+
 		<h:form prependId="false">
 
 			<h1>Pesquisa de Produto</h1>
@@ -19,7 +27,7 @@
 
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
-					<p:button value="Nova" icon="fa fa-file-o"
+					<p:button value="Novo" icon="fa fa-file-o"
 						outcome="/pages/cadastros/produto/cadastro-produto" />
 
 
@@ -110,25 +118,24 @@
 					<h:outputText value="#{produto.unidade.nome}" />
 				</p:column>
 
-				<p:column headerText="Estoque" style="width: 80px"
+				<p:column headerText="Estoque" style="width: 80px;text-align:right;"
 					sortBy="#{produto.quantidade}">
-					<h:outputText value="#{produto.quantidade}" />
+					<h:outputText value="#{produto.quantidade}">
+						<f:convertNumber type="currency" currencySymbol="" />
+					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Prç. Custo" style="width: 100px"
-					sortBy="#{produto.vlrCusto}">
-					<h:outputText value="#{produto.vlrCusto}" />
+				<p:column headerText="Preço Venda"
+					style="width: 110px; text-align:right;">
+					<h:outputText value="#{produto.vlrVenda}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Prç. Venda" style="width: 100px"
-					sortBy="#{produto.vlrVenda}">
-					<h:outputText value="#{produto.vlrVenda}" />
-				</p:column>
-
-				<!-- <p:column headerText="Status" sortBy="#{produto.s}"
+				<p:column headerText="Status" sortBy="#{produto.status}"
 					style="text-align: center; width: 100px">
 					<h:outputText value="#{produto.status ? 'ATIVO' : 'INATIVO'}" />
-				</p:column> -->
+				</p:column>
 
 			</p:dataTable>
 
@@ -151,12 +158,13 @@
 		</h:form>
 
 		<p:dialog header="Filtro" widgetVar="dialogFiltro" modal="true"
-			width="auto" height="180" resizable="false" draggable="true"
+			width="337" height="170" resizable="false" draggable="true"
 			id="dgFiltro" visible="false" closeOnEscape="true" appendTo="@(body)">
 			<h:form prependId="false">
 				<p:focus for="txtFilterNome" />
 
-				<h:panelGrid columns="2" id="panelFiltro">
+				<h:panelGrid columns="2" id="panelFiltro"
+					columnClasses="rotulo,campo">
 
 					<p:outputLabel value="SKU" />
 					<p:inputText id="txtFilterNome"
@@ -170,13 +178,12 @@
 					<p:inputText value="#{listaProdutoBean.filtro.nome}"
 						style="width:98%;" />
 
-					<p:outputLabel value="Ativo" />
+					<p:outputLabel value="Status" />
 					<p:selectOneMenu autoWidth="false" style="width:88%;"
-						value="#{listaProdutoBean.filtro.status}"
-						converter="omnifaces.SelectItemsConverter">
+						value="#{listaProdutoBean.filtro.status}">
 						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-						<f:selectItems value="#{listaProdutoBean.status}" var="statu"
-							itemLabel="#{statu.descricao}" itemValue="#{statu}" />
+						<f:selectItem itemLabel="ATIVO" itemValue="#{true}" />
+						<f:selectItem itemLabel="INATIVO" itemValue="#{false}" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>

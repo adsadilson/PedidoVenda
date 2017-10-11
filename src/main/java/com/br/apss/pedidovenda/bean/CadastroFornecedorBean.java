@@ -20,11 +20,11 @@ import org.primefaces.context.RequestContext;
 
 @Named
 @ViewScoped
-public class CadastroClienteBean implements Serializable {
+public class CadastroFornecedorBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Pessoa cliente = new Pessoa();
+	private Pessoa fornecedor = new Pessoa();
 
 	private Endereco novoEndereco = new Endereco();
 
@@ -34,49 +34,49 @@ public class CadastroClienteBean implements Serializable {
 
 	private Endereco enderecoSelecionado = new Endereco();
 
-	private Long idCliente;
+	private Long idFornecedor;
 
 	private boolean editandoEnd = false;
 
 	private boolean editandoFone = false;
 
 	@Inject
-	private PessoaService clienteService;
+	private PessoaService fornecedorService;
 
 	public void inicializar() {
-		if (idCliente != null) {
-			cliente = clienteService.porId(idCliente);
+		if (idFornecedor != null) {
+			fornecedor = fornecedorService.porId(idFornecedor);
 		}
 	}
 
 	public void salvar() {
 
-		Pessoa clienteExistente = clienteService.porCpf(cliente.getCpfCnpj());
-		if (clienteExistente != null && !clienteExistente.equals(cliente)) {
-			throw new NegocioException("Já existe uma Cliente com esse CPF/CNPJ informado.");
+		Pessoa fornecedorExistente = fornecedorService.porCpf(fornecedor.getCpfCnpj());
+		if (fornecedorExistente != null && !fornecedorExistente.equals(fornecedor)) {
+			throw new NegocioException("Já existe uma Fornecedor com esse CPF/CNPJ informado.");
 		}
-		
-		cliente.setCliente(true);
-		clienteService.salvar(cliente);
+
+		fornecedor.setFornecedor(true);
+		fornecedorService.salvar(fornecedor);
 		FacesUtil.addInfoMessage("Registro salvor com sucesso.");
 		limpar();
 
 	}
 
 	private void limpar() {
-		cliente = new Pessoa();
+		fornecedor = new Pessoa();
 	}
 
 	public void excluir() {
-		clienteService.excluir(cliente);
+		fornecedorService.excluir(fornecedor);
 	}
 
 	public void incluirEndereco() {
-		if (cliente.getEnderecos().size() > 0) {
+		if (fornecedor.getEnderecos().size() > 0) {
 			if (!existeEndereco(novoEndereco)) {
 				if (!editandoEnd) {
-					novoEndereco.setPessoa(cliente);
-					cliente.getEnderecos().add(novoEndereco);
+					novoEndereco.setPessoa(fornecedor);
+					fornecedor.getEnderecos().add(novoEndereco);
 				}
 				novoEndereco = new Endereco();
 				RequestContext request = RequestContext.getCurrentInstance();
@@ -85,8 +85,8 @@ public class CadastroClienteBean implements Serializable {
 				throw new NegocioException("Já existe um endereço com esse 'CEP' informado..");
 			}
 		} else {
-			novoEndereco.setPessoa(cliente);
-			cliente.getEnderecos().add(novoEndereco);
+			novoEndereco.setPessoa(fornecedor);
+			fornecedor.getEnderecos().add(novoEndereco);
 			novoEndereco = new Endereco();
 			RequestContext request = RequestContext.getCurrentInstance();
 			request.addCallbackParam("sucesso", true);
@@ -95,7 +95,7 @@ public class CadastroClienteBean implements Serializable {
 
 	public boolean existeEndereco(Endereco novoEndereco) {
 		boolean existeEndereco = false;
-		for (Endereco end : this.cliente.getEnderecos()) {
+		for (Endereco end : this.fornecedor.getEnderecos()) {
 			if (novoEndereco.getCep().contains(end.getCep())) {
 				if (!editandoEnd) {
 					existeEndereco = true;
@@ -107,9 +107,9 @@ public class CadastroClienteBean implements Serializable {
 	}
 
 	public void removerEndereco() {
-		for (int i = 0; i < this.getCliente().getEnderecos().size(); i++) {
-			if (this.getCliente().getEnderecos().get(i).getCep() == enderecoSelecionado.getCep()) {
-				this.cliente.getEnderecos().remove(i);
+		for (int i = 0; i < this.getFornecedor().getEnderecos().size(); i++) {
+			if (this.getFornecedor().getEnderecos().get(i).getCep() == enderecoSelecionado.getCep()) {
+				this.fornecedor.getEnderecos().remove(i);
 			}
 		}
 		prepararNovoEndereco();
@@ -121,11 +121,11 @@ public class CadastroClienteBean implements Serializable {
 	}
 
 	public void incluirTelefone() {
-		if (cliente.getTelefones().size() > 0) {
+		if (fornecedor.getTelefones().size() > 0) {
 			if (!existeTelefone(novoTelefone)) {
 				if (!editandoFone) {
-					novoTelefone.setPessoa(cliente);
-					cliente.getTelefones().add(novoTelefone);
+					novoTelefone.setPessoa(fornecedor);
+					fornecedor.getTelefones().add(novoTelefone);
 				}
 				novoTelefone = new Telefone();
 				RequestContext request = RequestContext.getCurrentInstance();
@@ -134,8 +134,8 @@ public class CadastroClienteBean implements Serializable {
 				throw new NegocioException("Já existe um telefone com esse 'NÚMERO' informado..");
 			}
 		} else {
-			novoTelefone.setPessoa(cliente);
-			cliente.getTelefones().add(novoTelefone);
+			novoTelefone.setPessoa(fornecedor);
+			fornecedor.getTelefones().add(novoTelefone);
 			novoTelefone = new Telefone();
 			RequestContext request = RequestContext.getCurrentInstance();
 			request.addCallbackParam("sucesso", true);
@@ -144,7 +144,7 @@ public class CadastroClienteBean implements Serializable {
 
 	public boolean existeTelefone(Telefone fone) {
 		boolean existeTelefone = false;
-		for (Telefone telefone : this.cliente.getTelefones()) {
+		for (Telefone telefone : this.fornecedor.getTelefones()) {
 			if (fone.getNumero().contains(telefone.getNumero())) {
 				if (!editandoFone) {
 					existeTelefone = true;
@@ -156,9 +156,9 @@ public class CadastroClienteBean implements Serializable {
 	}
 
 	public void removerTelefone() {
-		for (int i = 0; i < this.getCliente().getTelefones().size(); i++) {
-			if (this.getCliente().getTelefones().get(i).getNumero() == telefoneSelecionado.getNumero()) {
-				this.cliente.getTelefones().remove(i);
+		for (int i = 0; i < this.getFornecedor().getTelefones().size(); i++) {
+			if (this.getFornecedor().getTelefones().get(i).getNumero() == telefoneSelecionado.getNumero()) {
+				this.fornecedor.getTelefones().remove(i);
 			}
 		}
 		prepararNovoTelefone();
@@ -177,20 +177,20 @@ public class CadastroClienteBean implements Serializable {
 		this.editandoFone = true;
 	}
 
-	public Pessoa getCliente() {
-		return cliente;
+	public Pessoa getFornecedor() {
+		return fornecedor;
 	}
 
-	public void setCliente(Pessoa cliente) {
-		this.cliente = cliente;
+	public void setFornecedor(Pessoa fornecedor) {
+		this.fornecedor = fornecedor;
 	}
 
-	public Long getIdCliente() {
-		return idCliente;
+	public Long getIdFornecedor() {
+		return idFornecedor;
 	}
 
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
+	public void setIdFornecedor(Long idFornecedor) {
+		this.idFornecedor = idFornecedor;
 	}
 
 	public Endereco getNovoEndereco() {

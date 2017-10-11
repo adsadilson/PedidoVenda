@@ -21,18 +21,18 @@ import com.br.apss.pedidovenda.service.PessoaService;
 
 @Named
 @ViewScoped
-public class ListaClienteBean implements Serializable {
+public class ListaFornecedorBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private PessoaService clienteService;
+	private PessoaService fornecedorService;
 
 	private PessoaFilter filtro = new PessoaFilter();
 
 	private LazyDataModel<Pessoa> dataModel;
 
-	private Pessoa clienteSelecionada;
+	private Pessoa fornecedorSelecionada;
 
 	@PostConstruct
 	public void inicializar() {
@@ -55,16 +55,16 @@ public class ListaClienteBean implements Serializable {
 				filtro.setQuantidadeRegistros(pageSize);
 				filtro.setAscendente(SortOrder.ASCENDING.equals(sortOrder));
 				filtro.setCampoOrdenacao(sortField);
-				filtro.setCliente(true);
+				filtro.setFonecedor(true);
 
-				setRowCount(clienteService.quantidadeFiltrados(filtro));
+				setRowCount(fornecedorService.quantidadeFiltrados(filtro));
 
-				return clienteService.filtrados(filtro);
+				return fornecedorService.filtrados(filtro);
 			}
 
 			@Override
 			public Pessoa getRowData(String rowKey) {
-				Pessoa objeto = (Pessoa) clienteService.porId(Long.parseLong(rowKey));
+				Pessoa objeto = (Pessoa) fornecedorService.porId(Long.parseLong(rowKey));
 				return objeto;
 			}
 
@@ -77,7 +77,7 @@ public class ListaClienteBean implements Serializable {
 	}
 
 	public void excluir() {
-		clienteService.excluir(clienteSelecionada);
+		fornecedorService.excluir(fornecedorSelecionada);
 		pesquisar();
 		Messages.addGlobalInfo("Registro excluído com sucesso!");
 	}
@@ -100,12 +100,12 @@ public class ListaClienteBean implements Serializable {
 		this.dataModel = dataModel;
 	}
 
-	public Pessoa getClienteSelecionada() {
-		return clienteSelecionada;
+	public Pessoa getFornecedorSelecionada() {
+		return fornecedorSelecionada;
 	}
 
-	public void setClienteSelecionada(Pessoa clienteSelecionada) {
-		this.clienteSelecionada = clienteSelecionada;
+	public void setFornecedorSelecionada(Pessoa fornecedorSelecionada) {
+		this.fornecedorSelecionada = fornecedorSelecionada;
 	}
 
 	public void setFiltro(PessoaFilter filtro) {

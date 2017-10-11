@@ -32,8 +32,10 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
-						action="#{cadastroClienteBean.salvar}" update="painel" />
+						action="#{cadastroClienteBean.salvar}"
+						update="painel tabelaEndereços tabelaTelefones" />
 					<p:button value="Limpar" icon="fa fa-eraser"
+						style="margin-left:3px; margin-right:3px;"
 						outcome="/pages/cadastros/cliente/cadastro-cliente" />
 					<p:button value="Voltar" icon="fa fa-refresh"
 						outcome="/pages/cadastros/cliente/lista-cliente" />
@@ -79,13 +81,23 @@
 							value="#{cadastroClienteBean.cliente.cpfCnpj}" />
 					</h:panelGroup>
 
-					<p:outputLabel value="Email" for="email" />
+					<p:outputLabel value="E-mail" for="email" />
 					<p:inputText id="email" style="text-transform: lowercase;"
 						value="#{cadastroClienteBean.cliente.email}" />
 
 					<p:outputLabel value="Ativo" />
-					<p:selectBooleanCheckbox
-						value="#{cadastroClienteBean.cliente.status}" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox
+							value="#{cadastroClienteBean.cliente.status}" />
+						<h:outputText value="Fornecedor"
+							style="margin-left:30px; margin-right:10px;" />
+						<p:selectBooleanCheckbox
+							value="#{cadastroClienteBean.cliente.fornecedor}" />
+						<h:outputText value="Funcionário"
+							style="margin-left:30px; margin-right:10px;" />
+						<p:selectBooleanCheckbox label="Funcionario"
+							value="#{cadastroClienteBean.cliente.funcionario}" />
+					</h:panelGroup>
 
 				</h:panelGrid>
 			</p:panel>
@@ -106,7 +118,7 @@
 					value="#{cadastroClienteBean.cliente.enderecos}" var="endereco"
 					style="margin-top:5px;" paginator="true"
 					paginatorAlwaysVisible="false" paginatorPosition="top" rows="3"
-					emptyMessage="Nenhum Endereço foi encontrado">
+					emptyMessage="Nenhum registro foi encontrado">
 
 					<p:column headerText="Ação" style="width: 70px;">
 						<p:commandButton icon="ui-icon-pencil" title="Editar"
@@ -117,9 +129,14 @@
 							<f:setPropertyActionListener
 								target="#{cadastroClienteBean.novoEndereco}" value="#{endereco}" />
 						</p:commandButton>
-						<p:button icon="ui-icon-trash" title="Excluir"
-							styleClass="semPreenchimento"
-							onclick="PF('confirmacaoExclusao').show(); return false;" />
+						<p:commandButton icon="ui-icon-trash" title="Excluir"
+							styleClass="semPreenchimento" update="confirmacaoExclusao"
+							process="@this"
+							oncomplete="PF('confirmacaoExclusao').show(); return false;">
+							<f:setPropertyActionListener
+								target="#{cadastroClienteBean.enderecoSelecionado}"
+								value="#{endereco}" />
+						</p:commandButton>
 					</p:column>
 
 					<p:column headerText="Tipo" style="width: 90px;">
@@ -148,6 +165,21 @@
 
 				</p:dataTable>
 
+				<p:confirmDialog header="Confirmação de Exclussão"
+					widgetVar="confirmacaoExclusao" id="confirmacaoExclusao">
+					<f:facet name="message">
+						<h:outputText value="Tem certeza que deseja excluir o registro:" />
+						<br />
+						<h:outputText
+							value="#{cadastroClienteBean.enderecoSelecionado.logradouro}?" />
+					</f:facet>
+					<p:button value="não"
+						onclick="PF('confirmacaoExclusao').hide(); return false;" />
+					<p:commandButton value="sim" update="tabelaEndereços"
+						action="#{cadastroClienteBean.removerEndereco()}"
+						oncomplete="PF('confirmacaoExclusao').hide();" />
+				</p:confirmDialog>
+
 			</p:tab>
 			<p:tab title="Telefone(s)">
 
@@ -158,37 +190,65 @@
 				</p:commandButton>
 
 				<p:dataTable id="tabelaTelefones"
-					value="#{pesquisaClientesBean.clientesFiltrados}" var="telefone"
+					value="#{cadastroClienteBean.cliente.telefones}" var="telefone"
 					style="margin-top:5px;" paginator="true" scrollable="true"
 					scrollHeight="150" paginatorAlwaysVisible="false"
 					paginatorPosition="botton"
-					emptyMessage="Nenhum Endereço foi encontrado" rows="20">
+					emptyMessage="Nenhum registro foi encontrado" rows="20">
+
+					<p:column headerText="Ação" style="width: 70px;">
+						<p:commandButton icon="ui-icon-pencil" title="Editar"
+							styleClass="semPreenchimento"
+							action="#{cadastroClienteBean.prepararEdicaoTelefone}"
+							oncomplete="PF('inclusaoTelefone').show(); return false;"
+							process="@this" update="form3:panelGridInclusaoTelefone">
+							<f:setPropertyActionListener
+								target="#{cadastroClienteBean.novoTelefone}" value="#{telefone}" />
+						</p:commandButton>
+						<p:commandButton icon="ui-icon-trash" title="Excluir"
+							styleClass="semPreenchimento"
+							update="confirmacaoExclusaoTelefone" process="@this"
+							oncomplete="PF('confirmacaoExclusaoTelefone').show(); return false;">
+							<f:setPropertyActionListener
+								target="#{cadastroClienteBean.telefoneSelecionado}"
+								value="#{telefone}" />
+						</p:commandButton>
+					</p:column>
 
 					<p:column headerText="Tipo" style="width: 130px;">
-						<p:outputLabel value="RESIDENCIAL" />
+						<p:outputLabel value="#{telefone.tipo.descricao}" />
 					</p:column>
 
 					<p:column headerText="Número" style="width: 200px;">
-						<p:outputLabel value="123" />
+						<p:outputLabel value="#{telefone.numero}" />
 					</p:column>
 
 					<p:column headerText="Contato" style="width: 200px;">
-						<p:outputLabel value="complemento" />
-					</p:column>
-
-					<p:column headerText="Ação" style="width: 100px;">
-						<p:button icon="ui-icon-pencil" title="Editar"
-							styleClass="semPreenchimento" />
-						<p:button icon="ui-icon-trash" title="Excluir"
-							styleClass="semPreenchimento"
-							onclick="PF('confirmacaoExclusao').show(); return false;" />
+						<p:outputLabel value="#{telefone.contato}" />
 					</p:column>
 
 					<p:column />
 
 				</p:dataTable>
 
+				<p:confirmDialog header="Confirmação de Exclussão"
+					widgetVar="confirmacaoExclusaoTelefone"
+					id="confirmacaoExclusaoTelefone">
+					<f:facet name="message">
+						<h:outputText value="Tem certeza que deseja excluir o registro:" />
+						<br />
+						<h:outputText
+							value="#{cadastroClienteBean.telefoneSelecionado.numero}?" />
+					</f:facet>
+					<p:button value="não"
+						onclick="PF('confirmacaoExclusaoTelefone').hide(); return false;" />
+					<p:commandButton value="sim" update="tabelaTelefones"
+						action="#{cadastroClienteBean.removerTelefone()}"
+						oncomplete="PF('confirmacaoExclusaoTelefone').hide();" />
+				</p:confirmDialog>
+
 			</p:tab>
+
 		</p:tabView>
 
 		<h:form id="form2">
@@ -196,8 +256,6 @@
 				resizable="false" modal="true" id="inclusao">
 
 				<h:panelGrid columns="2" id="panelGridInclusaoEndereco">
-
-
 
 					<p:outputLabel value="Tipo" for="tipoEnd" />
 					<h:panelGroup>
@@ -262,14 +320,7 @@
 				</h:panelGrid>
 			</p:dialog>
 
-			<p:confirmDialog header="Exclusão de endereços"
-				widgetVar="confirmacaoExclusao"
-				message="Tem certeza de que deseja excluir esse Endereço?">
-				<p:button value="não"
-					onclick="PF('confirmacaoExclusao').hide(); return false;" />
-				<p:commandButton value="sim"
-					oncomplete="PF('confirmacaoExclusao').hide();" />
-			</p:confirmDialog>
+
 		</h:form>
 
 
@@ -279,44 +330,46 @@
 
 				<h:panelGrid columns="2" id="panelGridInclusaoTelefone">
 
-					<p:outputLabel value="Tipo" for="tipo" />
-					<p:selectOneMenu id="tipo" required="true" autoWidth="true"
-						style="width:85%;" converter="omnifaces.SelectItemsConverter"
-						filter="true" filterMatchMode="contains"
+					<p:outputLabel value="Tipo" for="tipoTelefone" />
+					<p:selectOneMenu id="tipoTelefone" style="width:150px;"
+						autoWidth="false" required="true"
 						requiredMessage="O campo 'TIPO' é obrigatório."
-						value="#{cadastroProdutoBean.produto.unidade}">
-						<f:selectItem itemLabel="Selecione..." />
+						value="#{cadastroClienteBean.novoTelefone.tipo}">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+						<f:selectItems value="#{cadastroClienteBean.tipoTelefones}"
+							var="tipoEnd" itemLabel="#{tipoFone.descricao}"
+							itemValue="#{tipoFone}" />
+						<p:ajax event="change" process="@this" update="txtNumero" />
 					</p:selectOneMenu>
 
-					<p:outputLabel value="Número" for="num" />
-					<p:inputMask mask="(99)?9999-9999" id="num" required="true"
-						requiredMessage="O campo 'NÚMERO' é obrigatório."
-						value="#{cadastroClienteBean.novoEndereco.cep}" />
+					<p:outputLabel value="Número" />
+					<h:panelGroup id="txtNumero">
+						<p:inputMask mask="(99)99999-9999"
+							rendered="#{cadastroClienteBean.novoTelefone.tipo=='CELULAR'}"
+							value="#{cadastroClienteBean.novoTelefone.numero}" />
+						<p:inputMask mask="(99)9999-9999"
+							rendered="#{cadastroClienteBean.novoTelefone.tipo!='CELULAR'}"
+							value="#{cadastroClienteBean.novoTelefone.numero}" />
+					</h:panelGroup>
 
 
 					<p:outputLabel value="Contato" />
 					<p:inputText id="complemento"
-						value="#{cadastroClienteBean.novoEndereco.complemento}" />
+						value="#{cadastroClienteBean.novoTelefone.contato}" />
 
 
 					<p:outputLabel />
-					<p:commandButton value="Incluir" update="panelGridInclusaoTelefone"
-						actionListener="#{cadastroClienteBean.incluirEndereco}"
-						process="@this inclusaoTelefone "
-						oncomplete="if(!args.validationFailed) PF('inclusaoTelefone').hide();">
+					<p:commandButton value="Incluir"
+						oncomplete="if(args.sucesso == true) PF('inclusaoTelefone').hide()"
+						update="form3:panelGridInclusaoTelefone tabelaTelefones"
+						actionListener="#{cadastroClienteBean.incluirTelefone}"
+						process="@this inclusaoTelefone ">
 					</p:commandButton>
 
 				</h:panelGrid>
+
 			</p:dialog>
 
-			<p:confirmDialog header="Exclusão de Telefone"
-				widgetVar="confirmacaoExclusaoTelefone"
-				message="Tem certeza de que deseja excluir esse Telefone?">
-				<p:button value="não"
-					onclick="PF('confirmacaoExclusaoTelefone').hide(); return false;" />
-				<p:commandButton value="sim"
-					oncomplete="PF('confirmacaoExclusaoTelefone').hide();" />
-			</p:confirmDialog>
 		</h:form>
 
 

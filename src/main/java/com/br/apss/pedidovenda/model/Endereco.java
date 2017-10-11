@@ -53,8 +53,8 @@ public class Endereco implements Serializable {
 	private TipoEndereco tipo;
 
 	@ManyToOne
-	@JoinColumn(name = "cliente_id", nullable = false)
-	private Pessoa cliente;
+	@JoinColumn(name = "pessoa_id", nullable = false)
+	private Pessoa pessoa;
 
 	public Long getId() {
 		return id;
@@ -112,12 +112,12 @@ public class Endereco implements Serializable {
 		this.cep = cep;
 	}
 
-	public Pessoa getCliente() {
-		return cliente;
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
 
-	public void setCliente(Pessoa cliente) {
-		this.cliente = cliente;
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	public void setBairro(String bairro) {

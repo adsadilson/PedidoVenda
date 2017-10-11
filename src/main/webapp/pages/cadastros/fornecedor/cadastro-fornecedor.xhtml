@@ -1,0 +1,160 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Manutenção de Fornecedor</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.rotulo {
+	width: 100px;
+}
+</style>
+
+		<f:metadata>
+			<o:viewParam name="codigo"
+				value="#{cadastroFornecedorBean.idFornecedor}"
+				converter="javax.faces.Long" />
+			<o:viewAction action="#{cadastroFornecedorBean.inicializar()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			<h1>#{cadastroFornecedorBean.fornecedor.id != null ? 'Edição de
+				Fornecedor' : 'Novo Fornecedor'}</h1>
+
+			<p:growl autoUpdate="true" />
+
+			<p:focus for="nome" />
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
+						action="#{cadastroFornecedorBean.salvar}" update="painel" />
+					<p:button value="Limpar" icon="fa fa-eraser"
+						style="margin-left:3px; margin-right:3px;"
+						outcome="/pages/cadastros/fornecedor/cadastro-fornecedor" />
+					<p:button value="Voltar" icon="fa fa-refresh"
+						outcome="/pages/cadastros/fornecedor/lista-fornecedor" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panel style="margin-top: 20px; margin-bottom:5px;">
+
+				<h:panelGrid columns="2" id="painel" style="width: 100%;"
+					columnClasses="rotulo">
+
+					<p:outputLabel value="Tipo" for="tipo" />
+					<p:selectOneRadio id="tipo"
+						value="#{cadastroFornecedorBean.fornecedor.tipoPessoa}">
+						<f:selectItem itemLabel="Física" itemValue="F" />
+						<f:selectItem itemLabel="Jurídica" itemValue="J" />
+						<p:ajax event="change" process="@this" update="txtCpf labelCpf" />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" style="width:25%" maxlength="80"
+						required="true" requiredMessage="O campo 'NOME' é obrigatório."
+						value="#{cadastroFornecedorBean.fornecedor.nome}" />
+
+
+					<h:panelGroup id="labelCpf">
+						<p:outputLabel value="CNPJ/CPF" for="cpf"
+							rendered="#{cadastroFornecedorBean.fornecedor.tipoPessoa=='F'}" />
+						<p:outputLabel value="CNPJ/CPF" for="cnpj"
+							rendered="#{cadastroFornecedorBean.fornecedor.tipoPessoa=='J'}" />
+					</h:panelGroup>
+					<h:panelGroup id="txtCpf">
+						<p:inputMask id="cpf" mask="999.999.999-99" required="true"
+							requiredMessage="O campo 'CNPJ/CPF' é obrigatório."
+							rendered="#{cadastroFornecedorBean.fornecedor.tipoPessoa=='F'}"
+							value="#{cadastroFornecedorBean.fornecedor.cpfCnpj}" />
+						<p:inputMask id="cnpj" mask="99.999.999/9999-99" required="true"
+							requiredMessage="O campo 'CNPJ/CPF' é obrigatório."
+							rendered="#{cadastroFornecedorBean.fornecedor.tipoPessoa=='J'}"
+							value="#{cadastroFornecedorBean.fornecedor.cpfCnpj}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="E-mail" for="email" />
+					<p:inputText id="email" style="text-transform: lowercase;"
+						value="#{cadastroFornecedorBean.fornecedor.email}" />
+
+					<p:outputLabel value="Ativo" />
+					<p:selectBooleanCheckbox
+						value="#{cadastroFornecedorBean.fornecedor.status}" />
+
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+		<p:tabView style="width: 100%; height: 230px;" prependId="false">
+			<p:tab title="Endereço/Contato">
+
+				<h:panelGrid columns="2" id="panelGridInclusaoEndereco"
+					style="margin-top:20px; margin-left:10px;"
+					columnClasses="rotulo,campo">
+
+					<p:outputLabel value="CEP" for="cep" />
+					<p:inputMask mask="99999-999" id="cep" required="true"
+						requiredMessage="O campo 'CEP' é obrigatório."
+						readonly="#{cadastroFornecedorBean.editandoEnd}"
+						value="#{cadastroFornecedorBean.novoEndereco.cep}" />
+
+					<p:outputLabel value="Logradouro" for="logradouro" />
+					<h:panelGroup>
+						<p:inputText id="logradouro" style="width: 78%" required="true"
+							requiredMessage="O campo 'LOGRADOURO' é obrigatório."
+							value="#{cadastroFornecedorBean.novoEndereco.logradouro}" />
+						<p:inputText id="numero" style="width: 16%; margin-left:5px;"
+							value="#{cadastroFornecedorBean.novoEndereco.numero}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Complemento" for="complemento" />
+					<h:panelGroup>
+						<p:inputText id="complemento"
+							value="#{cadastroFornecedorBean.novoEndereco.complemento}" />
+						<p:outputLabel value="Bairro" for="bairro"
+							style="margin-left: 10px; margin-right:12px;" />
+						<p:inputText id="bairro" required="true"
+							requiredMessage="O campo 'BAIRRO' é obrigatório."
+							value="#{cadastroFornecedorBean.novoEndereco.bairro}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="UF" for="uf" />
+					<h:panelGroup>
+						<p:inputText id="uf"
+							value="#{cadastroFornecedorBean.novoEndereco.uf}" required="true"
+							requiredMessage="O campo 'UF' é obrigatório." />
+						<p:outputLabel value="Cidade" for="cidade"
+							style="margin-left: 10px; margin-right:5px;" />
+						<p:inputText id="cidade" required="true"
+							requiredMessage="O campo 'CIDADE' é obrigatório."
+							value="#{cadastroFornecedorBean.novoEndereco.cidade}" />
+					</h:panelGroup>
+
+					<p:outputLabel />
+					<p:commandButton value="Incluir"
+						oncomplete="if(args.sucesso == true) PF('inclusaoEndereco').hide()"
+						update="panelGridInclusaoEndereco"
+						actionListener="#{cadastroFornecedorBean.incluirEndereco}"
+						process="@this">
+					</p:commandButton>
+
+				</h:panelGrid>
+
+			</p:tab>
+			<p:tab title="Observação">
+
+			</p:tab>
+
+		</p:tabView>
+
+	</ui:define>
+</ui:composition>

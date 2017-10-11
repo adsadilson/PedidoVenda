@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.br.apss.pedidovenda.enums.TipoTelefone;
 
 @Entity
 @Table(name = "telefone")
@@ -33,11 +37,12 @@ public class Telefone implements Serializable {
 	private String email;
 
 	@Column(length = 40)
-	private String tipo;
+	@Enumerated(EnumType.STRING)
+	private TipoTelefone tipo;
 
 	@ManyToOne
-	@JoinColumn(name = "cliente_id", nullable = false)
-	private Pessoa cliente;
+	@JoinColumn(name = "pessoa_id", nullable = false)
+	private Pessoa pessoa;
 
 	public Long getId() {
 		return id;
@@ -71,20 +76,20 @@ public class Telefone implements Serializable {
 		this.email = email == null ? null : email.toLowerCase();
 	}
 
-	public String getTipo() {
+	public TipoTelefone getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(TipoTelefone tipo) {
 		this.tipo = tipo;
 	}
 
-	public Pessoa getCliente() {
-		return cliente;
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
 
-	public void setCliente(Pessoa cliente) {
-		this.cliente = cliente;
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	@Override
