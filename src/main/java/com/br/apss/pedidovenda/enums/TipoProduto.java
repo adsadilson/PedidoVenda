@@ -4,7 +4,7 @@ public enum TipoProduto {
 
 	REVENDA("REVENDA"),
 	CONSUMO("CONSUMO"),
-	SERVICO("SERVIÇO");
+	SERVICO("SERVIÃ‡O");
 	
 	private String descricao;
 

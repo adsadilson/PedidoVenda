@@ -36,6 +36,7 @@
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
 						action="#{cadastroProdutoBean.salvar}" update="painel" />
 					<p:button value="Limpar" icon="fa fa-eraser"
+						style="margin-left:3px; margin-right:3px;"
 						outcome="/pages/cadastros/produto/cadastro-produto" />
 					<p:button value="Voltar" icon="fa fa-refresh"
 						outcome="/pages/cadastros/produto/lista-produto" />
@@ -114,29 +115,28 @@
 							itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
 					</p:selectOneMenu>
 
-					<p:outputLabel value="Valor Venda" for="txtVenda" />
-					<p:inputNumber size="10" id="txtVenda" required="true"
-						emptyValue="empty" value="#{cadastroProdutoBean.produto.vlrVenda}"
-						symbol="R$ " decimalSeparator="," thousandSeparator=".">
-						<p:ajax process="@this txtCusto" update="txtMarLucro txtLucro"
-							listener="#{cadastroProdutoBean.calcVenda}" />
-					</p:inputNumber>
-
 					<p:outputLabel value="Valor Custo" for="txtCusto" />
 					<p:inputNumber size="10" id="txtCusto" required="true"
 						emptyValue="empty" value="#{cadastroProdutoBean.produto.vlrCusto}"
 						symbol="R$ " decimalSeparator="," thousandSeparator=".">
-						<p:ajax process="txtVenda @this"
-							update="txtMarLucro txtCusto txtLucro"
+						<p:ajax process="@this" update="txtMarLucro txtCusto txtLucro"
 							listener="#{cadastroProdutoBean.calcVenda}" />
 					</p:inputNumber>
 
-					<p:outputLabel value="Margem L (%)" />
+					<p:outputLabel value="Valor Venda" for="txtVenda" />
+					<p:inputNumber size="10" id="txtVenda" required="true"
+						emptyValue="empty" value="#{cadastroProdutoBean.produto.vlrVenda}"
+						symbol="R$ " decimalSeparator="," thousandSeparator=".">
+						<p:ajax process="@this" update="txtMarLucro txtLucro"
+							listener="#{cadastroProdutoBean.calcVenda}" />
+					</p:inputNumber>
+
+					<p:outputLabel value="Margem L (%)" for="txtMarLucro" />
 					<p:inputNumber id="txtMarLucro" size="10" required="true"
 						emptyValue="empty"
 						value="#{cadastroProdutoBean.produto.margLucro}" symbol="%"
 						symbolPosition="s">
-						<p:ajax process="@this, txtCusto" update="txtVenda txtLucro"
+						<p:ajax process="@this" update="txtVenda txtLucro"
 							listener="#{cadastroProdutoBean.calcMargem}" />
 					</p:inputNumber>
 

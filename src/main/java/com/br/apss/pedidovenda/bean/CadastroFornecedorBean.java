@@ -1,6 +1,7 @@
 package com.br.apss.pedidovenda.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,6 +47,16 @@ public class CadastroFornecedorBean implements Serializable {
 	public void inicializar() {
 		if (idFornecedor != null) {
 			fornecedor = fornecedorService.porId(idFornecedor);
+			for (int i = 0; i < fornecedor.getEnderecos().size(); i++) {
+				novoEndereco.setLogradouro(fornecedor.getEnderecos().get(i).getLogradouro());
+				novoEndereco.setNumero((fornecedor.getEnderecos().get(i).getNumero()));
+				novoEndereco.setComplemento(fornecedor.getEnderecos().get(i).getComplemento());
+				novoEndereco.setBairro(fornecedor.getEnderecos().get(i).getBairro());
+				novoEndereco.setCidade(fornecedor.getEnderecos().get(i).getCidade());
+				novoEndereco.setCep(fornecedor.getEnderecos().get(i).getCep());
+				novoEndereco.setUf(fornecedor.getEnderecos().get(i).getUf());
+			}
+				
 		}
 	}
 
@@ -53,9 +64,13 @@ public class CadastroFornecedorBean implements Serializable {
 
 		Pessoa fornecedorExistente = fornecedorService.porCpf(fornecedor.getCpfCnpj());
 		if (fornecedorExistente != null && !fornecedorExistente.equals(fornecedor)) {
-			throw new NegocioException("Já existe uma Fornecedor com esse CPF/CNPJ informado.");
+			throw new NegocioException("JÃ¡ existe uma Fornecedor com esse CPF/CNPJ informado.");
 		}
-
+		
+		novoEndereco.setPessoa(fornecedor);
+		List<Endereco> end = new ArrayList<>();
+		end.add(novoEndereco);
+		fornecedor.setEnderecos(end);
 		fornecedor.setFornecedor(true);
 		fornecedorService.salvar(fornecedor);
 		FacesUtil.addInfoMessage("Registro salvor com sucesso.");
@@ -65,6 +80,7 @@ public class CadastroFornecedorBean implements Serializable {
 
 	private void limpar() {
 		fornecedor = new Pessoa();
+		novoEndereco = new Endereco();
 	}
 
 	public void excluir() {
@@ -82,7 +98,7 @@ public class CadastroFornecedorBean implements Serializable {
 				RequestContext request = RequestContext.getCurrentInstance();
 				request.addCallbackParam("sucesso", true);
 			} else {
-				throw new NegocioException("Já existe um endereço com esse 'CEP' informado..");
+				throw new NegocioException("Jï¿½ existe um endereï¿½o com esse 'CEP' informado..");
 			}
 		} else {
 			novoEndereco.setPessoa(fornecedor);
@@ -131,7 +147,7 @@ public class CadastroFornecedorBean implements Serializable {
 				RequestContext request = RequestContext.getCurrentInstance();
 				request.addCallbackParam("sucesso", true);
 			} else {
-				throw new NegocioException("Já existe um telefone com esse 'NÚMERO' informado..");
+				throw new NegocioException("Jï¿½ existe um telefone com esse 'Nï¿½MERO' informado..");
 			}
 		} else {
 			novoTelefone.setPessoa(fornecedor);

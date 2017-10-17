@@ -46,7 +46,7 @@ public class Produto implements Serializable {
 	private TipoProduto tipoProduto;
 
 	@Column(name = "quantidade", precision = 12, scale = 2)
-	@DecimalMin(value="0.01", message="O campo 'ESTOQUE' tem quer ser maior que 0")
+	@DecimalMin(value = "0.01", message = "O campo 'ESTOQUE' tem quer ser maior que 0")
 	private BigDecimal quantidade = BigDecimal.ZERO;
 
 	@Column(name = "qtd_minima", precision = 12, scale = 2)
@@ -56,13 +56,14 @@ public class Produto implements Serializable {
 	private BigDecimal qtdMaxima = BigDecimal.ZERO;
 
 	@Column(name = "vlr_custo", precision = 12, scale = 2)
-	@DecimalMin(value="0.01", message="O campo 'CUSTO' tem quer ser maior que 0,00")
+	@DecimalMin(value = "0.01", message = "O campo 'CUSTO' tem quer ser maior que 0,00")
 	private BigDecimal vlrCusto = BigDecimal.ZERO;
 
 	@Column(name = "vlr_venda", precision = 12, scale = 2)
-	@DecimalMin(value="0.01", message="O campo 'VENDA' tem quer ser maior que 0,00")
+	@DecimalMin(value = "0.01", message = "O campo 'VENDA' tem quer ser maior que 0,00")
 	private BigDecimal vlrVenda = BigDecimal.ZERO;;
 
+	@DecimalMin(value = "0.01", message = "O campo 'MARG LUCRO' não pode ser negativo e nem menor que 0,00")
 	@Column(name = "marg_lucro", precision = 12, scale = 2)
 	private BigDecimal margLucro = BigDecimal.ZERO;
 

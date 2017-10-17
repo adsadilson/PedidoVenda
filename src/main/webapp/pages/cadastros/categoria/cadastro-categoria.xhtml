@@ -23,8 +23,8 @@
 		</f:metadata>
 
 		<h:form prependId="false">
-			<h1>#{cadastroCategoriaBean.categoria.id != null ?
-				'Edição de Categoria de Produto' : 'Nova Categoria de Produto'}</h1>
+			<h1>#{cadastroCategoriaBean.categoria.id != null ? 'Edição de
+				Categoria de Produto' : 'Nova Categoria de Produto'}</h1>
 
 			<p:growl autoUpdate="true" />
 
@@ -37,6 +37,7 @@
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
 						action="#{cadastroCategoriaBean.salvar}" update="painel" />
 					<p:button value="Limpar" icon="fa fa-eraser"
+						style="margin-left:3px; margin-right:3px;"
 						outcome="/pages/cadastros/categoria/cadastro-categoria" />
 					<p:button value="Voltar" icon="fa fa-refresh"
 						outcome="/pages/cadastros/categoria/lista-categoria" />
@@ -54,8 +55,7 @@
 
 					<p:outputLabel value="Descrição" for="nome" />
 					<p:inputText id="nome" style="width:25%" maxlength="80"
-						required="true"
-						requiredMessage="O campo 'NOME' é obrigatório."
+						required="true" requiredMessage="O campo 'NOME' é obrigatório."
 						value="#{cadastroCategoriaBean.categoria.nome}" />
 
 					<p:outputLabel value="Ativo" />
@@ -64,7 +64,7 @@
 
 				</h:panelGrid>
 			</p:panel>
-		
+
 		</h:form>
 
 	</ui:define>
