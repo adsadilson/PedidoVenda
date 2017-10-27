@@ -16,15 +16,13 @@
 </style>
 
 		<f:metadata>
-			<o:viewParam name="codigo"
-				value="#{cadastroUnidadeBean.idUnidade}"
-				converter="javax.faces.Long" />
+			<o:viewParam name="codigo" value="#{cadastroUnidadeBean.unidade}" />
 			<o:viewAction action="#{cadastroUnidadeBean.inicializar()}" />
 		</f:metadata>
 
 		<h:form prependId="false">
-			<h1>#{cadastroUnidadeBean.unidade.id != null ?
-				'Edição de Unidade de Medida' : 'Nova Unidade de Medida'}</h1>
+			<h1>#{cadastroUnidadeBean.unidade.id != null ? 'Edição de
+				Unidade de Medida' : 'Nova Unidade de Medida'}</h1>
 
 			<p:growl autoUpdate="true" />
 
@@ -68,7 +66,7 @@
 
 				</h:panelGrid>
 			</p:panel>
-		
+
 		</h:form>
 
 	</ui:define>

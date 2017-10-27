@@ -18,14 +18,12 @@ public class CadastroUnidadeBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private UnidadeMedida unidade = new UnidadeMedida();
 
-	private Long idUnidade;
-
 	@Inject
 	private UnidadeMedidaService unidadeService;
 
 	public void inicializar() {
-		if (idUnidade != null) {
-			unidade = unidadeService.porId(idUnidade);
+		if (this.unidade == null) {
+			limpar();
 		}
 	}
 
@@ -33,7 +31,7 @@ public class CadastroUnidadeBean implements Serializable {
 		
 		UnidadeMedida unidadeExistente = unidadeService.porNome(unidade.getNome());
 		if (unidadeExistente != null && !unidadeExistente.equals(unidade)) {
-			throw new NegocioException("Já existe uma Unidade de Medida com esse nome informado.");
+			throw new NegocioException("JÃ¡ existe uma Unidade de Medida com esse nome informado.");
 		}
 		
 		unidadeService.salvar(unidade);
@@ -58,14 +56,6 @@ public class CadastroUnidadeBean implements Serializable {
 
 	public void setUnidade(UnidadeMedida unidade) {
 		this.unidade = unidade;
-	}
-
-	public Long getIdUnidade() {
-		return idUnidade;
-	}
-
-	public void setIdUnidade(Long idUnidade) {
-		this.idUnidade = idUnidade;
 	}
 
 }

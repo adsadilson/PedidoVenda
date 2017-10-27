@@ -87,8 +87,18 @@
 						value="#{cadastroFornecedorBean.fornecedor.email}" />
 
 					<p:outputLabel value="Ativo" />
-					<p:selectBooleanCheckbox
-						value="#{cadastroFornecedorBean.fornecedor.status}" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox
+							value="#{cadastroFornecedorBean.fornecedor.status}" />
+						<h:outputText value="Cliente"
+							style="margin-left:30px; margin-right:10px;" />
+						<p:selectBooleanCheckbox
+							value="#{cadastroFornecedorBean.fornecedor.cliente}" />
+						<h:outputText value="Funcionário"
+							style="margin-left:30px; margin-right:10px;" />
+						<p:selectBooleanCheckbox label="Funcionario"
+							value="#{cadastroFornecedorBean.fornecedor.funcionario}" />
+					</h:panelGroup>
 
 				</h:panelGrid>
 			</p:panel>
