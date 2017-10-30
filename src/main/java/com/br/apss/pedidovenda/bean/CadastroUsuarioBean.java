@@ -26,6 +26,8 @@ public class CadastroUsuarioBean implements Serializable {
 
 	private GrupoUsuario grupo = new GrupoUsuario();
 
+	private GrupoUsuario grupoSelecionado = new GrupoUsuario();
+
 	private List<GrupoUsuario> grupos = new ArrayList<GrupoUsuario>();
 
 	@Inject
@@ -63,13 +65,17 @@ public class CadastroUsuarioBean implements Serializable {
 	public void adicionarGrupo() {
 		if (this.grupo != null) {
 			if (this.usuario.getGrupos().contains(this.grupo)) {
-				throw new NegocioException("O grupo " + this.grupo.getNome() + " já esta adicionar a esse usuário.");
+				throw new NegocioException("Grupo já cadastrado.");
 			}
 			this.usuario.getGrupos().add(this.grupo);
 			this.grupo = null;
-		}else{
+		} else {
 			Messages.addGlobalWarn("Selecione um grupo primeiro");
 		}
+	}
+	
+	public void removeGrupo(){
+		this.usuario.getGrupos().remove(this.grupoSelecionado);
 	}
 
 	/********* Getters e Setters *************/
@@ -96,6 +102,14 @@ public class CadastroUsuarioBean implements Serializable {
 
 	public void setGrupos(List<GrupoUsuario> grupos) {
 		this.grupos = grupos;
+	}
+
+	public GrupoUsuario getGrupoSelecionado() {
+		return grupoSelecionado;
+	}
+
+	public void setGrupoSelecionado(GrupoUsuario grupoSelecionado) {
+		this.grupoSelecionado = grupoSelecionado;
 	}
 
 }

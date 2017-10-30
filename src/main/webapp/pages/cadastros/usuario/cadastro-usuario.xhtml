@@ -31,7 +31,7 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
-						action="#{cadastroUsuarioBean.salvar}" update="painel" />
+						action="#{cadastroUsuarioBean.salvar}" update="painel grupoTabela" />
 					<p:button value="Limpar" icon="fa fa-eraser"
 						style="margin-left:3px; margin-right:3px;"
 						outcome="/pages/cadastros/usuario/cadastro-usuario" />
@@ -63,9 +63,17 @@
 
 					<p:outputLabel value="Senha" for="password" />
 					<p:password id="password" required="true"
-						value="#{cadastroUsuarioBean.usuario.senha}"
-						requiredMessage="O campo 'SENHA' é obrigatório." size="20"
-						maxlength="20" />
+						value="#{cadastroUsuarioBean.usuario.senha}" feedback="true"
+						weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"
+						promptLabel="Informe uma senha" inline="true"
+						match="confirmacaoSenha"
+						requiredMessage="O campo 'SENHA' é obrigatório."
+						style="width: 15%" maxlength="12" />
+
+					<p:outputLabel value="Confirmação" for="confirmacaoSenha" />
+					<p:password id="confirmacaoSenha" required="true"
+						requiredMessage="O campo 'CONFIRMAÇÃO' é obrigatório."
+						style="width: 15%" maxlength="12" />
 
 					<p:outputLabel value="Ativo" />
 					<p:selectBooleanCheckbox
@@ -102,22 +110,27 @@
 				<p:column headerText="Ação" style="text-align: center; width: 50px">
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						styleClass="semPreenchimento"
-						oncomplete="PF('confirmaExclusao').show();" />
+						oncomplete="PF('confirmaExclusaoGrupo').show()"
+						process="@this" update="confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{cadastroUsuarioBean.grupoSelecionado}" value="#{grupo}" />
+					</p:commandButton>
 				</p:column>
 
 				<p:column />
 
 			</p:dataTable>
 
-			<p:confirmDialog header="Esxclusão de grupo"
+			<p:confirmDialog header="Exclusão de grupo"
 				message="Tem certeza que deseja excluir o grupo de usuario?"
-				widgetVar="confirmaExclusao" id="confirmacaoExclusaoDialog">
+				widgetVar="confirmaExclusaoGrupo" id="confirmacaoExclusaoDialog">
 
 				<p:button value="Não"
-					onclick="PF('confirmaExclusao').hide(); return false;" />
+					onclick="PF('confirmaExclusaoGrupo').hide(); return false;" />
 
-				<p:commandButton value="Sim"
-					oncomplete="PF('confirmaExclusao').hide();" />
+				<p:commandButton value="Sim" action="#{cadastroUsuarioBean.removeGrupo}" process="@this"
+	    			update="grupoTabela"
+					oncomplete="PF('confirmaExclusaoGrupo').hide();" />
 			</p:confirmDialog>
 
 		</h:form>
