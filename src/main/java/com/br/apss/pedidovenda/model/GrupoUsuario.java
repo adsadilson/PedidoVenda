@@ -23,12 +23,12 @@ public class GrupoUsuario implements Serializable {
 
 	@Column(name = "nome", nullable = false, length = 80)
 	private String nome;
-	
+
 	@Column(name = "descricao", nullable = true, length = 80)
 	private String descricao;
-	
+
 	@Column(name = "status", nullable = true, length = 1)
-	private Boolean status;
+	private Boolean status = true;
 
 	public Long getId() {
 		return id;

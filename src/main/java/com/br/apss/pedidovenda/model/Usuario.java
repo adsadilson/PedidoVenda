@@ -43,11 +43,11 @@ public class Usuario implements Serializable {
 	private List<GrupoUsuario> grupos = new ArrayList<>();
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "cadastro", nullable = true)
+	@Column(name = "cadastro")
 	private Date cadastro;
 
 	@Column(name = "status", nullable = true, length = 1)
-	private Boolean status;
+	private Boolean status = true;
 
 	public Long getId() {
 		return id;
