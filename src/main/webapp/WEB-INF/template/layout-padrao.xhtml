@@ -38,17 +38,27 @@
 		<h:form style="display: inline-block">
 			<p:menubar styleClass="menu-sistema">
 				<p:submenu label="Cadastros">
-					<p:menuitem value="Clientes" outcome="/pages/cadastros/cliente/lista-cliente.xhtml"/>
-					<p:menuitem value="Fornecedores" outcome="/pages/cadastros/fornecedor/lista-fornecedor.xhtml"/>
-					<p:menuitem value="Usuários" />
+					<p:menuitem value="Clientes"
+						outcome="/pages/cadastros/cliente/lista-cliente.xhtml" />
+					<p:menuitem value="Fornecedores"
+						outcome="/pages/cadastros/fornecedor/lista-fornecedor.xhtml" />
+					<p:menuitem value="Usuários"
+						outcome="/pages/cadastros/usuario/lista-usuario.xhtml" />
 					<p:separator />
 					<p:submenu label="Produtos">
-						<p:menuitem value="Produto" outcome="/pages/cadastros/produto/lista-produto.xhtml"/>
-						<p:menuitem value="Categorias" outcome="/pages/cadastros/categoria/lista-categoria.xhtml"/>
-						<p:menuitem value="SubCategorias" outcome="/pages/cadastros/subcategoria/lista-subcategoria.xhtml"/>
-						<p:menuitem value="Unidade de Medida" outcome="/pages/cadastros/unidade/lista-unidade.xhtml"/>
+						<p:menuitem value="Produto"
+							outcome="/pages/cadastros/produto/lista-produto.xhtml" />
+						<p:menuitem value="Categorias"
+							outcome="/pages/cadastros/categoria/lista-categoria.xhtml" />
+						<p:menuitem value="SubCategorias"
+							outcome="/pages/cadastros/subcategoria/lista-subcategoria.xhtml" />
+						<p:menuitem value="Unidade de Medida"
+							outcome="/pages/cadastros/unidade/lista-unidade.xhtml" />
 					</p:submenu>
-					<p:menuitem value="Outros" />
+					<p:submenu label="Outros">
+						<p:menuitem value="Grupo de Usuário"
+							outcome="/pages/cadastros/grupoUsuario/lista-grupo-usuario.xhtml" />
+					</p:submenu>
 				</p:submenu>
 				<p:submenu label="Pedidos">
 					<p:menuitem value="Novo pedido" />
