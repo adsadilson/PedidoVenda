@@ -46,7 +46,7 @@ public class CadastroUsuarioBean implements Serializable {
 	public void salvar() {
 		Usuario usuarioExistente = usuarioService.porEmail(usuario.getEmail());
 		if (usuarioExistente != null && !usuarioExistente.equals(usuario)) {
-			throw new NegocioException("Já existe uma Usuário com esse 'E-MAIL' informado.");
+			throw new NegocioException("Jï¿½ existe uma Usuï¿½rio com esse 'E-MAIL' informado.");
 		}
 		usuarioService.salvar(usuario);
 		Messages.addGlobalInfo("Registro salvor com sucesso.");
@@ -65,12 +65,12 @@ public class CadastroUsuarioBean implements Serializable {
 	public void adicionarGrupo() {
 		if (this.grupo != null) {
 			if (this.usuario.getGrupos().contains(this.grupo)) {
-				throw new NegocioException("Grupo já cadastrado.");
+				throw new NegocioException("Grupo jÃ¡ cadastrado.");
 			}
 			this.usuario.getGrupos().add(this.grupo);
 			this.grupo = null;
 		} else {
-			Messages.addGlobalWarn("Selecione um grupo primeiro");
+			Messages.addGlobalWarn("Selecione um grupo primeiro.");
 		}
 	}
 	

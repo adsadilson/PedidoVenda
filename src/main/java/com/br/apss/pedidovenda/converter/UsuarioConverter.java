@@ -1,4 +1,4 @@
-package br.com.apss.pedidovenda.converter;
+package com.br.apss.pedidovenda.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

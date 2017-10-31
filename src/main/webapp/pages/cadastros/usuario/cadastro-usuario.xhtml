@@ -62,11 +62,12 @@
 						value="#{cadastroUsuarioBean.usuario.email}" />
 
 					<p:outputLabel value="Senha" for="password" />
-					<p:password id="password" required="true"
+					<p:password id="password" required="true" redisplay="true"
 						value="#{cadastroUsuarioBean.usuario.senha}" feedback="true"
 						weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"
 						promptLabel="Informe uma senha" inline="true"
 						match="confirmacaoSenha"
+						validatorMessage="Os campos 'SENHA' não são iguais."
 						requiredMessage="O campo 'SENHA' é obrigatório."
 						style="width: 15%" maxlength="12" />
 
@@ -110,8 +111,8 @@
 				<p:column headerText="Ação" style="text-align: center; width: 50px">
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						styleClass="semPreenchimento"
-						oncomplete="PF('confirmaExclusaoGrupo').show()"
-						process="@this" update="confirmacaoExclusaoDialog">
+						oncomplete="PF('confirmaExclusaoGrupo').show()" process="@this"
+						update="confirmacaoExclusaoDialog">
 						<f:setPropertyActionListener
 							target="#{cadastroUsuarioBean.grupoSelecionado}" value="#{grupo}" />
 					</p:commandButton>
@@ -128,8 +129,9 @@
 				<p:button value="Não"
 					onclick="PF('confirmaExclusaoGrupo').hide(); return false;" />
 
-				<p:commandButton value="Sim" action="#{cadastroUsuarioBean.removeGrupo}" process="@this"
-	    			update="grupoTabela"
+				<p:commandButton value="Sim"
+					action="#{cadastroUsuarioBean.removeGrupo}" process="@this"
+					update="grupoTabela"
 					oncomplete="PF('confirmaExclusaoGrupo').hide();" />
 			</p:confirmDialog>
 
