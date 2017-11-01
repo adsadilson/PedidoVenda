@@ -1,6 +1,7 @@
 package com.br.apss.pedidovenda.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,11 +9,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.enums.TipoEndereco;
 import com.br.apss.pedidovenda.enums.TipoTelefone;
+import com.br.apss.pedidovenda.model.Cidade;
 import com.br.apss.pedidovenda.model.Endereco;
 import com.br.apss.pedidovenda.model.Pessoa;
 import com.br.apss.pedidovenda.model.Telefone;
+import com.br.apss.pedidovenda.service.CidadeService;
 import com.br.apss.pedidovenda.service.PessoaService;
 import com.br.apss.pedidovenda.util.FacesUtil;
 import com.br.apss.pedidovenda.util.NegocioException;
@@ -33,6 +37,8 @@ public class CadastroClienteBean implements Serializable {
 	private Telefone telefoneSelecionado = new Telefone();
 
 	private Endereco enderecoSelecionado = new Endereco();
+	
+	private List<Cidade> cidades;
 
 	private Long idCliente;
 
@@ -42,6 +48,9 @@ public class CadastroClienteBean implements Serializable {
 
 	@Inject
 	private PessoaService clienteService;
+	
+	@Inject
+	private CidadeService cidadeService;
 
 	public void inicializar() {
 		if (idCliente != null) {
@@ -49,13 +58,22 @@ public class CadastroClienteBean implements Serializable {
 		}
 	}
 
+	public void carregarCidadesPorEstados() {
+		if (null != this.novoEndereco.getUf()) {
+			cidades = cidadeService.buscarPorEstado(this.novoEndereco.getUf());
+		} else {
+			cidades = new ArrayList<Cidade>();
+		}
+		
+	}
+
 	public void salvar() {
 
 		Pessoa clienteExistente = clienteService.porCpf(cliente.getCpfCnpj());
 		if (clienteExistente != null && !clienteExistente.equals(cliente)) {
-			throw new NegocioException("Já existe uma Cliente com esse CPF/CNPJ informado.");
+			throw new NegocioException("JÃ¡ existe uma Cliente com esse CPF/CNPJ informado.");
 		}
-		
+
 		cliente.setCliente(true);
 		clienteService.salvar(cliente);
 		FacesUtil.addInfoMessage("Registro salvor com sucesso.");
@@ -82,7 +100,7 @@ public class CadastroClienteBean implements Serializable {
 				RequestContext request = RequestContext.getCurrentInstance();
 				request.addCallbackParam("sucesso", true);
 			} else {
-				throw new NegocioException("Já existe um endereço com esse 'CEP' informado..");
+				throw new NegocioException("JÃ¡ existe um endereï¿½o com esse 'CEP' informado..");
 			}
 		} else {
 			novoEndereco.setPessoa(cliente);
@@ -131,7 +149,7 @@ public class CadastroClienteBean implements Serializable {
 				RequestContext request = RequestContext.getCurrentInstance();
 				request.addCallbackParam("sucesso", true);
 			} else {
-				throw new NegocioException("Já existe um telefone com esse 'NÚMERO' informado..");
+				throw new NegocioException("Jï¿½ existe um telefone com esse 'Nï¿½MERO' informado..");
 			}
 		} else {
 			novoTelefone.setPessoa(cliente);
@@ -170,11 +188,16 @@ public class CadastroClienteBean implements Serializable {
 	}
 
 	public void prepararEdicaoEndereco() {
+		carregarCidadesPorEstados();
 		this.editandoEnd = true;
 	}
 
 	public void prepararEdicaoTelefone() {
 		this.editandoFone = true;
+	}
+
+	public List<Estado> getEstados() {
+		return Arrays.asList(Estado.values());
 	}
 
 	public Pessoa getCliente() {
@@ -248,5 +271,15 @@ public class CadastroClienteBean implements Serializable {
 	public void setTelefoneSelecionado(Telefone telefoneSelecionado) {
 		this.telefoneSelecionado = telefoneSelecionado;
 	}
+
+	public List<Cidade> getCidades() {
+		return cidades;
+	}
+
+	public void setCidades(List<Cidade> cidades) {
+		this.cidades = cidades;
+	}
+	
+	
 
 }

@@ -138,32 +138,46 @@
 
 						<p:outputLabel value="UF" for="uf" />
 						<h:panelGroup>
-							<p:inputText id="uf"
-								value="#{cadastroFornecedorBean.novoEndereco.uf}"
-								required="true" requiredMessage="O campo 'UF' é obrigatório." />
-							<p:outputLabel value="Cidade" for="cidade"
+							<p:selectOneMenu id="uf" required="true" style="width:150px;"
+								requiredMessage="O campo 'UF' é obrigatório."
+								value="#{cadastroFornecedorBean.novoEndereco.uf}">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems value="#{cadastroFornecedorBean.estados}"
+									var="uf" itemLabel="#{uf.sigla}" itemValue="#{uf}" />
+								<p:ajax event="change"
+									listener="#{cadastroFornecedorBean.carregarCidadesPorEstados}"
+									update="comboCidade" />
+							</p:selectOneMenu>
+							<p:outputLabel value="Cidade" for="comboCidade"
 								style="margin-left: 10px; margin-right:5px;" />
-							<p:inputText id="cidade" required="true"
-								requiredMessage="O campo 'CIDADE' é obrigatório."
-								value="#{cadastroFornecedorBean.novoEndereco.cidade}" />
+							<p:selectOneMenu autoWidth="false" filter="true"
+								value="#{cadastroFornecedorBean.novoEndereco.cidade}"
+								id="comboCidade" required="true" style="width:150px;"
+								requiredMessage="O campo 'CIDADE' é obrigatório.">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems value="#{cadastroFornecedorBean.cidades}"
+									var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
+							</p:selectOneMenu>
 						</h:panelGroup>
 
 						<p:outputLabel />
-						
+
 						<ui:remove>
-						<p:commandButton value="Incluir"
-							oncomplete="if(args.sucesso == true) PF('inclusaoEndereco').hide()"
-							update="panelGridInclusaoEndereco"
-							actionListener="#{cadastroFornecedorBean.incluirEndereco}"
-							process="@this panelGridInclusaoEndereco">
-						</p:commandButton>
+							<p:commandButton value="Incluir"
+								oncomplete="if(args.sucesso == true) PF('inclusaoEndereco').hide()"
+								update="panelGridInclusaoEndereco"
+								actionListener="#{cadastroFornecedorBean.incluirEndereco}"
+								process="@this panelGridInclusaoEndereco">
+							</p:commandButton>
 						</ui:remove>
 
 					</h:panelGrid>
 
 				</p:tab>
 				<p:tab title="Observação">
-
+					<p:editor value="#{cadastroFornecedorBean.fornecedor.obs}"
+						height="160">
+					</p:editor>
 				</p:tab>
 
 			</p:tabView>

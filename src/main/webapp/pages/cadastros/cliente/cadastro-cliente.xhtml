@@ -160,7 +160,7 @@
 					</p:column>
 
 					<p:column headerText="Cidade/UF" style="width: 300px;">
-						<p:outputLabel value="#{endereco.cidade} / #{endereco.uf}" />
+						<p:outputLabel value="#{endereco.cidade.nome} / #{endereco.uf}" />
 					</p:column>
 
 				</p:dataTable>
@@ -248,6 +248,10 @@
 				</p:confirmDialog>
 
 			</p:tab>
+			<p:tab title="Observação">
+				<p:editor value="#{cadastroClienteBean.cliente.obs}" height="160">
+				</p:editor>
+			</p:tab>
 
 		</p:tabView>
 
@@ -299,14 +303,26 @@
 
 					<p:outputLabel value="UF" for="uf" />
 					<h:panelGroup>
-						<p:inputText id="uf"
-							value="#{cadastroClienteBean.novoEndereco.uf}" required="true"
-							requiredMessage="O campo 'UF' é obrigatório." />
-						<p:outputLabel value="Cidade" for="cidade"
+						<p:selectOneMenu id="uf" required="true" style="width:150px;"
+							requiredMessage="O campo 'UF' é obrigatório."
+							value="#{cadastroClienteBean.novoEndereco.uf}">
+							<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+							<f:selectItems value="#{cadastroClienteBean.estados}" var="uf"
+								itemLabel="#{uf.sigla}" itemValue="#{uf}" />
+							<p:ajax event="change"
+								listener="#{cadastroClienteBean.carregarCidadesPorEstados}"
+								update="comboCidade" />
+						</p:selectOneMenu>
+						<p:outputLabel value="Cidade" for="comboCidade"
 							style="margin-left: 10px; margin-right:5px;" />
-						<p:inputText id="cidade" required="true"
-							requiredMessage="O campo 'CIDADE' é obrigatório."
-							value="#{cadastroClienteBean.novoEndereco.cidade}" />
+						<p:selectOneMenu autoWidth="false" filter="true"
+								value="#{cadastroClienteBean.novoEndereco.cidade}"
+								id="comboCidade" required="true" style="width:150px;"
+								requiredMessage="O campo 'CIDADE' é obrigatório.">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems value="#{cadastroClienteBean.cidades}"
+									var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
+							</p:selectOneMenu>
 					</h:panelGroup>
 
 					<p:outputLabel />

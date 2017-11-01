@@ -1,0 +1,78 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Manutenção de Cidade</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.rotulo {
+	width: 100px;
+}
+</style>
+
+		<f:metadata>
+			<o:viewParam name="codigo" value="#{cadastroCidadeBean.cidade}" />
+			<o:viewAction action="#{cadastroCidadeBean.inicializar()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			<h1>#{cadastroCidadeBean.cidade.id != null ? 'Edição de Cidade
+				de Produto' : 'Nova Cidade de Produto'}</h1>
+
+			<p:growl autoUpdate="true" />
+
+			<p:focus for="nome" />
+
+
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
+						action="#{cadastroCidadeBean.salvar}" update="painel" />
+					<p:button value="Limpar" icon="fa fa-eraser"
+						style="margin-left:3px; margin-right:3px;"
+						outcome="/pages/cadastros/cidade/cadastro-cidade" />
+					<p:button value="Voltar" icon="fa fa-refresh"
+						outcome="/pages/cadastros/cidade/lista-cidade" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panel style="margin-top: 20px">
+
+				<h:panelGrid columns="2" id="painel" style="width: 100%;"
+					columnClasses="rotulo">
+
+					<p:outputLabel value="Estado" for="uf" />
+					<p:selectOneMenu id="uf" required="true" style="width:100px;"
+						requiredMessage="O campo 'UF' é obrigatório."
+						value="#{cadastroCidadeBean.cidade.uf}">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+						<f:selectItems value="#{cadastroCidadeBean.estados}" var="uf"
+							itemLabel="#{uf.sigla} - #{uf.label} " itemValue="#{uf}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" style="width:25%" maxlength="80"
+						required="true" requiredMessage="O campo 'NOME' é obrigatório."
+						value="#{cadastroCidadeBean.cidade.nome}" />
+
+					<p:outputLabel value="Ativo" />
+					<p:selectBooleanCheckbox
+						value="#{cadastroCidadeBean.cidade.status}" />
+
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -9,15 +9,19 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
+
+import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.enums.TipoEndereco;
 import com.br.apss.pedidovenda.enums.TipoTelefone;
+import com.br.apss.pedidovenda.model.Cidade;
 import com.br.apss.pedidovenda.model.Endereco;
 import com.br.apss.pedidovenda.model.Pessoa;
 import com.br.apss.pedidovenda.model.Telefone;
+import com.br.apss.pedidovenda.service.CidadeService;
 import com.br.apss.pedidovenda.service.PessoaService;
 import com.br.apss.pedidovenda.util.FacesUtil;
 import com.br.apss.pedidovenda.util.NegocioException;
-import org.primefaces.context.RequestContext;
 
 @Named
 @ViewScoped
@@ -35,6 +39,8 @@ public class CadastroFornecedorBean implements Serializable {
 
 	private Endereco enderecoSelecionado = new Endereco();
 
+	private List<Cidade> cidades;
+
 	private Long idFornecedor;
 
 	private boolean editandoEnd = false;
@@ -43,6 +49,9 @@ public class CadastroFornecedorBean implements Serializable {
 
 	@Inject
 	private PessoaService fornecedorService;
+
+	@Inject
+	private CidadeService cidadeService;
 
 	public void inicializar() {
 		if (idFornecedor != null) {
@@ -56,7 +65,7 @@ public class CadastroFornecedorBean implements Serializable {
 				novoEndereco.setCep(fornecedor.getEnderecos().get(i).getCep());
 				novoEndereco.setUf(fornecedor.getEnderecos().get(i).getUf());
 			}
-				
+			carregarCidadesPorEstados();
 		}
 	}
 
@@ -66,8 +75,11 @@ public class CadastroFornecedorBean implements Serializable {
 		if (fornecedorExistente != null && !fornecedorExistente.equals(fornecedor)) {
 			throw new NegocioException("Já existe uma Fornecedor com esse CPF/CNPJ informado.");
 		}
-		
+
 		novoEndereco.setPessoa(fornecedor);
+		if (null == this.fornecedor.getId()) {
+			novoEndereco.setTipo(TipoEndereco.COMERCIAL);
+		}
 		List<Endereco> end = new ArrayList<>();
 		end.add(novoEndereco);
 		fornecedor.setEnderecos(end);
@@ -98,7 +110,7 @@ public class CadastroFornecedorBean implements Serializable {
 				RequestContext request = RequestContext.getCurrentInstance();
 				request.addCallbackParam("sucesso", true);
 			} else {
-				throw new NegocioException("J� existe um endere�o com esse 'CEP' informado..");
+				throw new NegocioException("Já existe um endereço com esse 'CEP' informado..");
 			}
 		} else {
 			novoEndereco.setPessoa(fornecedor);
@@ -133,6 +145,7 @@ public class CadastroFornecedorBean implements Serializable {
 
 	public void prepararNovoEndereco() {
 		this.novoEndereco = new Endereco();
+		this.novoEndereco.setTipo(TipoEndereco.COMERCIAL);
 		this.editandoEnd = false;
 	}
 
@@ -147,7 +160,7 @@ public class CadastroFornecedorBean implements Serializable {
 				RequestContext request = RequestContext.getCurrentInstance();
 				request.addCallbackParam("sucesso", true);
 			} else {
-				throw new NegocioException("J� existe um telefone com esse 'N�MERO' informado..");
+				throw new NegocioException("Já existe um telefone com esse 'NÚMERO' informado..");
 			}
 		} else {
 			novoTelefone.setPessoa(fornecedor);
@@ -192,6 +205,20 @@ public class CadastroFornecedorBean implements Serializable {
 	public void prepararEdicaoTelefone() {
 		this.editandoFone = true;
 	}
+
+	public List<Estado> getEstados() {
+		return Arrays.asList(Estado.values());
+	}
+
+	public void carregarCidadesPorEstados() {
+		if (null != this.novoEndereco.getUf()) {
+			cidades = cidadeService.buscarPorEstado(this.novoEndereco.getUf());
+		} else {
+			cidades = new ArrayList<Cidade>();
+		}
+	}
+
+	/************ Getters e Setters ********************/
 
 	public Pessoa getFornecedor() {
 		return fornecedor;
@@ -263,6 +290,14 @@ public class CadastroFornecedorBean implements Serializable {
 
 	public void setTelefoneSelecionado(Telefone telefoneSelecionado) {
 		this.telefoneSelecionado = telefoneSelecionado;
+	}
+
+	public List<Cidade> getCidades() {
+		return cidades;
+	}
+
+	public void setCidades(List<Cidade> cidades) {
+		this.cidades = cidades;
 	}
 
 }

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.enums.TipoEndereco;
 
 @Entity
@@ -36,14 +37,15 @@ public class Endereco implements Serializable {
 	@Column(length = 150)
 	private String complemento;
 
-	@Column(length = 80)
-	private String cidade;
+	@JoinColumn(name = "cidade_id")
+	@ManyToOne
+	private Cidade cidade;
 
 	@Column(length = 80)
 	private String bairro;
 
-	@Column(length = 2)
-	private String uf;
+	@Enumerated(EnumType.STRING)
+	private Estado uf;
 
 	@Column(length = 10)
 	private String cep;
@@ -88,20 +90,20 @@ public class Endereco implements Serializable {
 		this.complemento = complemento == null ? null : complemento.toUpperCase();
 	}
 
-	public String getCidade() {
+	public Cidade getCidade() {
 		return cidade;
 	}
 
-	public void setCidade(String cidade) {
-		this.cidade = cidade.toUpperCase();
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
 	}
 
-	public String getUf() {
+	public Estado getUf() {
 		return uf;
 	}
 
-	public void setUf(String uf) {
-		this.uf = uf.toUpperCase();
+	public void setUf(Estado uf) {
+		this.uf = uf;
 	}
 
 	public String getCep() {
