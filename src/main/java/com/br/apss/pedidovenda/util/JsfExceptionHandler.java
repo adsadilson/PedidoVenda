@@ -47,14 +47,14 @@ public class JsfExceptionHandler extends ExceptionHandlerWrapper {
 			try {
 				if (exception instanceof ViewExpiredException) {
 					handled = true;
-					redirect("/login.xhtml");
+					redirect("/faces/login.xhtml");
 				} else if (negocioException != null) {
 					handled = true;
 					Messages.addGlobalInfo(negocioException.getMessage());
 				} else {
 					handled = true;
 					log.error("Erro de sistema: " + exception.getMessage(), exception);
-					redirect("/erro.xhtml");
+					redirect("/faces/erro.xhtml");
 				}
 			} finally {
 				if (handled) {

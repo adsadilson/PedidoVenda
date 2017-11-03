@@ -6,16 +6,62 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="corpo" >
+	<ui:define name="corpo">
+
+		<style>
+<!--
+.text-aqua {
+	color: #00c0ef !important;
+}
+
+a {
+	color: #3c8dbc;
+}
+
+.small {
+	font-weight: normal;
+	line-height: 1;
+	color: #777;
+	font-size: 65%;
+}
+
+h2, .h2 {
+	font-size: 30px;
+	font-family: inherit;
+	font-weight: 500;
+	line-height: 1.1;
+	color: inherit;
+	text-align: center;
+}
+-->
+</style>
+
 		<br />
 		<div style="margin-left: 30px;">
 			<h:graphicImage library="images" name="apss2.png" height="100px" />
 		</div>
 		<br />
 		<br />
-		<h1 style="font-variant: small-caps; margin-left: 150px">Seja
-			Bem-Vindo!!!</h1>
-			
+		<div style="margin-left: 150px; width: 550px;">
+			<h2>
+				Bem vindo ao sistema <span class="text-aqua"> <i>Pedido
+						de Venda</i></span>! <br /> <span class="small">Utilizando <p:link
+						value="CDI"
+						href="http://blog.caelum.com.br/use-cdi-no-seu-proximo-projeto-java/"
+						target="_blank" />, <p:link value="JPA"
+						href="https://www.dfilitto.com.br/java/jpa-o-que-e-para-que-serve-como-implementar-um-sistema/"
+						target="_blank" />, e <p:link value="Primefaces"
+						href="http://primefaces.org" target="_blank" />, com <p:link
+						value="JSF" href="https://javaserverfaces.java.net/"
+						target="_blank" />.
+				</span>
+			</h2>
+			<h:form>
+				<p:commandButton value="salvar" action="#{cadastroCategoriaBean.salvar()}"></p:commandButton>
+			</h:form>
+		</div>
+
+
 	</ui:define>
 
 </ui:composition>
