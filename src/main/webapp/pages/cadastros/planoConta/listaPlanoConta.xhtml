@@ -5,13 +5,21 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="titulo">Pesquisa Grupo de Usuário</ui:define>
+	<ui:define name="titulo">Pesquisa Plano de Conta</ui:define>
 
 	<ui:define name="corpo">
 
+		<style type="text/css">
+<!--
+.rotulo {
+	width: 70px;
+}
+-->
+</style>
+
 		<h:form prependId="false">
 
-			<h1>Pesquisa Grupo de Usuário</h1>
+			<h1>Pesquisa Plano de Conta</h1>
 
 			<p:growl autoUpdate="true" showDetail="3000" />
 
@@ -20,16 +28,16 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Novo" icon="fa fa-file-o"
-						outcome="/pages/cadastros/grupoUsuario/cadastro-grupo-usuario" />
+						outcome="/pages/cadastros/planoConta/cadastroPlanoConta" />
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
-						update="dgFiltro" action="#{listaGrupoUsuarioBean.novoFiltro}"
+						update="dgFiltro" action="#{listaPlanoContaBean.novoFiltro}"
 						style="margin-left:5px;" oncomplete="PF('dialogFiltro').show()" />
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-grupo-usuario"
-							fileName="grupoUsuarios" />
+						<p:dataExporter type="xls" target="tbl-planoConta"
+							fileName="planoContas" />
 					</p:commandButton>
 
 					<span class="ui-separator"> <span
@@ -37,16 +45,16 @@
 					</span>
 
 					<p:inputText size="30" placeholder="digite o texto"
-						title="Pesquisa pelo campo descrição"
+						title="Pesquisa pelo campo nome do plano de conta"
 						style="margin-left:5px; margin-right:5px;" id="txtPesquisar"
-						value="#{listaGrupoUsuarioBean.filtro.nome}" />
+						value="#{listaPlanoContaBean.filtro.nome}" />
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-grupo-usuario" id="btnPesquisar"
-						action="#{listaGrupoUsuarioBean.pesquisar()}">
+						update="tbl-planoConta" id="btnPesquisar"
+						action="#{listaPlanoContaBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
-							target="#{listaGrupoUsuarioBean.filtro.origem}" />
+							target="#{listaPlanoContaBean.filtro.origem}" />
 					</p:commandButton>
 
 					<p:defaultCommand target="btnPesquisar" />
@@ -57,11 +65,10 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-grupo-usuario"
-				value="#{listaGrupoUsuarioBean.grupoUsuarios}" var="grupoUsuario"
-				style="margin-top: 20px" lazy="true"
-				emptyMessage="Nenhum registro encontrado." rows="11"
-				paginator="true" paginatorAlwaysVisible="false"
+			<p:dataTable id="tbl-planoConta"
+				value="#{listaPlanoContaBean.planoContas}" var="planoConta"
+				style="margin-top: 20px" emptyMessage="Nenhum registro encontrado."
+				rows="11" paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
 				{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}">
@@ -69,27 +76,44 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/grupoUsuario/cadastro-grupo-usuario"
+						outcome="/pages/cadastros/planoConta/cadastroPlanoConta"
 						styleClass="semPreenchimento">
-						<f:param name="codigo" value="#{grupoUsuario.id}" />
+						<f:param name="codigo" value="#{planoConta.id}" />
 					</p:button>
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						styleClass="semPreenchimento"
 						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update="confirmacaoExclusaoDialog">
 						<f:setPropertyActionListener
-							target="#{listaGrupoUsuarioBean.grupoUsuarioSelecionada}"
-							value="#{grupoUsuario}" />
+							target="#{listaPlanoContaBean.planoContaSelecionada}"
+							value="#{planoConta}" />
 					</p:commandButton>
 				</p:column>
-
-				<p:column headerText="Descrição" sortBy="#{grupoUsuario.nome}">
-					<h:outputText value="#{grupoUsuario.nome}" />
+				
+				<p:column headerText="Código" style="width:70px; text-align:center;"
+					sortBy="#{planoConta.id}">
+					<h:outputText value="#{planoConta.id}" />
 				</p:column>
 
-				<p:column headerText="Status" sortBy="#{grupoUsuario.status}"
+				<p:column headerText="Nome do Plano de Conta"
+					sortBy="#{planoConta.nome}">
+					<h:outputText value="#{planoConta.nome}" />
+				</p:column>
+
+				<p:column headerText="Tipo" sortBy="#{planoConta.tipo}"
+					style="width: 120px">
+					<h:outputText value="#{planoConta.tipo.descricao}" />
+				</p:column>
+
+
+				<p:column headerText="Sigla" sortBy="#{planoConta.tipo}"
+					style="text-align:center; width: 50px">
+					<h:outputText value="#{planoConta.tipo.sigla}" />
+				</p:column>
+
+				<p:column headerText="Status" sortBy="#{planoConta.status}"
 					style="text-align: center; width: 100px">
-					<h:outputText value="#{grupoUsuario.status ? 'ATIVO' : 'INATIVO'}" />
+					<h:outputText value="#{planoConta.status ? 'ATIVO' : 'INATIVO'}" />
 				</p:column>
 
 				<p:column headerText="">
@@ -102,38 +126,46 @@
 					<h:outputText value="Tem certeza que deseja excluir o registro:" />
 					<br />
 					<h:outputText
-						value="#{listaGrupoUsuarioBean.grupoUsuarioSelecionada.nome} ?" />
+						value="#{listaPlanoContaBean.planoContaSelecionada.nome} ?" />
 				</f:facet>
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
 					oncomplete="PF('confirmacaoExclusao').hide();"
-					update="tbl-grupo-usuario" action="#{listaGrupoUsuarioBean.excluir()}"
+					update="tbl-planoConta" action="#{listaPlanoContaBean.excluir()}"
 					process="@this" />
 			</p:confirmDialog>
 
 		</h:form>
 
 		<p:dialog header="Filtro" widgetVar="dialogFiltro" modal="true"
-			width="280" height="110" resizable="false" draggable="true"
+			width="295" height="130" resizable="false" draggable="true"
 			id="dgFiltro" visible="false" closeOnEscape="true" appendTo="@(body)">
 			<h:form prependId="false">
 				<p:focus for="txtFilterDescricao" />
 
-				<h:panelGrid columns="2" id="panelFiltro">
+				<h:panelGrid columns="2" id="panelFiltro"
+					columnClasses="rotulo,campo">
 
-					<p:outputLabel value="Descrição" />
+					<p:outputLabel value="Conta" />
 					<p:inputText id="txtFilterDescricao"
-						value="#{listaGrupoUsuarioBean.filtro.nome}" style="width:98%;" />
+						value="#{listaPlanoContaBean.filtro.nome}" style="width:98%;" />
+
+					<p:outputLabel value="Tipo" />
+					<p:selectOneMenu style="width:89%;"
+						value="#{listaPlanoContaBean.filtro.tipo}">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+						<f:selectItems value="#{cadastroPlanoContaBean.tipos}" var="tp"
+							itemLabel="#{tp.sigla} - #{tp.descricao} " itemValue="#{tp}" />
+					</p:selectOneMenu>
 
 					<p:outputLabel value="Ativo" />
-					<p:selectOneMenu autoWidth="false" style="width:88%;"
-						value="#{listaGrupoUsuarioBean.filtro.status}">
+					<p:selectOneMenu autoWidth="false" style="width:89%;"
+						value="#{listaPlanoContaBean.filtro.status}">
 						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
 						<f:selectItem itemLabel="ATIVO" itemValue="true" />
 						<f:selectItem itemLabel="INATIVO" itemValue="false" />
 					</p:selectOneMenu>
-
 				</h:panelGrid>
 
 				<p:toolbar style="margin-top: 5px; margin-button:5px"
@@ -141,9 +173,9 @@
 					<p:toolbarGroup align="right" style="margin-right: 0px;">
 						<p:commandButton value="Pesquisar" icon="fa fa-search"
 							id="btnPesquisarFiltro" process="@this panelFiltro"
-							action="#{listaGrupoUsuarioBean.pesquisar}"
+							action="#{listaPlanoContaBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-grupo-usuario panelFiltro" />
+							update="tbl-planoConta panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>

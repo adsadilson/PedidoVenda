@@ -28,7 +28,7 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Nova" icon="fa fa-file-o"
-						outcome="/pages/cadastros/cidade/cadastro-cidade" />
+						outcome="/pages/cadastros/cidade/cadastroCidade" />
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
 						update="dgFiltro" action="#{listaCidadeBean.novoFiltro}"
@@ -36,7 +36,7 @@
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-cidade" fileName="cidades" />
+						<p:dataExporter type="xls" target="tblCidade" fileName="cidades" />
 					</p:commandButton>
 
 					<span class="ui-separator"> <span
@@ -50,7 +50,7 @@
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-cidade" id="btnPesquisar"
+						update="tblCidade" id="btnPesquisar"
 						action="#{listaCidadeBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
 							target="#{listaCidadeBean.filtro.origem}" />
@@ -64,7 +64,7 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-cidade" value="#{listaCidadeBean.cidades}"
+			<p:dataTable id="tblCidade" value="#{listaCidadeBean.cidades}"
 				var="cidade" style="margin-top: 20px" lazy="true"
 				emptyMessage="Nenhum registro encontrado." rows="11"
 				paginator="true" paginatorAlwaysVisible="false"
@@ -75,7 +75,7 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/cidade/cadastro-cidade"
+						outcome="/pages/cadastros/cidade/cadastroCidade"
 						styleClass="semPreenchimento">
 						<f:param name="codigo" value="#{cidade.id}" />
 					</p:button>
@@ -116,7 +116,7 @@
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
-					oncomplete="PF('confirmacaoExclusao').hide();" update="tbl-cidade"
+					oncomplete="PF('confirmacaoExclusao').hide();" update="tblCidade"
 					action="#{listaCidadeBean.excluir()}" process="@this" />
 			</p:confirmDialog>
 
@@ -159,7 +159,7 @@
 							id="btnPesquisarFiltro" process="@this panelFiltro"
 							action="#{listaCidadeBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-cidade panelFiltro" />
+							update="tblCidade panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>

@@ -20,7 +20,7 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Nova" icon="fa fa-file-o"
-						outcome="/pages/cadastros/categoria/cadastro-categoria" />
+						outcome="/pages/cadastros/categoria/cadastroCategoria" />
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
 						update="dgFiltro" action="#{listaCategoriaBean.novoFiltro}"
@@ -28,7 +28,7 @@
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-categoria"
+						<p:dataExporter type="xls" target="tblCategoria"
 							fileName="categorias" />
 					</p:commandButton>
 
@@ -43,7 +43,7 @@
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-categoria" id="btnPesquisar"
+						update="tblCategoria" id="btnPesquisar"
 						action="#{listaCategoriaBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
 							target="#{listaCategoriaBean.filtro.origem}" />
@@ -57,11 +57,10 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-categoria"
+			<p:dataTable id="tblCategoria"
 				value="#{listaCategoriaBean.categorias}" var="categoria"
-				style="margin-top: 20px" lazy="true"
-				emptyMessage="Nenhum registro encontrado." rows="11"
-				paginator="true" paginatorAlwaysVisible="false"
+				style="margin-top: 20px" emptyMessage="Nenhum registro encontrado."
+				rows="11" paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
 				{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}">
@@ -69,7 +68,7 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/categoria/cadastro-categoria"
+						outcome="/pages/cadastros/categoria/cadastroCategoria"
 						styleClass="semPreenchimento">
 						<f:param name="codigo" value="#{categoria.id}" />
 					</p:button>
@@ -81,6 +80,11 @@
 							target="#{listaCategoriaBean.categoriaSelecionada}"
 							value="#{categoria}" />
 					</p:commandButton>
+				</p:column>
+
+				<p:column headerText="Código" sortBy="#{categoria.id}"
+					style="text-align:center; width:70px;">
+					<h:outputText value="#{categoria.id}" />
 				</p:column>
 
 				<p:column headerText="Descrição" sortBy="#{categoria.nome}">
@@ -108,7 +112,7 @@
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
 					oncomplete="PF('confirmacaoExclusao').hide();"
-					update="tbl-categoria" action="#{listaCategoriaBean.excluir()}"
+					update="tblCategoria" action="#{listaCategoriaBean.excluir()}"
 					process="@this" />
 			</p:confirmDialog>
 
@@ -143,7 +147,7 @@
 							id="btnPesquisarFiltro" process="@this panelFiltro"
 							action="#{listaCategoriaBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-categoria panelFiltro" />
+							update="tblCategoria panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>

@@ -5,13 +5,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="titulo">Pesquisa Unidade de Medida</ui:define>
+	<ui:define name="titulo">Pesquisa SubCategoria de Produto</ui:define>
 
 	<ui:define name="corpo">
 
 		<h:form prependId="false">
 
-			<h1>Pesquisa Unidade de Medida</h1>
+			<h1>Pesquisa SubCategoria de Produto</h1>
 
 			<p:growl autoUpdate="true" showDetail="3000" />
 
@@ -20,36 +20,33 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Nova" icon="fa fa-file-o"
-						outcome="/pages/cadastros/unidade/cadastro-unidade" />
-
+						outcome="/pages/cadastros/subcategoria/cadastroSubCategoria.xhtml" />
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
-						update="dgFiltro" action="#{listaUnidadeBean.novoFiltro}"
+						update="dgFiltro" action="#{listaSubCategoriaBean.novoFiltro}"
 						style="margin-left:5px;" oncomplete="PF('dialogFiltro').show()" />
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-unidade"
-							fileName="unidades" />
+						<p:dataExporter type="xls" target="tbl-subCategoria"
+							fileName="subCategorias" />
 					</p:commandButton>
-
-					<!-- <p:commandButton icon="fa fa-filter" title="Filtro Avançado" /> -->
 
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
 
 					<p:inputText size="30" placeholder="digite o texto"
-						title="Pesquisa pelo campo sigla ou descrição"
+						title="Pesquisa pelo campo SubCategoria"
 						style="margin-left:5px; margin-right:5px;" id="txtPesquisar"
-						value="#{listaUnidadeBean.filtro.nome}" />
+						value="#{listaSubCategoriaBean.filtro.nome}" />
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-unidade" id="btnPesquisar"
-						action="#{listaUnidadeBean.pesquisar()}">
+						update="tbl-subCategoria" id="btnPesquisar"
+						action="#{listaSubCategoriaBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
-							target="#{listaUnidadeBean.filtro.origem}" />
+							target="#{listaSubCategoriaBean.filtro.origem}" />
 					</p:commandButton>
 
 					<p:defaultCommand target="btnPesquisar" />
@@ -60,10 +57,10 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-unidade" value="#{listaUnidadeBean.dataModel}"
-				var="unidade" style="margin-top: 20px" lazy="true"
-				emptyMessage="Nenhum registro encontrado." rows="11"
-				paginator="true" paginatorAlwaysVisible="false"
+			<p:dataTable id="tbl-subCategoria"
+				value="#{listaSubCategoriaBean.subCategorias}" var="subCategoria"
+				style="margin-top: 20px" emptyMessage="Nenhum registro encontrado."
+				rows="11" paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
 				{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}">
@@ -71,31 +68,37 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/unidade/cadastro-unidade"
+						outcome="/pages/cadastros/subcategoria/cadastroSubCategoria"
 						styleClass="semPreenchimento">
-						<f:param name="codigo" value="#{unidade.id}" />
+						<f:param name="codigo" value="#{subCategoria.id}" />
 					</p:button>
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						styleClass="semPreenchimento"
 						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update="confirmacaoExclusaoDialog">
 						<f:setPropertyActionListener
-							target="#{listaUnidadeBean.unidadeSelecionada}"
-							value="#{unidade}" />
+							target="#{listaSubCategoriaBean.subCategoriaSelecionada}"
+							value="#{subCategoria}" />
 					</p:commandButton>
 				</p:column>
 
-				<p:column headerText="Sigla" style="text-align: center; width: 60px"
-					sortBy="#{unidade.nome}">
-					<h:outputText value="#{unidade.nome}" />
-				</p:column>
-				<p:column headerText="Descrição" sortBy="#{unidade.descricao}">
-					<h:outputText value="#{unidade.descricao}" />
+				<p:column headerText="Código"
+					style="text-align: center; width: 70px" sortBy="#{subCategoria.id}">
+					<h:outputText value="#{subCategoria.id}" />
 				</p:column>
 
-				<p:column headerText="Status" sortBy="#{unidade.status}"
+				<p:column headerText="SubCategoria" sortBy="#{subCategoria.nome}">
+					<h:outputText value="#{subCategoria.nome}" />
+				</p:column>
+
+				<p:column headerText="Categoria"
+					sortBy="#{subCategoria.categoria.nome}" style="width: 300px">
+					<h:outputText value="#{subCategoria.categoria.nome}" />
+				</p:column>
+
+				<p:column headerText="Status" sortBy="#{subCategoria.status}"
 					style="text-align: center; width: 100px">
-					<h:outputText value="#{unidade.status ? 'ATIVO' : 'INATIVO'}" />
+					<h:outputText value="#{subCategoria.status ? 'ATIVO' : 'INATIVO'}" />
 				</p:column>
 
 				<p:column headerText="">
@@ -108,41 +111,38 @@
 					<h:outputText value="Tem certeza que deseja excluir o registro:" />
 					<br />
 					<h:outputText
-						value="#{listaUnidadeBean.unidadeSelecionada.nome} -  
-						#{listaUnidadeBean.unidadeSelecionada.descricao} ?" />
+						value="#{listaSubCategoriaBean.subCategoriaSelecionada.nome} ?" />
 				</f:facet>
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
-					oncomplete="PF('confirmacaoExclusao').hide();" update="tbl-unidade"
-					action="#{listaUnidadeBean.excluir()}" process="@this" />
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					update="tbl-subCategoria"
+					action="#{listaSubCategoriaBean.excluir()}" process="@this" />
 			</p:confirmDialog>
 
 		</h:form>
 
 		<p:dialog header="Filtro" widgetVar="dialogFiltro" modal="true"
-			width="280" height="140" resizable="false" draggable="true"
+			width="280" height="110" resizable="false" draggable="true"
 			id="dgFiltro" visible="false" closeOnEscape="true" appendTo="@(body)">
+
 			<h:form prependId="false">
-				<p:focus for="txtFilterNome" />
+
+				<p:focus for="txtFilterDescricao" />
 
 				<h:panelGrid columns="2" id="panelFiltro">
 
-					<p:outputLabel value="Sigla" />
-					<p:inputText id="txtFilterNome"
-						value="#{listaUnidadeBean.filtro.nome}" style="width:98%;" />
-
 					<p:outputLabel value="Descrição" />
 					<p:inputText id="txtFilterDescricao"
-						value="#{listaUnidadeBean.filtro.descricao}" style="width:98%;" />
+						value="#{listaSubCategoriaBean.filtro.nome}" style="width:94%;" />
 
 					<p:outputLabel value="Ativo" />
-					<p:selectOneMenu autoWidth="false" style="width:88%;"
-						value="#{listaUnidadeBean.filtro.status}"
-						converter="omnifaces.SelectItemsConverter">
+					<p:selectOneMenu autoWidth="false" style="width:155px"
+						value="#{listaSubCategoriaBean.filtro.status}">
 						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-						<f:selectItems value="#{listaUnidadeBean.status}" var="tipo"
-							itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+						<f:selectItem itemLabel="ATIVO" itemValue="true" />
+						<f:selectItem itemLabel="INATIVO" itemValue="false" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>
@@ -152,9 +152,9 @@
 					<p:toolbarGroup align="right" style="margin-right: 0px;">
 						<p:commandButton value="Pesquisar" icon="fa fa-search"
 							id="btnPesquisarFiltro" process="@this panelFiltro"
-							action="#{listaUnidadeBean.pesquisar}"
+							action="#{listaSubCategoriaBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-unidade panelFiltro" />
+							update="tbl-subCategoria panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>

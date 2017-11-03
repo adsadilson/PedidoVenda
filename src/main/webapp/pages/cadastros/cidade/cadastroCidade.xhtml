@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
-	<ui:define name="titulo">Manutenção de SubCategoria de Produto</ui:define>
+	<ui:define name="titulo">Manutenção de Cidade</ui:define>
 
 	<ui:define name="corpo">
 
@@ -16,15 +16,13 @@
 </style>
 
 		<f:metadata>
-			<o:viewParam name="codigo"
-				value="#{cadastroSubCategoriaBean.idSubCategoria}"
-				converter="javax.faces.Long" />
-			<o:viewAction action="#{cadastroSubCategoriaBean.inicializar()}" />
+			<o:viewParam name="codigo" value="#{cadastroCidadeBean.cidade}" />
+			<o:viewAction action="#{cadastroCidadeBean.inicializar()}" />
 		</f:metadata>
 
 		<h:form prependId="false">
-			<h1>#{cadastroSubCategoriaBean.subCategoria.id != null ? 'Edição
-				de SubCategoria de Produto' : 'Nova SubCategoria de Produto'}</h1>
+			<h1>#{cadastroCidadeBean.cidade.id != null ? 'Edição de Cidade
+				de Produto' : 'Nova Cidade de Produto'}</h1>
 
 			<p:growl autoUpdate="true" />
 
@@ -35,12 +33,12 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
-						action="#{cadastroSubCategoriaBean.salvar}" update="painel" />
+						action="#{cadastroCidadeBean.salvar}" update="painel" />
 					<p:button value="Limpar" icon="fa fa-eraser"
 						style="margin-left:3px; margin-right:3px;"
-						outcome="/pages/cadastros/subcategoria/cadastro-subcategoria" />
+						outcome="/pages/cadastros/cidade/cadastroCidade" />
 					<p:button value="Voltar" icon="fa fa-refresh"
-						outcome="/pages/cadastros/subcategoria/lista-subcategoria" />
+						outcome="/pages/cadastros/cidade/listaCidade" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:button value="Fechar" outcome="/home" />
@@ -52,27 +50,24 @@
 				<h:panelGrid columns="2" id="painel" style="width: 100%;"
 					columnClasses="rotulo">
 
+					<p:outputLabel value="Estado" for="uf" />
+					<p:selectOneMenu id="uf" required="true" style="width:100px;"
+						requiredMessage="O campo 'UF' é obrigatório."
+						value="#{cadastroCidadeBean.cidade.uf}">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+						<f:selectItems value="#{cadastroCidadeBean.estados}" var="uf"
+							itemLabel="#{uf.sigla} - #{uf.label} " itemValue="#{uf}" />
+					</p:selectOneMenu>
 
-					<p:outputLabel value="Descrição" for="nome" />
+
+					<p:outputLabel value="Nome" for="nome" />
 					<p:inputText id="nome" style="width:25%" maxlength="80"
 						required="true" requiredMessage="O campo 'NOME' é obrigatório."
-						value="#{cadastroSubCategoriaBean.subCategoria.nome}" />
-
-					<p:outputLabel value="Categoria" for="categoria" />
-					<p:selectOneMenu autoWidth="true" style="width:23.5%;"
-						id="categoria" filter="true" filterMatchMode="contains"
-						required="true"
-						requiredMessage="O campo 'CATEGORIA' é obrigatório."
-						value="#{cadastroSubCategoriaBean.subCategoria.categoria}"
-						converter="omnifaces.SelectItemsConverter">
-						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-						<f:selectItems value="#{cadastroSubCategoriaBean.categorias}"
-							var="cat" itemLabel="#{cat.nome}" itemValue="#{cat}" />
-					</p:selectOneMenu>
+						value="#{cadastroCidadeBean.cidade.nome}" />
 
 					<p:outputLabel value="Ativo" />
 					<p:selectBooleanCheckbox
-						value="#{cadastroSubCategoriaBean.subCategoria.status}" />
+						value="#{cadastroCidadeBean.cidade.status}" />
 
 				</h:panelGrid>
 			</p:panel>

@@ -28,7 +28,7 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Novo" icon="fa fa-file-o"
-						outcome="/pages/cadastros/produto/cadastro-produto" />
+						outcome="/pages/cadastros/produto/cadastroProduto" />
 
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
@@ -37,7 +37,7 @@
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-produto"
+						<p:dataExporter type="xls" target="tblProduto"
 							fileName="produtos" />
 					</p:commandButton>
 
@@ -54,7 +54,7 @@
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-produto" id="btnPesquisar"
+						update="tblProduto" id="btnPesquisar"
 						action="#{listaProdutoBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
 							target="#{listaProdutoBean.filtro.origem}" />
@@ -68,7 +68,7 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-produto" value="#{listaProdutoBean.dataModel}"
+			<p:dataTable id="tblProduto" value="#{listaProdutoBean.dataModel}"
 				var="produto" style="margin-top: 20px" lazy="true"
 				emptyMessage="Nenhum registro encontrado." rows="11"
 				paginator="true" paginatorAlwaysVisible="false"
@@ -79,7 +79,7 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/produto/cadastro-produto"
+						outcome="/pages/cadastros/produto/cadastroProduto"
 						styleClass="semPreenchimento">
 						<f:param name="codigo" value="#{produto.id}" />
 					</p:button>
@@ -151,7 +151,7 @@
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
-					oncomplete="PF('confirmacaoExclusao').hide();" update="tbl-produto"
+					oncomplete="PF('confirmacaoExclusao').hide();" update="tblProduto"
 					action="#{listaProdutoBean.excluir()}" process="@this" />
 			</p:confirmDialog>
 
@@ -195,7 +195,7 @@
 							id="btnPesquisarFiltro" process="@this panelFiltro"
 							action="#{listaProdutoBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-produto panelFiltro" />
+							update="tblProduto panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>

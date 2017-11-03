@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="titulo">Pesquisa Usuario</ui:define>
+	<ui:define name="titulo">Pesquisa Cliente</ui:define>
 
 	<ui:define name="corpo">
 
@@ -19,7 +19,7 @@
 
 		<h:form prependId="false">
 
-			<h1>Pesquisa Usuário</h1>
+			<h1>Pesquisa Cliente</h1>
 
 			<p:growl autoUpdate="true" showDetail="3000" />
 
@@ -28,17 +28,17 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:button value="Novo" icon="fa fa-file-o"
-						outcome="/pages/cadastros/usuario/cadastro-usuario" />
+						outcome="/pages/cadastros/cliente/cadastroCliente" />
 
 
 					<p:commandButton icon="fa fa-filter" title="Filtro Avançado"
-						update="dgFiltro" action="#{listaUsuarioBean.novoFiltro}"
+						update="dgFiltro" action="#{listaClienteBean.novoFiltro}"
 						style="margin-left:5px;" oncomplete="PF('dialogFiltro').show()" />
 
 					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="tbl-usuario"
-							fileName="usuarios" />
+						<p:dataExporter type="xls" target="tblCliente"
+							fileName="clientes" />
 					</p:commandButton>
 
 					<span class="ui-separator"> <span
@@ -46,16 +46,16 @@
 					</span>
 
 					<p:inputText size="30" placeholder="digite o texto"
-						title="Pesquisa pelo campo nome ou e-mail"
+						title="Pesquisa pelo campo nome ou cpf/cnpj"
 						style="margin-left:5px; margin-right:5px;" id="txtPesquisar"
-						value="#{listaUsuarioBean.filtro.nome}" />
+						value="#{listaClienteBean.filtro.nome}" />
 
 
 					<p:commandButton icon="fa fa-search" value="Pesquisar"
-						update="tbl-usuario" id="btnPesquisar"
-						action="#{listaUsuarioBean.pesquisar()}">
+						update="tblCliente" id="btnPesquisar"
+						action="#{listaClienteBean.pesquisar()}">
 						<f:setPropertyActionListener value="principal"
-							target="#{listaUsuarioBean.filtro.origem}" />
+							target="#{listaClienteBean.filtro.origem}" />
 					</p:commandButton>
 
 					<p:defaultCommand target="btnPesquisar" />
@@ -66,8 +66,8 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="tbl-usuario" value="#{listaUsuarioBean.usuarios}"
-				var="usuario" style="margin-top: 20px" lazy="true"
+			<p:dataTable id="tblCliente" value="#{listaClienteBean.dataModel}"
+				var="cliente" style="margin-top: 20px" lazy="true"
 				emptyMessage="Nenhum registro encontrado." rows="11"
 				paginator="true" paginatorAlwaysVisible="false"
 				paginatorPosition="bottom"
@@ -77,40 +77,32 @@
 				<p:column headerText="Ação" style="width: 70px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
-						outcome="/pages/cadastros/usuario/cadastro-usuario"
+						outcome="/pages/cadastros/cliente/cadastroCliente"
 						styleClass="semPreenchimento">
-						<f:param name="codigo" value="#{usuario.id}" />
+						<f:param name="codigo" value="#{cliente.id}" />
 					</p:button>
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						styleClass="semPreenchimento"
 						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
 						update="confirmacaoExclusaoDialog">
 						<f:setPropertyActionListener
-							target="#{listaUsuarioBean.usuarioSelecionada}"
-							value="#{usuario}" />
+							target="#{listaClienteBean.clienteSelecionada}"
+							value="#{cliente}" />
 					</p:commandButton>
 				</p:column>
 
-				<p:column headerText="Nome do Usuario" sortBy="#{usuario.nome}">
-					<h:outputText value="#{usuario.nome}" />
+				<p:column headerText="Nome do Cliente" sortBy="#{cliente.nome}">
+					<h:outputText value="#{cliente.nome}" />
 				</p:column>
 
-				<p:column headerText="E-mail" sortBy="#{usuario.email}"
-					style="width: 250px">
-					<h:outputText value="#{usuario.email}" />
+				<p:column headerText="CPF/CNPJ" sortBy="#{cliente.cpfCnpj}"
+					width="130">
+					<h:outputText value="#{cliente.cpfCnpj}" />
 				</p:column>
 
-				<p:column headerText="Cadastro" sortBy="#{usuario.cadastro}"
+				<p:column headerText="Status" sortBy="#{cliente.status}"
 					style="text-align: center; width: 100px">
-					<h:outputText value="#{usuario.cadastro}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</h:outputText>
-				</p:column>
-
-
-				<p:column headerText="Status" sortBy="#{usuario.status}"
-					style="text-align: center; width: 100px">
-					<h:outputText value="#{usuario.status ? 'ATIVO' : 'INATIVO'}" />
+					<h:outputText value="#{cliente.status ? 'ATIVO' : 'INATIVO'}" />
 				</p:column>
 
 				<p:column headerText="">
@@ -122,13 +114,13 @@
 				<f:facet name="message">
 					<h:outputText value="Tem certeza que deseja excluir o registro:" />
 					<br />
-					<h:outputText value="#{listaUsuarioBean.usuarioSelecionada.nome} ?" />
+					<h:outputText value="#{listaClienteBean.clienteSelecionada.nome} ?" />
 				</f:facet>
 				<p:button value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" />
 				<p:commandButton value="Sim"
-					oncomplete="PF('confirmacaoExclusao').hide();" update="tbl-usuario"
-					action="#{listaUsuarioBean.excluir()}" process="@this" />
+					oncomplete="PF('confirmacaoExclusao').hide();" update="tblCliente"
+					action="#{listaClienteBean.excluir()}" process="@this" />
 			</p:confirmDialog>
 
 		</h:form>
@@ -139,21 +131,19 @@
 			<h:form prependId="false">
 				<p:focus for="txtFilterNome" />
 
-				<h:panelGrid columns="2" id="panelFiltro"
-					columnClasses="rotulo,campo">
+				<h:panelGrid columns="2" id="panelFiltro" columnClasses="rotulo,campo">
 
 					<p:outputLabel value="Nome" />
 					<p:inputText id="txtFilterNome"
-						value="#{listaUsuarioBean.filtro.nome}" style="width:98%;" />
+						value="#{listaClienteBean.filtro.nome}" style="width:98%;" />
 
-					<p:outputLabel value="E-mail" />
-					<p:inputText id="txtFilterEmail"
-						value="#{listaUsuarioBean.filtro.email}"
-						style="width:98%;text-transform: lowercase" />
+					<p:outputLabel value="Cpf/Cnpj" />
+					<p:inputText id="txtFilterCpf"
+						value="#{listaClienteBean.filtro.cpf}" style="width:98%;" />
 
 					<p:outputLabel value="Status" />
 					<p:selectOneMenu autoWidth="false" style="width:88%;"
-						value="#{listaUsuarioBean.filtro.status}"
+						value="#{listaClienteBean.filtro.status}"
 						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
 						<f:selectItem itemLabel="ATIVO" itemValue="true" />
@@ -166,9 +156,9 @@
 					<p:toolbarGroup align="right">
 						<p:commandButton value="Pesquisar" icon="fa fa-search"
 							id="btnPesquisarFiltro" process="@this panelFiltro"
-							action="#{listaUsuarioBean.pesquisar}"
+							action="#{listaClienteBean.pesquisar}"
 							oncomplete="PF('dialogFiltro').hide()"
-							update="tbl-usuario panelFiltro" />
+							update="tblCliente panelFiltro" />
 					</p:toolbarGroup>
 				</p:toolbar>
 

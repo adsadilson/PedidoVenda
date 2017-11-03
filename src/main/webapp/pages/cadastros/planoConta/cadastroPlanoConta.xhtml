@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
-	<ui:define name="titulo">Manutenção de Grupo de Usuário</ui:define>
+	<ui:define name="titulo">Manutenção de Plano de Conta</ui:define>
 
 	<ui:define name="corpo">
 
@@ -17,13 +17,13 @@
 
 		<f:metadata>
 			<o:viewParam name="codigo"
-				value="#{cadastroGrupoUsuarioBean.grupoUsuario}" />
-			<o:viewAction action="#{cadastroGrupoUsuarioBean.inicializar}" />
+				value="#{cadastroPlanoContaBean.planoConta}" />
+			<o:viewAction action="#{cadastroPlanoContaBean.inicializar()}" />
 		</f:metadata>
 
 		<h:form prependId="false">
-			<h1>#{cadastroGrupoUsuarioBean.grupoUsuario.id != null ? 'Edição
-				de Grupo de Usuário' : 'Nova Grupo de Usuário'}</h1>
+			<h1>#{cadastroPlanoContaBean.planoConta.id != null ? 'Edição de
+				Plano de Conta ' : 'Novo Plano de Conta'}</h1>
 
 			<p:growl autoUpdate="true" />
 
@@ -34,11 +34,12 @@
 			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
 				<p:toolbarGroup>
 					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
-						action="#{cadastroGrupoUsuarioBean.salvar}" update="painel" />
+						action="#{cadastroPlanoContaBean.salvar}" update="painel" />
 					<p:button value="Limpar" icon="fa fa-eraser"
-						outcome="/pages/cadastros/grupoUsuario/cadastro-grupo-usuario" />
+						style="margin-left:3px; margin-right:3px;"
+						outcome="/pages/cadastros/planoConta/cadastroPlanoConta" />
 					<p:button value="Voltar" icon="fa fa-refresh"
-						outcome="/pages/cadastros/grupoUsuario/lista-grupo-usuario" />
+						outcome="/pages/cadastros/planoConta/listaPlanoConta" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:button value="Fechar" outcome="/home" />
@@ -50,15 +51,24 @@
 				<h:panelGrid columns="2" id="painel" style="width: 100%;"
 					columnClasses="rotulo">
 
+					<p:outputLabel value="Tipo" for="tp" />
+					<p:selectOneMenu id="tp" required="true" style="width:100px;"
+						requiredMessage="O campo 'TIPO' é obrigatório."
+						value="#{cadastroPlanoContaBean.planoConta.tipo}">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+						<f:selectItems value="#{cadastroPlanoContaBean.tipos}" var="tp"
+							itemLabel="#{tp.sigla} - #{tp.descricao} " itemValue="#{tp}" />
+					</p:selectOneMenu>
+
 
 					<p:outputLabel value="Nome" for="nome" />
 					<p:inputText id="nome" style="width:25%" maxlength="80"
 						required="true" requiredMessage="O campo 'NOME' é obrigatório."
-						value="#{cadastroGrupoUsuarioBean.grupoUsuario.nome}" />
+						value="#{cadastroPlanoContaBean.planoConta.nome}" />
 
 					<p:outputLabel value="Ativo" />
 					<p:selectBooleanCheckbox
-						value="#{cadastroGrupoUsuarioBean.grupoUsuario.status}" />
+						value="#{cadastroPlanoContaBean.planoConta.status}" />
 
 				</h:panelGrid>
 			</p:panel>
