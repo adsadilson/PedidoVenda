@@ -1,0 +1,79 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Manutenção de Plano de Conta</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.rotulo {
+	width: 100px;
+}
+</style>
+
+		<f:metadata>
+			<o:viewParam name="codigo"
+				value="#{cadastroPlanoContaBean.planoConta}" />
+			<o:viewAction action="#{cadastroPlanoContaBean.inicializar()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			<h1>#{cadastroPlanoContaBean.planoConta.id != null ? 'Edição de
+				Plano de Conta ' : 'Novo Plano de Conta'}</h1>
+
+			<p:growl autoUpdate="true" />
+
+			<p:focus for="nome" />
+
+
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
+						action="#{cadastroPlanoContaBean.salvar}" update="painel" />
+					<p:button value="Limpar" icon="fa fa-eraser"
+						style="margin-left:3px; margin-right:3px;"
+						outcome="/pages/cadastros/planoConta/cadastro-plano-conta" />
+					<p:button value="Voltar" icon="fa fa-refresh"
+						outcome="/pages/cadastros/planoConta/lista-plano-conta" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panel style="margin-top: 20px">
+
+				<h:panelGrid columns="2" id="painel" style="width: 100%;"
+					columnClasses="rotulo">
+
+					<p:outputLabel value="Tipo" for="tp" />
+					<p:selectOneMenu id="tp" required="true" style="width:100px;"
+						requiredMessage="O campo 'TIPO' é obrigatório."
+						value="#{cadastroPlanoContaBean.planoConta.tipo}">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+						<f:selectItems value="#{cadastroPlanoContaBean.tipos}" var="tp"
+							itemLabel="#{tp.sigla} - #{tp.descricao} " itemValue="#{tp}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Nome" for="nome" />
+					<p:inputText id="nome" style="width:25%" maxlength="80"
+						required="true" requiredMessage="O campo 'NOME' é obrigatório."
+						value="#{cadastroPlanoContaBean.planoConta.nome}" />
+
+					<p:outputLabel value="Ativo" />
+					<p:selectBooleanCheckbox
+						value="#{cadastroPlanoContaBean.planoConta.status}" />
+
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

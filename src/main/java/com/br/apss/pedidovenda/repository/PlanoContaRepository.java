@@ -15,57 +15,71 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import com.br.apss.pedidovenda.model.Categoria;
-import com.br.apss.pedidovenda.model.filter.CategoriaFilter;
+import com.br.apss.pedidovenda.enums.TipoConta;
+import com.br.apss.pedidovenda.model.PlanoConta;
+import com.br.apss.pedidovenda.model.filter.PlanoContaFilter;
 import com.br.apss.pedidovenda.util.NegocioException;
 
-public class CategoriaRepository implements Serializable {
+public class PlanoContaRepository implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private EntityManager manager;
 
-	public Categoria salvar(Categoria obj) {
+	public PlanoConta salvar(PlanoConta obj) {
 		return manager.merge(obj);
 	}
 
-	public void excluir(Categoria obj) {
+	public void excluir(PlanoConta obj) {
 		try {
 			obj = porId(obj.getId());
 			manager.remove(obj);
 			manager.flush();
 
 		} catch (Exception e) {
-			throw new NegocioException("Categoria de Produto n�o pode ser exclu�da");
+			throw new NegocioException("Plano de Conta não pode ser excluída");
 		}
 	}
 
-	public Categoria porId(Long id) {
-		return manager.find(Categoria.class, id);
+	public PlanoConta porId(Long id) {
+		return manager.find(PlanoConta.class, id);
 	}
 
-	public List<Categoria> listarTodos() {
-		return manager.createQuery("from Categoria order by nome", Categoria.class).getResultList();
+	public List<PlanoConta> listarTodos() {
+		return manager.createQuery("from PlanoConta order by nome", PlanoConta.class).getResultList();
 	}
 
-	public Categoria porNome(String nome) {
+	public PlanoConta porNome(String nome) {
 		try {
-			return manager.createQuery("from Categoria where upper(nome) = :nome", Categoria.class)
+			return manager.createQuery("from PlanoConta where upper(nome) = :nome", PlanoConta.class)
 					.setParameter("nome", nome.toUpperCase()).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
 
+	public PlanoConta porNomeTipo(String nome, TipoConta tipo) {
+		try {
+			return manager.createQuery("from PlanoConta where nome = :nome and tipo=:tipo", PlanoConta.class)
+					.setParameter("nome", nome).setParameter("tipo", tipo).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
 	@SuppressWarnings({ "deprecation" })
-	private Criteria criarCriteriaParaFiltro(CategoriaFilter filtro) {
+	private Criteria criarCriteriaParaFiltro(PlanoContaFilter filtro) {
 
 		Session session = manager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(Categoria.class);
+		Criteria criteria = session.createCriteria(PlanoConta.class);
 
 		if (StringUtils.isNotBlank(filtro.getNome())) {
 			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+		}
+
+		if (filtro.getTipo() != null) {
+			criteria.add(Restrictions.eq("tipo", filtro.getTipo()));
 		}
 
 		if (filtro.getStatus() != null) {
@@ -76,12 +90,12 @@ public class CategoriaRepository implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Categoria> filtrados(CategoriaFilter filtro) {
+	public List<PlanoConta> filtrados(PlanoContaFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 
-	public int quantidadeFiltrados(CategoriaFilter filtro) {
+	public int quantidadeFiltrados(PlanoContaFilter filtro) {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
 		criteria.setProjection(Projections.rowCount());
 		return ((Number) criteria.uniqueResult()).intValue();
