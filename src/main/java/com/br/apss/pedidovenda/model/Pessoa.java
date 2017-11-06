@@ -635,6 +635,14 @@ public class Pessoa implements Serializable {
 	public void setObs(String obs) {
 		this.obs = obs;
 	}
+	
+	public boolean isInclusao() {
+		return getId() == null ? true : false;
+	}
+
+	public boolean isEditando() {
+		return !isInclusao();
+	}
 
 	@Override
 	public int hashCode() {

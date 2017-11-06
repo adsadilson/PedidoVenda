@@ -23,17 +23,17 @@ public class ItemPedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "ITEM_PEDIDO_ID")
 	private Long id;
-	
+
 	@Column(nullable = false, length = 3)
 	private Integer quantidade;
-	
+
 	@Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
 	private BigDecimal valorUnitario;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "produto_id", nullable = false)
 	private Produto produto;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "pedido_id", nullable = false)
 	private Pedido pedido;
@@ -46,7 +46,6 @@ public class ItemPedido implements Serializable {
 		this.id = id;
 	}
 
-	
 	public Integer getQuantidade() {
 		return quantidade;
 	}
@@ -55,7 +54,6 @@ public class ItemPedido implements Serializable {
 		this.quantidade = quantidade;
 	}
 
-	
 	public BigDecimal getValorUnitario() {
 		return valorUnitario;
 	}
@@ -72,13 +70,20 @@ public class ItemPedido implements Serializable {
 		this.produto = produto;
 	}
 
-	
 	public Pedido getPedido() {
 		return pedido;
 	}
 
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
+	}
+
+	public boolean isInclusao() {
+		return getId() == null ? true : false;
+	}
+
+	public boolean isEditando() {
+		return !isInclusao();
 	}
 
 	@Override
@@ -104,6 +109,11 @@ public class ItemPedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
 	}
 
 }

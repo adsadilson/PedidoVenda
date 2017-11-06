@@ -26,8 +26,6 @@ import javax.persistence.TemporalType;
 import com.br.apss.pedidovenda.enums.FormaPagamento;
 import com.br.apss.pedidovenda.enums.StatusPedido;
 
-
-
 @Entity
 @Table(name = "pedido")
 @SequenceGenerator(name = "PEDIDO_ID", sequenceName = "PEDIDO_SEQ", allocationSize = 1, initialValue = 1)
@@ -37,46 +35,46 @@ public class Pedido implements Serializable {
 
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "PEDIDO_ID")
 	private Long id;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_criacao", nullable = false)
+	@Column(name = "data_criacao")
 	private Date dataCriacao;
-	
+
 	@Column(columnDefinition = "text")
 	private String observacao;
-	
+
 	@Temporal(TemporalType.DATE)
-	@Column(name = "data_entrega", nullable = false)
+	@Column(name = "data_entrega")
 	private Date dataEntrega;
-	
-	@Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
+
+	@Column(name = "valor_frete", precision = 10, scale = 2)
 	private BigDecimal valorFrete;
-	
-	@Column(name = "valor_desconto", nullable = false, precision = 10, scale = 2)
+
+	@Column(name = "valor_desconto", precision = 10, scale = 2)
 	private BigDecimal valorDesconto;
-	
-	@Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
+
+	@Column(name = "valor_total", precision = 10, scale = 2)
 	private BigDecimal valorTotal;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 20)
+	@Column(length = 20)
 	private StatusPedido status;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(name = "forma_pagamento", nullable = false, length = 20)
+	@Column(name = "forma_pagamento", length = 20)
 	private FormaPagamento formaPagamento;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "vendedor_id", nullable = false)
+	@JoinColumn(name = "vendedor_id")
 	private Usuario vendedor;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", nullable = false)
 	private Pessoa cliente;
-	
+
 	@Embedded
 	private EnderecoEntrega enderecoEntrega;
-	
+
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemPedido> itens = new ArrayList<>();
 
@@ -91,7 +89,7 @@ public class Pedido implements Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_criacao", nullable = false)
+	@Column(name = "data_criacao")
 	public Date getDataCriacao() {
 		return dataCriacao;
 	}
@@ -110,7 +108,7 @@ public class Pedido implements Serializable {
 	}
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "data_entrega", nullable = false)
+	@Column(name = "data_entrega")
 	public Date getDataEntrega() {
 		return dataEntrega;
 	}
@@ -119,7 +117,7 @@ public class Pedido implements Serializable {
 		this.dataEntrega = dataEntrega;
 	}
 
-	@Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
+	@Column(name = "valor_frete", precision = 10, scale = 2)
 	public BigDecimal getValorFrete() {
 		return valorFrete;
 	}
@@ -128,7 +126,7 @@ public class Pedido implements Serializable {
 		this.valorFrete = valorFrete;
 	}
 
-	@Column(name = "valor_desconto", nullable = false, precision = 10, scale = 2)
+	@Column(name = "valor_desconto", precision = 10, scale = 2)
 	public BigDecimal getValorDesconto() {
 		return valorDesconto;
 	}
@@ -137,7 +135,7 @@ public class Pedido implements Serializable {
 		this.valorDesconto = valorDesconto;
 	}
 
-	@Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
+	@Column(name = "valor_total", precision = 10, scale = 2)
 	public BigDecimal getValorTotal() {
 		return valorTotal;
 	}
@@ -147,7 +145,7 @@ public class Pedido implements Serializable {
 	}
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 20)
+	@Column(length = 20)
 	public StatusPedido getStatus() {
 		return status;
 	}
@@ -157,7 +155,7 @@ public class Pedido implements Serializable {
 	}
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "forma_pagamento", nullable = false, length = 20)
+	@Column(name = "forma_pagamento", length = 20)
 	public FormaPagamento getFormaPagamento() {
 		return formaPagamento;
 	}
@@ -203,7 +201,8 @@ public class Pedido implements Serializable {
 	public void setItens(List<ItemPedido> itens) {
 		this.itens = itens;
 	}
-
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -227,6 +226,11 @@ public class Pedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
 	}
 
 }
