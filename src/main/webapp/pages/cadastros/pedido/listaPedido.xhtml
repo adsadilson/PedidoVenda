@@ -87,8 +87,8 @@
 					</p:commandButton>
 				</p:column>
 
-				<p:column headerText="Número"
-					style="text-align: center; width: 100px">
+				<p:column headerText="Número" sortBy="#{pedido.id}"
+					style="text-align: center; width:70px">
 					<h:outputText value="#{pedido.id}" />
 				</p:column>
 
@@ -100,15 +100,16 @@
 					<h:outputText value="#{pedido.vendedor.nome}" />
 				</p:column>
 
-				<p:column headerText="Data de Criação"
-					style="text-align: center; width: 140px">
+				<p:column headerText="Data de Emissão"
+					sortBy="#{pedido.dataCriacao}"
+					style="text-align: center; width: 120px">
 					<h:outputText value="#{pedido.dataCriacao}">
 						<f:convertDateTime pattern="dd/MM/yyyy" />
 					</h:outputText>
 				</p:column>
 
 				<p:column headerText="Valor Total"
-					style="text-align: right; width: 120px">
+					style="text-align: right; width: 100px">
 					<h:outputText value="#{pedido.valorTotal}">
 						<f:convertNumber type="currency" />
 					</h:outputText>
@@ -116,7 +117,7 @@
 
 				<p:column headerText="Status" sortBy="#{pedido.status}"
 					style="text-align: center; width: 100px">
-					<h:outputText value="#{pedido.status ? 'ATIVO' : 'INATIVO'}" />
+					<h:outputText value="#{pedido.status}" />
 				</p:column>
 
 				<p:column headerText="">

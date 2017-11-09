@@ -46,6 +46,10 @@ public class UsuarioService implements Serializable {
 	public Usuario porNome(String nome) {
 		return dao.porNome(nome);
 	}
+	
+	public List<Usuario> completarVendedor(String nome) {
+		return dao.completarVendedor(nome);
+	}
 
 	public Usuario porEmail(String email) {
 		return dao.porEmail(email);

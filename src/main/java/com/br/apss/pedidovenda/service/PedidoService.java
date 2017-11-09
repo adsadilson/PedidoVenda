@@ -1,6 +1,7 @@
 package com.br.apss.pedidovenda.service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,6 +21,9 @@ public class PedidoService implements Serializable {
 
 	@Transacional
 	public void salvar(Pedido obj) {
+		if (obj.getId() == null) {
+			obj.setDataCriacao(new Date());
+		}
 		dao.salvar(obj);
 	}
 
@@ -51,7 +55,7 @@ public class PedidoService implements Serializable {
 	public List<Pedido> filtrados(PedidoFilter filtro) {
 		return dao.filtrados(filtro);
 	}
-	
+
 	public int qtdeFiltrados(PedidoFilter filtro) {
 		return dao.qtdeFiltrados(filtro);
 	}

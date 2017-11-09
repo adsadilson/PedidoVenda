@@ -4,71 +4,95 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.br.apss.pedidovenda.enums.Estado;
 
 @Embeddable
 public class EnderecoEntrega implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Column(nullable = false, length = 150)
 	private String logradouro;
+
+	@Column(nullable = false, length = 20)
 	private String numero;
+
+	@Column(length = 150)
 	private String complemento;
-	private String cidade;
-	private String uf;
+
+	@JoinColumn(name = "cidade_id")
+	@ManyToOne
+	private Cidade cidade;
+
+	@Column(nullable = false, length = 60)
+	private String bairro;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 2)
+	private Estado uf;
+
+	@Column(nullable = false, length = 10)
 	private String cep;
 
-	@Column(name = "entrega_logradouro", nullable = false, length = 150)
 	public String getLogradouro() {
 		return logradouro;
 	}
 
 	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
+		this.logradouro = logradouro.toUpperCase();
 	}
 
-	@Column(name = "entrega_numero", nullable = false, length = 20)
 	public String getNumero() {
 		return numero;
 	}
 
 	public void setNumero(String numero) {
-		this.numero = numero;
+		this.numero = numero == null ? null : numero.toUpperCase();
 	}
 
-	@Column(name = "entrega_complemento", length = 150)
 	public String getComplemento() {
 		return complemento;
 	}
 
 	public void setComplemento(String complemento) {
-		this.complemento = complemento;
+		this.complemento = complemento == null ? null : complemento.toUpperCase();
 	}
 
-	@Column(name = "entrega_cidade", nullable = false, length = 60)
-	public String getCidade() {
+	public Cidade getCidade() {
 		return cidade;
 	}
 
-	public void setCidade(String cidade) {
+	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
 
-	@Column(name = "entrega_uf", nullable = false, length = 60)
-	public String getUf() {
+	public Estado getUf() {
 		return uf;
 	}
 
-	public void setUf(String uf) {
+	public void setUf(Estado uf) {
 		this.uf = uf;
 	}
 
-	@Column(name = "entrega_cep", nullable = false, length = 9)
 	public String getCep() {
 		return cep;
 	}
 
 	public void setCep(String cep) {
 		this.cep = cep;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro.toUpperCase();
 	}
 
 }

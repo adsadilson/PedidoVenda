@@ -10,6 +10,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><ui:insert name="titulo">Sistema de Pedidos de Venda</ui:insert></title>
 	<h:outputStylesheet library="css" name="sistema.css" />
+	<h:outputScript library="js" name="jquery.maskMoney.js"/>
+	<h:outputScript library="js" name="initScript.js"/>
 
 </h:head>
 
@@ -56,17 +58,19 @@
 							outcome="/pages/cadastros/unidade/listaUnidade.xhtml" />
 					</p:submenu>
 					<p:submenu label="Outros">
-							<p:menuitem value="Cidades"
+						<p:menuitem value="Cidades"
 							outcome="/pages/cadastros/cidade/listaCidade.xhtml" />
-							<p:menuitem value="Grupo de Usuário"
+						<p:menuitem value="Grupo de Usuário"
 							outcome="/pages/cadastros/grupoUsuario/listaGrupoUsuario.xhtml" />
-							<p:menuitem value="Plano de Conta"
+						<p:menuitem value="Plano de Conta"
 							outcome="/pages/cadastros/planoConta/listaPlanoConta.xhtml" />
 					</p:submenu>
 				</p:submenu>
 				<p:submenu label="Pedidos">
-					<p:menuitem value="Novo pedido" outcome="/pages/cadastros/pedido/cadastroPedido.xhtml" />
-					<p:menuitem value="Pesquisa" outcome="/pages/cadastros/pedido/listaPedido.xhtml" />
+					<p:menuitem value="Novo pedido"
+						outcome="/pages/cadastros/pedido/cadastroPedido.xhtml" />
+					<p:menuitem value="Pesquisa"
+						outcome="/pages/cadastros/pedido/listaPedido.xhtml" />
 				</p:submenu>
 				<p:menuitem value="Sair" />
 			</p:menubar>

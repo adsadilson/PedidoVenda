@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "item_pedido")
@@ -114,6 +115,11 @@ public class ItemPedido implements Serializable {
 	@Override
 	public String toString() {
 		return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
+	}
+	
+	@Transient
+	public BigDecimal getValorTotal() {
+		return this.getValorUnitario().multiply(new BigDecimal(this.getQuantidade()));
 	}
 
 }

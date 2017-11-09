@@ -1,6 +1,7 @@
 package com.br.apss.pedidovenda.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,8 +12,16 @@ import javax.inject.Named;
 import org.omnifaces.util.Messages;
 
 import com.br.apss.pedidovenda.enums.Estado;
+import com.br.apss.pedidovenda.enums.FormaPagamento;
+import com.br.apss.pedidovenda.model.Cidade;
 import com.br.apss.pedidovenda.model.Pedido;
+import com.br.apss.pedidovenda.model.Pessoa;
+import com.br.apss.pedidovenda.model.Usuario;
+import com.br.apss.pedidovenda.model.filter.PessoaFilter;
+import com.br.apss.pedidovenda.service.CidadeService;
 import com.br.apss.pedidovenda.service.PedidoService;
+import com.br.apss.pedidovenda.service.PessoaService;
+import com.br.apss.pedidovenda.service.UsuarioService;
 
 @Named
 @ViewScoped
@@ -20,31 +29,75 @@ public class CadastroPedidoBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Pedido pedido = new Pedido();
-
 	@Inject
 	private PedidoService pedidoService;
+
+	@Inject
+	private UsuarioService vendedorService;
+
+	@Inject
+	private PessoaService clienteService;
+
+	@Inject
+	private CidadeService cidadeService;
+
+	private Pedido pedido;
+
+	private List<Cidade> cidades;
 
 	public void inicializar() {
 		if (this.pedido == null) {
 			limpar();
 		}
+		this.carregarCidadesPorEstados();
+		this.recalcularPedido();
 	}
 
 	public void salvar() {
 		pedidoService.salvar(pedido);
 		Messages.addGlobalInfo("Registro salvor com sucesso.");
 		limpar();
-
 	}
 
 	private void limpar() {
 		pedido = new Pedido();
 	}
 
+	public FormaPagamento[] getFormaPagto() {
+		return FormaPagamento.values();
+	}
+
+	public List<Pessoa> completarCliente(String nome) {
+		PessoaFilter filtroCliente = new PessoaFilter();
+		filtroCliente.setCliente(true);
+		filtroCliente.setOrigem("principal");
+		filtroCliente.setNome(nome);
+		return clienteService.filtrados(filtroCliente);
+	}
+
+	public List<Usuario> getVendedores() {
+		return vendedorService.listarTodos();
+	}
+
 	public List<Estado> getEstados() {
 		return Arrays.asList(Estado.values());
 	}
+
+	public void carregarCidadesPorEstados() {
+		if (null != this.pedido.getEnderecoEntrega().getUf()) {
+			cidades = cidadeService.buscarPorEstado(this.pedido.getEnderecoEntrega().getUf());
+		} else {
+			cidades = new ArrayList<Cidade>();
+		}
+	}
+
+	public void recalcularPedido() {
+		if (this.pedido != null) {
+			this.pedido.recalcularValorTotal();
+		}
+	}
+
+	/************** Getters e Seterrs *******************/
 
 	public Pedido getPedido() {
 		return pedido;
@@ -52,6 +105,14 @@ public class CadastroPedidoBean implements Serializable {
 
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
+	}
+
+	public List<Cidade> getCidades() {
+		return cidades;
+	}
+
+	public void setCidades(List<Cidade> cidades) {
+		this.cidades = cidades;
 	}
 
 }
