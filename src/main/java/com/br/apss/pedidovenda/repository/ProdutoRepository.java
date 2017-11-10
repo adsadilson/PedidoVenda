@@ -38,7 +38,7 @@ public class ProdutoRepository implements Serializable {
 			manager.flush();
 
 		} catch (Exception e) {
-			throw new NegocioException("Produto não pode ser excluída");
+			throw new NegocioException("Produto nï¿½o pode ser excluï¿½da");
 		}
 	}
 
@@ -57,6 +57,11 @@ public class ProdutoRepository implements Serializable {
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	public List<Produto> porListaProdutoPorNome(String nome) {
+		return this.manager.createQuery("from Produto where upper(nome) like :nome", Produto.class)
+				.setParameter("nome", nome.toUpperCase() + "%").getResultList();
 	}
 
 	@SuppressWarnings({ "deprecation" })
@@ -83,7 +88,7 @@ public class ProdutoRepository implements Serializable {
 			if (StringUtils.isNotBlank(filtro.getNome())) {
 				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 			}
-			
+
 			if (StringUtils.isNotBlank(filtro.getSku())) {
 				criteria.add(Restrictions.ilike("sku", filtro.getSku(), MatchMode.ANYWHERE));
 			}
@@ -126,6 +131,15 @@ public class ProdutoRepository implements Serializable {
 		Criteria criteria = criarCriteriaParaFiltro(filtro);
 		criteria.setProjection(Projections.rowCount());
 		return ((Number) criteria.uniqueResult()).intValue();
+	}
+
+	public Produto porCodigoBarra(String codigoBarra) {
+		try {
+			return manager.createQuery("from Produto where codigoBarra = :codigoBarra", Produto.class)
+					.setParameter("codigoBarra", codigoBarra).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 }

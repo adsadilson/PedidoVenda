@@ -43,7 +43,15 @@ public class ProdutoService implements Serializable {
 		return dao.porNome(nome);
 	}
 
+	public List<Produto> porListaProdutoPorNome(String nome) {
+		return dao.porListaProdutoPorNome(nome);
+	}
+
 	public int quantidadeFiltrados(ProdutoFilter filtro) {
 		return dao.quantidadeFiltrados(filtro);
+	}
+
+	public Produto porCodigoBarra(String codigoBarra) {
+		return dao.porCodigoBarra(codigoBarra);
 	}
 }

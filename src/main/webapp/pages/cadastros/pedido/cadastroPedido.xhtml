@@ -30,6 +30,10 @@
 .conteudo {
 	margin-left: 5%;
 }
+
+.ui-panel .ui-panel-content {
+	padding: 1px !important;
+}
 </style>
 
 		<f:metadata>
@@ -43,139 +47,66 @@
 
 			<p:growl autoUpdate="true" />
 
-			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
-				<p:toolbarGroup>
-					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
-						action="#{cadastroPedidoBean.salvar}"
-						update="painel panelEndereco panelObs" />
-					<p:button value="Limpar" icon="fa fa-eraser"
-						style="margin-left:3px; margin-right:3px;"
-						outcome="/pages/cadastros/pedido/cadastroPedido" />
-					<p:button value="Voltar" icon="fa fa-refresh"
-						outcome="/pages/cadastros/pedido/listaPedido" />
-				</p:toolbarGroup>
-				<p:toolbarGroup align="right">
-					<p:button value="Fechar" outcome="/home" />
-				</p:toolbarGroup>
-			</p:toolbar>
+			<p:wizard flowListener="#{cadastroPedidoBean.onFlowProcess}"
+				style="margin-top:20px;">
 
-			<p:panel style="margin-top: 20px">
+				<p:tab id="Itens" title="Lançamento de Itens">
+					<p:panel header="Relação dos Itens" id="panelItem"
+						style="height:385px;">
+						<p:dataTable value="#{cadastroPedidoBean.pedido.itens}" var="item"
+							rows="8" paginator="true" paginatorAlwaysVisible="false"
+							paginatorPosition="bottom"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
+							{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}"
+							id="tabelaItens">
 
-				<h:panelGrid columns="4" id="painel"
-					columnClasses="rotulo,campo,rotulo,campo">
+							<p:column headerText="Código de Barra"
+								style="text-align: center; width: 130px">
 
-					<p:outputLabel value="Número"
-						rendered="#{cadastroPedidoBean.pedido.existente}" />
-					<p:outputLabel size="10" value="#{cadastroPedidoBean.pedido.id}"
-						rendered="#{cadastroPedidoBean.pedido.existente}" />
+								<h:outputText value="#{item.produto.codigoBarra}"
+									rendered="#{item.produtoAssociado}" />
 
-					<p:outputLabel value="Data de Criação"
-						rendered="#{cadastroPedidoBean.pedido.existente}" />
-					<h:outputText value="#{cadastroPedidoBean.pedido.dataCriacao}"
-						rendered="#{cadastroPedidoBean.pedido.existente}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</h:outputText>
+								<p:inputText style="width:98%;"
+									value="#{cadastroPedidoBean.codigoBarra}" label="Código Barra"
+									rendered="#{not item.produtoAssociado}">
+									<p:ajax event="change" process="@this" update="tabelaItens"
+										listener="#{cadastroPedidoBean.carregarProdutoPorCodigoBarra()}" />
+								</p:inputText>
 
-					<p:outputLabel value="Status" />
-					<h:outputText value="#{cadastroPedidoBean.pedido.status.descricao}" />
-
-					<p:outputLabel value="Vendedor" for="vendedor" />
-					<p:selectOneMenu id="vendedor" required="true" autoWidth="false"
-						style="width:200px;"
-						requiredMessage="O campo 'VENDEDOR' é obrigatório."
-						value="#{cadastroPedidoBean.pedido.vendedor}">
-						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-						<f:selectItems value="#{cadastroPedidoBean.vendedores}" var="v"
-							itemLabel="#{v.nome}" itemValue="#{v}" />
-					</p:selectOneMenu>
-
-					<p:outputLabel value="Cliente" for="cliente" />
-					<p:autoComplete id="cliente" size="35" dropdown="false"
-						style="text-transform: uppercase;"
-						value="#{cadastroPedidoBean.pedido.cliente}" var="cliente"
-						itemLabel="#{cliente.nome}" itemValue="#{cliente}"
-						minQueryLength="2" required="true"
-						requiredMessage="O campo 'CLIENTE' é obrigatório."
-						completeMethod="#{cadastroPedidoBean.completarCliente}"
-						forceSelection="true" />
-
-					<p:outputLabel value="Forma de Pagamento" for="formaPagamento" />
-					<p:selectOneMenu id="formaPagamento" required="true"
-						autoWidth="false" style="width:200px;"
-						requiredMessage="O campo 'FORMA DE PAGTO' é obrigatório."
-						value="#{cadastroPedidoBean.pedido.formaPagamento}">
-						<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-						<f:selectItems value="#{cadastroPedidoBean.formaPagto}" var="fp"
-							itemLabel="#{fp.descricao}" itemValue="#{fp}" />
-					</p:selectOneMenu>
-
-
-					<p:outputLabel value="Valor do frete" for="valorFrete" />
-					<p:inputText id="valorFrete" size="10" maxlength="10"
-						onfocus="configurarMoeda(this);" value="#{cadastroPedidoBean.pedido.valorFrete}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
-						<p:ajax event="change" process="@this" update="totalPedido"
-							listener="#{cadastroPedidoBean.recalcularPedido()}" />
-					</p:inputText>
-
-					<p:outputLabel value="Subtotal" style="font-weight: bold" />
-					<h:outputText value="#{cadastroPedidoBean.pedido.valorSubtotal}"
-						style="font-weight: bold" id="subtotal">
-						<f:convertNumber type="currency" />
-					</h:outputText>
-
-					<p:outputLabel value="Valor de desconto" for="valorDesconto" />
-					<p:inputText id="valorDesconto" size="10" maxlength="10"
-						styleClass="moeda"
-						value="#{cadastroPedidoBean.pedido.valorDesconto}">
-						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
-						<p:ajax event="change" process="@this" update="totalPedido"
-							listener="#{cadastroPedidoBean.recalcularPedido()}" />
-					</p:inputText>
-
-					<p:outputLabel value="Total do pedido"
-						style="font-weight: bold; font-size: 1.1em" />
-					<h:outputText value="#{cadastroPedidoBean.pedido.valorTotal}"
-						style="font-weight: bold; font-size: 1.1em" id="totalPedido">
-						<f:convertNumber type="currency" />
-					</h:outputText>
-
-				</h:panelGrid>
-			</p:panel>
-
-
-			<p:tabView style="margin-top: 10px; height: 230px;" prependId="false">
-				<p:tab title="Itens">
-					<div class="botoes">
-						<h:panelGrid>
-							<p:commandButton value="Adicionar Item" style="width:99%;" />
-							<p:commandButton value="Excluir Item" style="width:99%;" />
-						</h:panelGrid>
-					</div>
-					<div class="conteudo">
-						<p:dataTable var="item" id="tabelaItens">
-							<p:column headerText="SKU"
-								style="text-align: center; width: 100px">
-								<h:outputText size="8" />
 							</p:column>
 							<p:column headerText="Produto">
-								<h:outputText />
+								<h:outputText value="#{item.produto.nome}"
+									rendered="#{item.produtoAssociado}" />
+
+								<p:autoComplete styleClass="produto-tabela" style="width:98%;"
+									value="#{cadastroPedidoBean.produtoLinhaEditavel}"
+									completeMethod="#{cadastroPedidoBean.completarProduto}"
+									var="produto" itemLabel="#{produto.nome}"
+									itemValue="#{produto}" forceSelection="true"
+									rendered="#{not item.produtoAssociado}">
+									<p:ajax event="itemSelect" update="tabelaItens"
+										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel}" />
+								</p:autoComplete>
 							</p:column>
 							<p:column headerText="Valor unitário"
 								style="text-align: right; width: 120px">
-								<h:outputText value="R$ 0,00" />
+								<h:outputText value="#{item.valorUnitario}">
+									<f:convertNumber type="currency" />
+								</h:outputText>
 							</p:column>
 							<p:column headerText="Quantidade"
 								style="text-align: center; width: 100px">
-								<h:outputText size="8" />
+								<p:inputText size="8" value="#{item.quantidade}" />
 							</p:column>
 							<p:column headerText="Estoque"
 								style="text-align: center; width: 100px">
-								<h:outputText value="0" />
+								<h:outputText value="#{item.produto.quantidade}" />
 							</p:column>
 							<p:column headerText="Valor total"
 								style="text-align: right; width: 100px">
-								<h:outputText value="R$ 0,00" />
+								<h:outputText value="#{item.valorTotal}">
+									<f:convertNumber type="currency" />
+								</h:outputText>
 							</p:column>
 
 							<p:columnGroup type="footer">
@@ -186,78 +117,107 @@
 								</p:row>
 							</p:columnGroup>
 						</p:dataTable>
-					</div>
+					</p:panel>
 				</p:tab>
-				<p:tab title="Dados de entrega">
-					<h:panelGrid columns="2" id="panelEndereco"
-						style="margin-top:20px; margin-left:10px;"
-						columnClasses="rotulo,campo100">
+				<p:tab id="DdCliente" title="Dados do Fechamento">
+					<p:panel header="Informação p/Fechamento" style="height:365px;">
+						<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+							<p:toolbarGroup>
+								<p:commandButton value="Salvar" id="botaoSalvar"
+									icon="fa fa-save" action="#{cadastroPedidoBean.salvar}"
+									update="panelEndereco panelObs" />
+								<p:button value="Limpar" icon="fa fa-eraser"
+									style="margin-left:3px; margin-right:3px;"
+									outcome="/pages/cadastros/pedido/cadastroPedido" />
+								<p:button value="Voltar" icon="fa fa-refresh"
+									outcome="/pages/cadastros/pedido/listaPedido" />
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:button value="Fechar" outcome="/home" />
+							</p:toolbarGroup>
+						</p:toolbar>
 
-						<p:outputLabel value="Data Entrega" for="dtEntrega" />
-						<p:calendar id="dtEntrega" required="true" pattern="dd/MM/yyyy"
-							requiredMessage="O campo 'DATA ENTREGA' é obrigatório."
-							value="#{cadastroPedidoBean.pedido.dataEntrega}">
-						</p:calendar>
+						<p:tabView style="margin-top: 10px; height: 230px;"
+							prependId="false">
+							<p:tab title="informativo">
+							</p:tab>
+							<p:tab title="Dados de entrega">
+								<h:panelGrid columns="2" id="panelEndereco"
+									style="margin-top:20px; margin-left:10px;"
+									columnClasses="rotulo,campo100">
 
-						<p:outputLabel value="CEP" for="cep" />
-						<p:inputMask mask="99999-999" id="cep" required="true"
-							requiredMessage="O campo 'CEP' é obrigatório."
-							value="#{cadastroPedidoBean.pedido.enderecoEntrega.cep}" />
+									<p:outputLabel value="Data Entrega" for="dtEntrega" />
+									<p:calendar id="dtEntrega" required="true" pattern="dd/MM/yyyy"
+										requiredMessage="O campo 'DATA ENTREGA' é obrigatório."
+										value="#{cadastroPedidoBean.pedido.dataEntrega}">
+									</p:calendar>
 
-						<p:outputLabel value="Logradouro" for="logradouro" />
-						<h:panelGroup>
-							<p:inputText id="logradouro" style="width: 60%" required="true"
-								requiredMessage="O campo 'LOGRADOURO' é obrigatório."
-								value="#{cadastroPedidoBean.pedido.enderecoEntrega.logradouro}" />
-							<p:inputText id="numero" style="width: 10%; margin-left:5px;"
-								value="#{cadastroPedidoBean.pedido.enderecoEntrega.numero}" />
-						</h:panelGroup>
+									<p:outputLabel value="CEP" for="cep" />
+									<p:inputMask mask="99999-999" id="cep" required="true"
+										requiredMessage="O campo 'CEP' é obrigatório."
+										value="#{cadastroPedidoBean.pedido.enderecoEntrega.cep}" />
 
-						<p:outputLabel value="Complemento" for="complemento" />
-						<h:panelGroup>
-							<p:inputText id="complemento"
-								value="#{cadastroPedidoBean.pedido.enderecoEntrega.complemento}" />
-							<p:outputLabel value="Bairro" for="bairro"
-								style="margin-left: 10px; margin-right:12px;" />
-							<p:inputText id="bairro" required="true"
-								requiredMessage="O campo 'BAIRRO' é obrigatório."
-								value="#{cadastroPedidoBean.pedido.enderecoEntrega.bairro}" />
-						</h:panelGroup>
+									<p:outputLabel value="Logradouro" for="logradouro" />
+									<h:panelGroup>
+										<p:inputText id="logradouro" style="width: 60%"
+											required="true"
+											requiredMessage="O campo 'LOGRADOURO' é obrigatório."
+											value="#{cadastroPedidoBean.pedido.enderecoEntrega.logradouro}" />
+										<p:inputText id="numero" style="width: 10%; margin-left:5px;"
+											value="#{cadastroPedidoBean.pedido.enderecoEntrega.numero}" />
+									</h:panelGroup>
 
-						<p:outputLabel value="UF" for="uf" />
-						<h:panelGroup>
-							<p:selectOneMenu id="uf" required="true" style="width:150px;"
-								requiredMessage="O campo 'UF' é obrigatório."
-								value="#{cadastroPedidoBean.pedido.enderecoEntrega.uf}">
-								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-								<f:selectItems value="#{cadastroPedidoBean.estados}" var="uf"
-									itemLabel="#{uf.sigla}" itemValue="#{uf}" />
-								<p:ajax event="change"
-									listener="#{cadastroPedidoBean.carregarCidadesPorEstados}"
-									update="comboCidade" />
-							</p:selectOneMenu>
-							<p:outputLabel value="Cidade" for="comboCidade"
-								style="margin-left: 10px; margin-right:5px;" />
-							<p:selectOneMenu autoWidth="false" filter="true"
-								value="#{cadastroPedidoBean.pedido.enderecoEntrega.cidade}"
-								id="comboCidade" required="true" style="width:150px;"
-								requiredMessage="O campo 'CIDADE' é obrigatório.">
-								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-								<f:selectItems value="#{cadastroPedidoBean.cidades}"
-									var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" />
-							</p:selectOneMenu>
-						</h:panelGroup>
-					</h:panelGrid>
+									<p:outputLabel value="Complemento" for="complemento" />
+									<h:panelGroup>
+										<p:inputText id="complemento"
+											value="#{cadastroPedidoBean.pedido.enderecoEntrega.complemento}" />
+										<p:outputLabel value="Bairro" for="bairro"
+											style="margin-left: 10px; margin-right:12px;" />
+										<p:inputText id="bairro" required="true"
+											requiredMessage="O campo 'BAIRRO' é obrigatório."
+											value="#{cadastroPedidoBean.pedido.enderecoEntrega.bairro}" />
+									</h:panelGroup>
+
+									<p:outputLabel value="UF" for="uf" />
+									<h:panelGroup>
+										<p:selectOneMenu id="uf" required="true" style="width:150px;"
+											requiredMessage="O campo 'UF' é obrigatório."
+											value="#{cadastroPedidoBean.pedido.enderecoEntrega.uf}">
+											<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+											<f:selectItems value="#{cadastroPedidoBean.estados}" var="uf"
+												itemLabel="#{uf.sigla}" itemValue="#{uf}" />
+											<p:ajax event="change"
+												listener="#{cadastroPedidoBean.carregarCidadesPorEstados}"
+												update="comboCidade" />
+										</p:selectOneMenu>
+										<p:outputLabel value="Cidade" for="comboCidade"
+											style="margin-left: 10px; margin-right:5px;" />
+										<p:selectOneMenu autoWidth="false" filter="true"
+											value="#{cadastroPedidoBean.pedido.enderecoEntrega.cidade}"
+											id="comboCidade" required="true" style="width:150px;"
+											requiredMessage="O campo 'CIDADE' é obrigatório.">
+											<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+											<f:selectItems value="#{cadastroPedidoBean.cidades}"
+												var="cidade" itemLabel="#{cidade.nome}"
+												itemValue="#{cidade}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:tab>
+							<p:tab title="Observação">
+								<h:panelGroup id="panelObs" layout="block"
+									style="padding-right: 10px">
+									<p:inputTextarea rows="12"
+										style="width: 100%; text-transform: uppercase;"
+										value="#{cadastroPedidoBean.pedido.observacao}" />
+								</h:panelGroup>
+							</p:tab>
+						</p:tabView>
+
+					</p:panel>
 				</p:tab>
-				<p:tab title="Observação">
-					<h:panelGroup id="panelObs" layout="block"
-						style="padding-right: 10px">
-						<p:inputTextarea rows="12"
-							style="width: 100%; text-transform: uppercase;"
-							value="#{cadastroPedidoBean.pedido.observacao}" />
-					</h:panelGroup>
-				</p:tab>
-			</p:tabView>
+			</p:wizard>
+
 
 		</h:form>
 

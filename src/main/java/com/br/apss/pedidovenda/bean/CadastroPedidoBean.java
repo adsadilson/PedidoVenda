@@ -10,17 +10,22 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.omnifaces.util.Messages;
+import org.primefaces.event.FlowEvent;
 
 import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.enums.FormaPagamento;
 import com.br.apss.pedidovenda.model.Cidade;
+import com.br.apss.pedidovenda.model.ItemPedido;
 import com.br.apss.pedidovenda.model.Pedido;
 import com.br.apss.pedidovenda.model.Pessoa;
+import com.br.apss.pedidovenda.model.Produto;
 import com.br.apss.pedidovenda.model.Usuario;
 import com.br.apss.pedidovenda.model.filter.PessoaFilter;
+import com.br.apss.pedidovenda.model.filter.ProdutoFilter;
 import com.br.apss.pedidovenda.service.CidadeService;
 import com.br.apss.pedidovenda.service.PedidoService;
 import com.br.apss.pedidovenda.service.PessoaService;
+import com.br.apss.pedidovenda.service.ProdutoService;
 import com.br.apss.pedidovenda.service.UsuarioService;
 
 @Named
@@ -41,7 +46,16 @@ public class CadastroPedidoBean implements Serializable {
 	@Inject
 	private CidadeService cidadeService;
 
+	@Inject
+	private ProdutoService produtoService;
+
 	private Pedido pedido;
+
+	private String codigoBarra;
+
+	private Produto produtoLinhaEditavel;
+
+	private boolean skip;
 
 	private List<Cidade> cidades;
 
@@ -51,6 +65,7 @@ public class CadastroPedidoBean implements Serializable {
 		}
 		this.carregarCidadesPorEstados();
 		this.recalcularPedido();
+		this.pedido.adicionarItemVazio();
 	}
 
 	public void salvar() {
@@ -97,6 +112,60 @@ public class CadastroPedidoBean implements Serializable {
 		}
 	}
 
+	public void carregarProdutoPorCodigoBarra() {
+		if (null != this.codigoBarra) {
+			this.produtoLinhaEditavel = this.produtoService.porCodigoBarra(this.codigoBarra);
+			this.carregarProdutoLinhaEditavel();
+		}
+	}
+
+	public void carregarProdutoLinhaEditavel() {
+		ItemPedido item = this.pedido.getItens().get(0);
+
+		if (this.produtoLinhaEditavel != null) {
+			if (this.existeItemComProduto(this.produtoLinhaEditavel)) {
+				Messages.addGlobalWarn("Já existe um item no pedido com o produto informado.");
+			} else {
+				item.setProduto(this.produtoLinhaEditavel);
+				item.setValorUnitario(this.produtoLinhaEditavel.getVlrVenda());
+
+				this.pedido.adicionarItemVazio();
+				this.produtoLinhaEditavel = null;
+				this.codigoBarra = null;
+
+				this.pedido.recalcularValorTotal();
+			}
+		}
+	}
+
+	private boolean existeItemComProduto(Produto produto) {
+		boolean existeItem = false;
+
+		for (ItemPedido item : this.getPedido().getItens()) {
+			if (produto.equals(item.getProduto())) {
+				existeItem = true;
+				break;
+			}
+		}
+
+		return existeItem;
+	}
+
+	public List<Produto> completarProduto(String nome) {
+		ProdutoFilter filtroProduto = new ProdutoFilter();
+		filtroProduto.setNome(nome);
+		return this.produtoService.filtrados(filtroProduto);
+	}
+
+	public String onFlowProcess(FlowEvent event) {
+		if (skip) {
+			skip = false; // reset in case user goes back
+			return "confirm";
+		} else {
+			return event.getNewStep();
+		}
+	}
+
 	/************** Getters e Seterrs *******************/
 
 	public Pedido getPedido() {
@@ -113,6 +182,30 @@ public class CadastroPedidoBean implements Serializable {
 
 	public void setCidades(List<Cidade> cidades) {
 		this.cidades = cidades;
+	}
+
+	public String getCodigoBarra() {
+		return codigoBarra;
+	}
+
+	public void setCodigoBarra(String codigoBarra) {
+		this.codigoBarra = codigoBarra;
+	}
+
+	public Produto getProdutoLinhaEditavel() {
+		return produtoLinhaEditavel;
+	}
+
+	public void setProdutoLinhaEditavel(Produto produtoLinhaEditavel) {
+		this.produtoLinhaEditavel = produtoLinhaEditavel;
+	}
+
+	public boolean isSkip() {
+		return skip;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
 	}
 
 }
