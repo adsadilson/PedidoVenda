@@ -1,6 +1,7 @@
 package com.br.apss.pedidovenda.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,9 +54,17 @@ public class CadastroPedidoBean implements Serializable {
 
 	private String codigoBarra;
 
+	private BigDecimal vlrUnit;
+
+	private BigDecimal qtdeEstoque;
+
+	private String descricao;
+
 	private Produto produtoLinhaEditavel;
 
 	private boolean skip;
+
+	private boolean achou = false;
 
 	private List<Cidade> cidades;
 
@@ -112,10 +121,22 @@ public class CadastroPedidoBean implements Serializable {
 		}
 	}
 
-	public void carregarProdutoPorCodigoBarra() {
-		if (null != this.codigoBarra) {
-			this.produtoLinhaEditavel = this.produtoService.porCodigoBarra(this.codigoBarra);
-			this.carregarProdutoLinhaEditavel();
+	public void carregarProdutoPesquisado() {
+		if (null != this.codigoBarra || this.produtoLinhaEditavel != null) {
+			if (null != this.codigoBarra) {
+				this.produtoLinhaEditavel = this.produtoService.porCodigoBarra(this.codigoBarra);
+			}
+			if (null != this.produtoLinhaEditavel) {
+				this.achou = true;
+				this.getProdutoLinhaEditavel().getNome();
+				this.setVlrUnit(this.getProdutoLinhaEditavel().getVlrVenda());
+				this.setQtdeEstoque(this.produtoLinhaEditavel.getQuantidade());
+				this.setCodigoBarra(this.getProdutoLinhaEditavel().getCodigoBarra());
+			} else {
+				this.achou = false;
+				Messages.addGlobalInfo("Produto não localizado.");
+			}
+			// this.carregarProdutoLinhaEditavel();
 		}
 	}
 
@@ -132,6 +153,8 @@ public class CadastroPedidoBean implements Serializable {
 				this.pedido.adicionarItemVazio();
 				this.produtoLinhaEditavel = null;
 				this.codigoBarra = null;
+				this.vlrUnit = null;
+				this.qtdeEstoque = null;
 
 				this.pedido.recalcularValorTotal();
 			}
@@ -207,5 +230,39 @@ public class CadastroPedidoBean implements Serializable {
 	public void setSkip(boolean skip) {
 		this.skip = skip;
 	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public boolean isAchou() {
+		return achou;
+	}
+
+	public void setAchou(boolean achou) {
+		this.achou = achou;
+	}
+
+	public BigDecimal getVlrUnit() {
+		return vlrUnit;
+	}
+
+	public void setVlrUnit(BigDecimal vlrUnit) {
+		this.vlrUnit = vlrUnit;
+	}
+
+	public BigDecimal getQtdeEstoque() {
+		return qtdeEstoque;
+	}
+
+	public void setQtdeEstoque(BigDecimal qtdeEstoque) {
+		this.qtdeEstoque = qtdeEstoque;
+	}
+
+	
 
 }

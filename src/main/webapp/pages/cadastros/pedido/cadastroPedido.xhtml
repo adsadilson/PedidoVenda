@@ -9,6 +9,11 @@
 
 	<ui:define name="corpo">
 
+		<script type="text/javascript"> 
+	function setfocus(id){
+		document.getElementById(id).select()} 
+	</script>
+
 		<style type="text/css">
 .rotulo {
 	width: 140px;
@@ -66,11 +71,13 @@
 								<h:outputText value="#{item.produto.codigoBarra}"
 									rendered="#{item.produtoAssociado}" />
 
-								<p:inputText style="width:98%;"
+								<p:inputText style="width:95%;" id="cod" onfocus="select()"
 									value="#{cadastroPedidoBean.codigoBarra}" label="Código Barra"
 									rendered="#{not item.produtoAssociado}">
-									<p:ajax event="change" process="@this" update="tabelaItens"
-										listener="#{cadastroPedidoBean.carregarProdutoPorCodigoBarra()}" />
+									<p:ajax event="change" process="@this"
+										update="qtde descricao vlr qtdest"
+										oncomplete="setfocus('tabelaItens:0:qtde')"
+										listener="#{cadastroPedidoBean.carregarProdutoPesquisado()}" />
 								</p:inputText>
 
 							</p:column>
@@ -81,27 +88,49 @@
 								<p:autoComplete styleClass="produto-tabela" style="width:98%;"
 									value="#{cadastroPedidoBean.produtoLinhaEditavel}"
 									completeMethod="#{cadastroPedidoBean.completarProduto}"
-									var="produto" itemLabel="#{produto.nome}"
+									var="produto" itemLabel="#{produto.nome}" id="descricao"
 									itemValue="#{produto}" forceSelection="true"
 									rendered="#{not item.produtoAssociado}">
-									<p:ajax event="itemSelect" update="tabelaItens"
-										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel}" />
+									<p:ajax event="itemSelect" update="qtde cod vlr qtdest"
+										oncomplete="setfocus('tabelaItens:0:qtde')"
+										listener="#{cadastroPedidoBean.carregarProdutoPesquisado()}" />
 								</p:autoComplete>
 							</p:column>
 							<p:column headerText="Valor unitário"
-								style="text-align: right; width: 120px">
-								<h:outputText value="#{item.valorUnitario}">
+								style="text-align: right; width: 110px">
+								<h:outputText value="#{item.produto.vlrVenda}"
+									rendered="#{item.produtoAssociado}">
+									<f:convertNumber type="currency" />
+								</h:outputText>
+
+								<h:outputText id="vlr"
+									value="#{cadastroPedidoBean.vlrUnit}" label="Valor unitário"
+									rendered="#{not item.produtoAssociado}">
 									<f:convertNumber type="currency" />
 								</h:outputText>
 							</p:column>
 							<p:column headerText="Quantidade"
 								style="text-align: center; width: 100px">
-								<p:inputText size="8" value="#{item.quantidade}" />
+								<p:inputText id="qtde" size="8" value="#{item.quantidade}">
+									<p:ajax event="blur" process="@this" update="tabelaItens"
+										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel()}" />
+								</p:inputText>
+								<p:focus for="cod" />
 							</p:column>
 							<p:column headerText="Estoque"
 								style="text-align: center; width: 100px">
-								<h:outputText value="#{item.produto.quantidade}" />
+								<h:outputText value="#{item.produto.quantidade}"
+									rendered="#{item.produtoAssociado}">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+
+								<h:outputText id="qtdest"
+									value="#{cadastroPedidoBean.qtdeEstoque}" label="Estoque"
+									rendered="#{not item.produtoAssociado}">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
 							</p:column>
+
 							<p:column headerText="Valor total"
 								style="text-align: right; width: 100px">
 								<h:outputText value="#{item.valorTotal}">
