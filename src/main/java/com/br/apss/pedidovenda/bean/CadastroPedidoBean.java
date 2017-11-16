@@ -140,23 +140,30 @@ public class CadastroPedidoBean implements Serializable {
 		}
 	}
 
-	public void carregarProdutoLinhaEditavel() {
-		ItemPedido item = this.pedido.getItens().get(0);
+	public void carregarProdutoLinhaEditavel(Integer cod) {
 
-		if (this.produtoLinhaEditavel != null) {
-			if (this.existeItemComProduto(this.produtoLinhaEditavel)) {
-				Messages.addGlobalWarn("Já existe um item no pedido com o produto informado.");
+		if (cod != null) {
+			if (cod == 0) {
+				System.out.println("resolver o codigo feio");
 			} else {
-				item.setProduto(this.produtoLinhaEditavel);
-				item.setValorUnitario(this.produtoLinhaEditavel.getVlrVenda());
+				ItemPedido item = this.pedido.getItens().get(0);
 
-				this.pedido.adicionarItemVazio();
-				this.produtoLinhaEditavel = null;
-				this.codigoBarra = null;
-				this.vlrUnit = null;
-				this.qtdeEstoque = null;
+				if (this.produtoLinhaEditavel != null) {
+					if (this.existeItemComProduto(this.produtoLinhaEditavel)) {
+						Messages.addGlobalWarn("Já existe um item no pedido com o produto informado.");
+					} else {
+						item.setProduto(this.produtoLinhaEditavel);
+						item.setValorUnitario(this.produtoLinhaEditavel.getVlrVenda());
 
-				this.pedido.recalcularValorTotal();
+						this.pedido.adicionarItemVazio();
+						this.produtoLinhaEditavel = null;
+						this.codigoBarra = null;
+						this.vlrUnit = null;
+						this.qtdeEstoque = null;
+
+						this.pedido.recalcularValorTotal();
+					}
+				}
 			}
 		}
 	}
@@ -262,7 +269,5 @@ public class CadastroPedidoBean implements Serializable {
 	public void setQtdeEstoque(BigDecimal qtdeEstoque) {
 		this.qtdeEstoque = qtdeEstoque;
 	}
-
-	
 
 }

@@ -8,3 +8,5 @@ function configurarMoeda(id) {
 		symbolStay: true
 	});
 }
+
+

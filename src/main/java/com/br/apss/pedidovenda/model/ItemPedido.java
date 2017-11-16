@@ -26,7 +26,7 @@ public class ItemPedido implements Serializable {
 	private Long id;
 
 	@Column(nullable = false, length = 3)
-	private Integer quantidade = 1;
+	private Integer quantidade = 0;
 
 	@Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
 	private BigDecimal valorUnitario = BigDecimal.ZERO;

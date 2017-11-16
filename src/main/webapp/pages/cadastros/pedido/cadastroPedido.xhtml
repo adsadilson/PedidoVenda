@@ -12,6 +12,16 @@
 		<script type="text/javascript"> 
 	function setfocus(id){
 		document.getElementById(id).select()} 
+
+	function somenteNumeros(num) {
+	    var er = /[^0-9.]/;
+	    er.lastIndex = 0;
+	    var campo = num;
+	    if (er.test(campo.value)) {
+	      campo.value = "";
+	    }
+	}
+	
 	</script>
 
 		<style type="text/css">
@@ -76,7 +86,7 @@
 									rendered="#{not item.produtoAssociado}">
 									<p:ajax event="change" process="@this"
 										update="qtde descricao vlr qtdest"
-										oncomplete="setfocus('tabelaItens:0:qtde')"
+										oncomplete="$('tabelaItens:0:cod').val()==''?$('tabelaItens:0:cod').focus():setfocus('tabelaItens:0:qtde')"
 										listener="#{cadastroPedidoBean.carregarProdutoPesquisado()}" />
 								</p:inputText>
 
@@ -103,17 +113,18 @@
 									<f:convertNumber type="currency" />
 								</h:outputText>
 
-								<h:outputText id="vlr"
-									value="#{cadastroPedidoBean.vlrUnit}" label="Valor unitário"
-									rendered="#{not item.produtoAssociado}">
+								<h:outputText id="vlr" value="#{cadastroPedidoBean.vlrUnit}"
+									label="Valor unitário" rendered="#{not item.produtoAssociado}">
 									<f:convertNumber type="currency" />
 								</h:outputText>
 							</p:column>
 							<p:column headerText="Quantidade"
 								style="text-align: center; width: 100px">
-								<p:inputText id="qtde" size="8" value="#{item.quantidade}">
-									<p:ajax event="blur" process="@this" update="tabelaItens"
-										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel()}" />
+								<p:inputText id="qtde" size="8" value="#{item.quantidade}"
+									onkeyup="somenteNumeros(this)" style="text-align: center;"
+									onkeypress="event.keyCode==13?$(this).val()!=''?setfocus('tabelaItens:0:cod'):'':''">
+									<p:ajax event="change" process="@this" update="tabelaItens"
+										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel(item.quantidade)}" />
 								</p:inputText>
 								<p:focus for="cod" />
 							</p:column>
@@ -142,7 +153,9 @@
 								<p:row>
 									<p:column colspan="5" footerText="Subtotal"
 										style="text-align: right" />
-									<p:column footerText="R$ 0,00" style="text-align: right" />
+									<p:column
+										footerText="#{cadastroPedidoBean.pedido.valorSubtotal}"
+										style="text-align: right" />
 								</p:row>
 							</p:columnGroup>
 						</p:dataTable>
