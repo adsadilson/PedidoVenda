@@ -2,6 +2,7 @@ package com.br.apss.pedidovenda.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -228,6 +229,12 @@ public class Pedido implements Serializable {
 	@Transient
 	public BigDecimal getValorSubtotal() {
 		return this.getValorTotal().subtract(this.getValorFrete()).add(this.getValorDesconto());
+	}
+	
+	public String getVlrSubtotal() {
+			NumberFormat nf = NumberFormat.getCurrencyInstance();
+			String formatado = nf.format(this.getValorTotal().subtract(this.getValorFrete()).add(this.getValorDesconto()));
+			return formatado;
 	}
 
 	public void recalcularValorTotal() {

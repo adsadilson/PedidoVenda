@@ -70,7 +70,7 @@
 						style="height:385px;">
 						<p:dataTable value="#{cadastroPedidoBean.pedido.itens}" var="item"
 							rows="8" paginator="true" paginatorAlwaysVisible="false"
-							paginatorPosition="bottom"
+							paginatorPosition="bottom" rowIndexVar="linha"
 							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
 							{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}"
 							id="tabelaItens">
@@ -124,7 +124,7 @@
 									onkeyup="somenteNumeros(this)" style="text-align: center;"
 									onkeypress="event.keyCode==13?$(this).val()!=''?setfocus('tabelaItens:0:cod'):'':''">
 									<p:ajax event="change" process="@this" update="tabelaItens"
-										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel(item.quantidade)}" />
+										listener="#{cadastroPedidoBean.carregarProdutoLinhaEditavel(item.quantidade,linha)}" />
 								</p:inputText>
 								<p:focus for="cod" />
 							</p:column>
@@ -153,8 +153,7 @@
 								<p:row>
 									<p:column colspan="5" footerText="Subtotal"
 										style="text-align: right" />
-									<p:column
-										footerText="#{cadastroPedidoBean.pedido.valorSubtotal}"
+									<p:column footerText="#{cadastroPedidoBean.pedido.vlrSubtotal}"
 										style="text-align: right" />
 								</p:row>
 							</p:columnGroup>

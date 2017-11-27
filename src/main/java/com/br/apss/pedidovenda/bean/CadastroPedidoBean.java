@@ -140,11 +140,12 @@ public class CadastroPedidoBean implements Serializable {
 		}
 	}
 
-	public void carregarProdutoLinhaEditavel(Integer cod) {
+	public void carregarProdutoLinhaEditavel(Integer qtde,int linha) {
 
-		if (cod != null) {
-			if (cod == 0) {
-				System.out.println("resolver o codigo feio");
+		if (qtde != null) {
+			if (qtde == 0) {
+				//Excluir o item da tabela
+				this.getPedido().getItens().remove(linha);
 			} else {
 				ItemPedido item = this.pedido.getItens().get(0);
 
@@ -160,12 +161,12 @@ public class CadastroPedidoBean implements Serializable {
 						this.codigoBarra = null;
 						this.vlrUnit = null;
 						this.qtdeEstoque = null;
-
-						this.pedido.recalcularValorTotal();
 					}
 				}
 			}
+			this.pedido.recalcularValorTotal();
 		}
+
 	}
 
 	private boolean existeItemComProduto(Produto produto) {
