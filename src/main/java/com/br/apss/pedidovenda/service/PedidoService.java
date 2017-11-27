@@ -10,6 +10,7 @@ import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.model.Pedido;
 import com.br.apss.pedidovenda.model.filter.PedidoFilter;
 import com.br.apss.pedidovenda.repository.PedidoRepository;
+import com.br.apss.pedidovenda.util.NegocioException;
 import com.br.apss.pedidovenda.util.Transacional;
 
 public class PedidoService implements Serializable {
@@ -23,6 +24,16 @@ public class PedidoService implements Serializable {
 	public void salvar(Pedido obj) {
 		if (obj.getId() == null) {
 			obj.setDataCriacao(new Date());
+		}
+		
+		obj.recalcularValorTotal();
+
+		if (obj.getItens().isEmpty()) {
+			throw new NegocioException("O pedido deve possuir pelo menos um item.");
+		}
+
+		if (obj.isValorTotalNegativo()) {
+			throw new NegocioException("Valor total do pedido não pode ser negativo.");
 		}
 		dao.salvar(obj);
 	}

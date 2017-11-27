@@ -78,9 +78,14 @@ public class CadastroPedidoBean implements Serializable {
 	}
 
 	public void salvar() {
-		pedidoService.salvar(pedido);
-		Messages.addGlobalInfo("Registro salvor com sucesso.");
-		limpar();
+		this.pedido.removerItemVazio();
+		try {
+			pedidoService.salvar(pedido);
+			Messages.addGlobalInfo("Registro salvor com sucesso.");
+			limpar();
+		} finally {
+			this.pedido.adicionarItemVazio();
+		}
 	}
 
 	private void limpar() {
@@ -134,17 +139,17 @@ public class CadastroPedidoBean implements Serializable {
 				this.setCodigoBarra(this.getProdutoLinhaEditavel().getCodigoBarra());
 			} else {
 				this.achou = false;
-				Messages.addGlobalInfo("Produto n√£o localizado.");
+				Messages.addGlobalInfo("Produto n„o localizado.");
 			}
 			// this.carregarProdutoLinhaEditavel();
 		}
 	}
 
-	public void carregarProdutoLinhaEditavel(Integer qtde,int linha) {
+	public void carregarProdutoLinhaEditavel(Integer qtde, int linha) {
 
 		if (qtde != null) {
 			if (qtde == 0) {
-				//Excluir o item da tabela
+				// Excluir o item da tabela
 				this.getPedido().getItens().remove(linha);
 			} else {
 				ItemPedido item = this.pedido.getItens().get(0);

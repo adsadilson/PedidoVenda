@@ -2,7 +2,7 @@ package com.br.apss.pedidovenda.enums;
 
 public enum StatusPedido {
 
-	ORCAMENTO("ORÃ‡AMENTO"), 
+	ORCAMENTO("ORÇAMENTO"), 
 	EMITIDO("EMITIDO"), 
 	CANCELADO("CANCELADO");
 

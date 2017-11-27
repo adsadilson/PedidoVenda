@@ -56,9 +56,12 @@ h2, .h2 {
 						target="_blank" />.
 				</span>
 			</h2>
-			<h:form>
-				<p:commandButton value="Error" action="#{cadastroCategoriaBean.salvar()}"></p:commandButton>
-			</h:form>
+			<ui:remove>
+				<h:form>
+					<p:commandButton value="Error"
+						action="#{cadastroCategoriaBean.salvar()}"></p:commandButton>
+				</h:form>
+			</ui:remove>
 		</div>
 
 
