@@ -131,15 +131,24 @@
 							<p:column headerText="Estoque"
 								style="text-align: center; width: 100px">
 								<h:outputText value="#{item.produto.quantidade}"
+									style="#{item.estoqueInsuficiente ? 'color: red':''}"
 									rendered="#{item.produtoAssociado}">
 									<f:convertNumber type="currency" currencySymbol="" />
 								</h:outputText>
 
 								<h:outputText id="qtdest"
-									value="#{cadastroPedidoBean.qtdeEstoque}" label="Estoque"
-									rendered="#{not item.produtoAssociado}">
+									value="#{cadastroPedidoBean.qtdeEstoque}" label="Estoque">
 									<f:convertNumber type="currency" currencySymbol="" />
 								</h:outputText>
+
+								<h:graphicImage library="images" name="alerta.png"
+									id="semEstoque"
+									style="vertical-align: bottom; margin-left: 5px"
+									rendered="#{item.estoqueInsuficiente}" />
+
+								<p:tooltip for="semEstoque" value="Estoque insuficiente"
+									rendered="#{item.estoqueInsuficiente}" />
+
 							</p:column>
 
 							<p:column headerText="Valor total"
@@ -172,6 +181,7 @@
 									<p:outputLabel value="Número"
 										rendered="#{cadastroPedidoBean.pedido.existente}" />
 									<p:inputText size="10" value="#{cadastroPedidoBean.pedido.id}"
+										readonly="true" style="text-align: center;"
 										rendered="#{cadastroPedidoBean.pedido.existente}" />
 
 									<p:outputLabel value="Data de Criação"
@@ -323,10 +333,16 @@
 								<p:commandButton value="Salvar" id="botaoSalvar"
 									icon="fa fa-save" action="#{cadastroPedidoBean.salvar}"
 									update="panelEndereco panelObs panelPrincipal" />
-								<p:button value="Limpar" icon="fa fa-eraser"
+								<p:button value="Novo" icon="fa fa-file-o"
 									style="margin-left:3px; margin-right:3px;"
 									outcome="/pages/cadastros/pedido/cadastroPedido" />
-								<p:button value="Voltar" icon="fa fa-refresh"
+								<p:separator />
+								<p:commandButton value="Emitir" />
+								<p:commandButton value="Cancelar"
+									style="margin-left:3px; margin-right:3px;" />
+								<p:commandButton value="Enviar por e-mail" />
+								<p:separator />
+								<p:button value="Pesquisa"
 									outcome="/pages/cadastros/pedido/listaPedido" />
 							</p:toolbarGroup>
 						</p:toolbar>

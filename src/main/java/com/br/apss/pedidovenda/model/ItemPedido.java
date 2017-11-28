@@ -26,7 +26,7 @@ public class ItemPedido implements Serializable {
 	private Long id;
 
 	@Column(nullable = false, length = 3)
-	private Integer quantidade = 0;
+	private BigDecimal quantidade = BigDecimal.ZERO;
 
 	@Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
 	private BigDecimal valorUnitario = BigDecimal.ZERO;
@@ -47,11 +47,11 @@ public class ItemPedido implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getQuantidade() {
+	public BigDecimal getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Integer quantidade) {
+	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
 
@@ -119,12 +119,24 @@ public class ItemPedido implements Serializable {
 
 	@Transient
 	public BigDecimal getValorTotal() {
-		return this.getValorUnitario().multiply(new BigDecimal(this.getQuantidade()));
+		return this.getValorUnitario().multiply(this.getQuantidade());
 	}
 
 	@Transient
 	public boolean isProdutoAssociado() {
 		return this.getProduto() != null && this.getProduto().getId() != null;
+	}
+
+	@Transient
+	public boolean isEstoqueSuficiente() {
+		return this.getPedido().isEmitido() || this.getProduto().getId() == null
+				|| this.getProduto().getQuantidade().compareTo(this.getQuantidade()) >= 0;
+	}
+
+	@Transient
+	public boolean isEstoqueInsuficiente() {
+		System.out.println(this.isEstoqueSuficiente());
+		return !this.isEstoqueSuficiente();
 	}
 
 }
