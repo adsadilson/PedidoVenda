@@ -337,7 +337,9 @@
 									style="margin-left:3px; margin-right:3px;"
 									outcome="/pages/cadastros/pedido/cadastroPedido" />
 								<p:separator />
-								<p:commandButton value="Emitir" />
+								<p:commandButton value="Emitir"
+									action="#{emissaoPedidoBean.emitirPedido}" process="@form"
+									update="@form" />
 								<p:commandButton value="Cancelar"
 									style="margin-left:3px; margin-right:3px;" />
 								<p:commandButton value="Enviar por e-mail" />

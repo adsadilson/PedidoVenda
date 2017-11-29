@@ -21,7 +21,7 @@ public class PedidoService implements Serializable {
 	private PedidoRepository dao;
 
 	@Transacional
-	public void salvar(Pedido obj) {
+	public Pedido salvar(Pedido obj) {
 		if (obj.getId() == null) {
 			obj.setDataCriacao(new Date());
 		}
@@ -33,9 +33,9 @@ public class PedidoService implements Serializable {
 		}
 
 		if (obj.isValorTotalNegativo()) {
-			throw new NegocioException("Valor total do pedido n„o pode ser negativo.");
+			throw new NegocioException("Valor total do pedido n√£o pode ser negativo.");
 		}
-		dao.salvar(obj);
+		return dao.salvar(obj);
 	}
 
 	@Transacional

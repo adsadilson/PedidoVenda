@@ -16,10 +16,10 @@ public class EnderecoEntrega implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(nullable = false, length = 150)
+	@Column(length = 150)
 	private String logradouro;
 
-	@Column(nullable = false, length = 20)
+	@Column(length = 20)
 	private String numero;
 
 	@Column(length = 150)
@@ -29,14 +29,14 @@ public class EnderecoEntrega implements Serializable {
 	@ManyToOne
 	private Cidade cidade;
 
-	@Column(nullable = false, length = 60)
+	@Column(length = 60)
 	private String bairro;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 2)
+	@Column(length = 2)
 	private Estado uf;
 
-	@Column(nullable = false, length = 10)
+	@Column(length = 10)
 	private String cep;
 
 	public String getLogradouro() {

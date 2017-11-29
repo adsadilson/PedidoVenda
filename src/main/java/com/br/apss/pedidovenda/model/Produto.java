@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 
 import com.br.apss.pedidovenda.enums.TipoProduto;
+import com.br.apss.pedidovenda.util.NegocioException;
 
 @Entity
 @Table(name = "produto")
@@ -248,6 +249,18 @@ public class Produto implements Serializable {
 	@Override
 	public String toString() {
 		return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
+	}
+
+	public void baixarEstoque(BigDecimal quantidade) {
+		BigDecimal novaQuantidade = this.getQuantidade().subtract(quantidade);
+
+		if (novaQuantidade.compareTo(BigDecimal.ZERO) < 0) {
+			throw new NegocioException(
+					"Não há disponibilidade no estoque de " + quantidade + " itens do produto " + this.getNome() + ".");
+		}
+
+		this.setQuantidade(novaQuantidade);
+
 	}
 
 }

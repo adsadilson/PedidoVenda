@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.enterprise.inject.Produces;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,6 +51,8 @@ public class CadastroPedidoBean implements Serializable {
 	@Inject
 	private ProdutoService produtoService;
 
+	@Produces
+	@PedidoEdicao
 	private Pedido pedido;
 
 	private String codigoBarra;
@@ -139,7 +142,7 @@ public class CadastroPedidoBean implements Serializable {
 				this.setCodigoBarra(this.getProdutoLinhaEditavel().getCodigoBarra());
 			} else {
 				this.achou = false;
-				Messages.addGlobalInfo("Produto não localizado.");
+				Messages.addGlobalInfo("Produto nï¿½o localizado.");
 			}
 			// this.carregarProdutoLinhaEditavel();
 		}
