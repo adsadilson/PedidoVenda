@@ -2,6 +2,7 @@ package com.br.apss.pedidovenda.bean;
 
 import java.io.Serializable;
 
+import javax.enterprise.event.Event;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,7 +17,7 @@ import com.br.apss.pedidovenda.service.EmissaoPedidoService;
 public class EmissaoPedidoBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Inject
 	private EmissaoPedidoService emissaoPedidoService;
 
@@ -24,12 +25,14 @@ public class EmissaoPedidoBean implements Serializable {
 	@PedidoEdicao
 	private Pedido pedido;
 
+	@Inject
+	private Event<PedidoAlteradoEvent> pedidoAlteradoEvent;
+
 	public void emitirPedido() {
 		this.pedido.removerItemVazio();
 		try {
 			this.pedido = this.emissaoPedidoService.emitir(this.pedido);
-			// this.pedidoAlteradoEvent.fire(new
-			// PedidoAlteradoEvent(this.pedido));
+			this.pedidoAlteradoEvent.fire(new PedidoAlteradoEvent(this.pedido));
 
 			Messages.addGlobalInfo("Pedido emitido com sucesso!");
 		} finally {

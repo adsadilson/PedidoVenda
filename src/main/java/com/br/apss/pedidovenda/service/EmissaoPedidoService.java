@@ -22,7 +22,7 @@ public class EmissaoPedidoService implements Serializable {
 		pedido = this.pedidoService.salvar(pedido);
 		if (pedido.isNaoEmissivel()) {
 			throw new NegocioException(
-					"Pedido n√£o pode ser emitido com status " + pedido.getStatus().getDescricao() + ".");
+					"Pedido n„o pode ser emitido com status " + pedido.getStatus().getDescricao() + ".");
 		}
 		this.estoqueService.baixarItensEstoque(pedido);
 		pedido.setStatus(StatusPedido.EMITIDO);

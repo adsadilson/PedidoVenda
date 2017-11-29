@@ -27,6 +27,11 @@ public class PedidoService implements Serializable {
 		}
 		
 		obj.recalcularValorTotal();
+		
+		if (obj.isNaoAlteravel()) {
+			throw new NegocioException("Pedido não pode ser alterado no status "
+					+ obj.getStatus().getDescricao() + ".");
+		}
 
 		if (obj.getItens().isEmpty()) {
 			throw new NegocioException("O pedido deve possuir pelo menos um item.");

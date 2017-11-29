@@ -121,6 +121,7 @@
 							<p:column headerText="Quantidade"
 								style="text-align: center; width: 100px">
 								<p:inputText id="qtde" size="8" value="#{item.quantidade}"
+									disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 									onkeyup="somenteNumeros(this)" style="text-align: center;"
 									onkeypress="event.keyCode==13?$(this).val()!=''?setfocus('tabelaItens:0:cod'):'':''">
 									<p:ajax event="change" process="@this" update="tabelaItens"
@@ -194,6 +195,7 @@
 
 									<p:outputLabel value="Vendedor" for="vendedor" />
 									<p:selectOneMenu id="vendedor" style="width:80%;"
+										disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 										required="true" requiredMessage="Selecione o vendedor"
 										value="#{cadastroPedidoBean.pedido.vendedor}">
 										<f:selectItem itemLabel="Selecione" />
@@ -208,6 +210,7 @@
 
 									<p:outputLabel value="Cliente" for="cliente" />
 									<p:autoComplete id="cliente" size="33" dropdown="false"
+										disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 										required="true" requiredMessage="Selecione o cliente"
 										value="#{cadastroPedidoBean.pedido.cliente}" var="cliente"
 										itemLabel="#{cliente.nome}" itemValue="#{cliente}"
@@ -216,6 +219,7 @@
 
 									<p:outputLabel value="Forma de Pagamento" for="formaPagamento" />
 									<p:selectOneMenu id="formaPagamento" required="true"
+										disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 										requiredMessage="Selecione a forma de pagamento"
 										value="#{cadastroPedidoBean.pedido.formaPagamento}">
 										<f:selectItem itemLabel="Selecione" />
@@ -226,6 +230,7 @@
 
 									<p:outputLabel value="Valor do frete" for="valorFrete" />
 									<p:inputNumber size="10" id="valorFrete" emptyValue="empty"
+										disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 										value="#{cadastroPedidoBean.pedido.valorFrete}" symbol="R$ "
 										decimalSeparator="," thousandSeparator=".">
 										<p:ajax event="change" process="@this" update="totalPedido"
@@ -241,6 +246,7 @@
 
 									<p:outputLabel value="Valor de desconto" for="valorDesconto" />
 									<p:inputNumber size="10" id="valorDesconto" emptyValue="empty"
+										disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 										value="#{cadastroPedidoBean.pedido.valorDesconto}"
 										symbol="R$ " decimalSeparator="," thousandSeparator=".">
 										<p:ajax event="change" process="@this" update="totalPedido"
@@ -331,16 +337,21 @@
 						<p:toolbar style="margin-top: 5px" styleClass="semPreenchimento">
 							<p:toolbarGroup>
 								<p:commandButton value="Salvar" id="botaoSalvar"
+									disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"
 									icon="fa fa-save" action="#{cadastroPedidoBean.salvar}"
-									update="panelEndereco panelObs panelPrincipal" />
+									update="@form" />
 								<p:button value="Novo" icon="fa fa-file-o"
 									style="margin-left:3px; margin-right:3px;"
 									outcome="/pages/cadastros/pedido/cadastroPedido" />
 								<p:separator />
 								<p:commandButton value="Emitir"
+									disabled="#{cadastroPedidoBean.pedido.naoEmissivel}"
 									action="#{emissaoPedidoBean.emitirPedido}" process="@form"
 									update="@form" />
 								<p:commandButton value="Cancelar"
+									disabled="#{cadastroPedidoBean.pedido.naoCancelavel}"
+									action="#{cancelamentoPedidoBean.cancelarPedido}"
+									process="@this" update="@form"
 									style="margin-left:3px; margin-right:3px;" />
 								<p:commandButton value="Enviar por e-mail" />
 								<p:separator />

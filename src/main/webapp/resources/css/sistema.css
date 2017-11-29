@@ -53,6 +53,10 @@ header > div {
 	width: 301px !important;
 }
 
+.ui-state-disabled {
+	opacity: .90 !important;
+}
+
 
 #conteudo {
 	padding: 0px 8px

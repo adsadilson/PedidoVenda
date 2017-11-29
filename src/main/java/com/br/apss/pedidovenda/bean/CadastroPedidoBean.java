@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -83,9 +84,8 @@ public class CadastroPedidoBean implements Serializable {
 	public void salvar() {
 		this.pedido.removerItemVazio();
 		try {
-			pedidoService.salvar(pedido);
+			this.pedido = pedidoService.salvar(pedido);
 			Messages.addGlobalInfo("Registro salvor com sucesso.");
-			limpar();
 		} finally {
 			this.pedido.adicionarItemVazio();
 		}
@@ -93,6 +93,10 @@ public class CadastroPedidoBean implements Serializable {
 
 	private void limpar() {
 		pedido = new Pedido();
+	}
+	
+	public void pedidoAlterado(@Observes PedidoAlteradoEvent event) {
+		this.pedido = event.getPedido();
 	}
 
 	public FormaPagamento[] getFormaPagto() {
@@ -142,7 +146,7 @@ public class CadastroPedidoBean implements Serializable {
 				this.setCodigoBarra(this.getProdutoLinhaEditavel().getCodigoBarra());
 			} else {
 				this.achou = false;
-				Messages.addGlobalInfo("Produto nï¿½o localizado.");
+				Messages.addGlobalInfo("Produto não localizado.");
 			}
 			// this.carregarProdutoLinhaEditavel();
 		}
@@ -159,7 +163,7 @@ public class CadastroPedidoBean implements Serializable {
 
 				if (this.produtoLinhaEditavel != null) {
 					if (this.existeItemComProduto(this.produtoLinhaEditavel)) {
-						Messages.addGlobalWarn("JÃ¡ existe um item no pedido com o produto informado.");
+						Messages.addGlobalWarn("Já¡ existe um item no pedido com o produto informado.");
 					} else {
 						item.setProduto(this.produtoLinhaEditavel);
 						item.setValorUnitario(this.produtoLinhaEditavel.getVlrVenda());

@@ -2,6 +2,7 @@ package com.br.apss.pedidovenda.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,6 +71,9 @@ public class Produto implements Serializable {
 
 	@Column(name = "lucro", precision = 12, scale = 2)
 	private BigDecimal lucro = BigDecimal.ZERO;
+
+	@Column(name = "data_ultima_venda")
+	private Date dtUltimaVenda;
 
 	@ManyToOne
 	@JoinColumn(name = "unidade_medida_id")
@@ -221,6 +225,14 @@ public class Produto implements Serializable {
 		this.status = status;
 	}
 
+	public Date getDtUltimaVenda() {
+		return dtUltimaVenda;
+	}
+
+	public void setDtUltimaVenda(Date dtUltimaVenda) {
+		this.dtUltimaVenda = dtUltimaVenda;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -255,12 +267,17 @@ public class Produto implements Serializable {
 		BigDecimal novaQuantidade = this.getQuantidade().subtract(quantidade);
 
 		if (novaQuantidade.compareTo(BigDecimal.ZERO) < 0) {
-			throw new NegocioException(
-					"NÃ£o hÃ¡ disponibilidade no estoque de " + quantidade + " itens do produto " + this.getNome() + ".");
+			throw new NegocioException("Não há¡ disponibilidade no estoque de " + quantidade + " itens do produto "
+					+ this.getNome() + ".");
 		}
-
+		
+		this.setDtUltimaVenda(new Date());
 		this.setQuantidade(novaQuantidade);
 
+	}
+
+	public void adicionarEstoque(BigDecimal quantidade) {
+		this.setQuantidade(this.getQuantidade().add(quantidade));
 	}
 
 }
