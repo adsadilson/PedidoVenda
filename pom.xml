@@ -194,7 +194,7 @@
 			<version>2.6.1</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- Abstração para envio de e-mails -->
 		<dependency>
 			<groupId>com.outjected</groupId>
@@ -203,13 +203,32 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Requerido para envio de e-mails -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
-			<scope>compile</scope>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.6</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/smtp -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>smtp</artifactId>
+			<version>1.4.5</version>
+		</dependency>
+
+
 
 
 	</dependencies>

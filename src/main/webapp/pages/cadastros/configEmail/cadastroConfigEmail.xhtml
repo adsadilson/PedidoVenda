@@ -1,0 +1,93 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Configuração de Envio de E-mail</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+.rotulo {
+	width: 100px;
+}
+</style>
+
+		<f:metadata>
+			<o:viewParam name="codigo"
+				value="#{cadastroConfigEmailBean.configEmail}" />
+			<o:viewAction action="#{cadastroConfigEmailBean.inicializar()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			<h1>#{cadastroConfigEmailBean.configEmail.id != null ? 'Edição
+				de Configuração de E-mail' : 'Nova Configuração de E-mail'}</h1>
+
+			<p:growl autoUpdate="true" />
+
+			<p:focus for="nome" />
+
+
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" id="botaoSalvar" icon="fa fa-save"
+						action="#{cadastroConfigEmailBean.salvar}" update="painel" />
+					<p:button value="Limpar" icon="fa fa-eraser"
+						outcome="/pages/cadastros/configEmail/cadastroConfigEmail" />
+					<p:button value="Voltar" icon="fa fa-refresh"
+						outcome="/pages/cadastros/configEmail/listaConfigEmail" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panel style="margin-top: 20px">
+
+				<h:panelGrid columns="2" id="painel" style="width: 100%;"
+					columnClasses="rotulo">
+
+					<p:outputLabel value="SMTP" for="nome" />
+					<p:inputText id="nome"
+						style="text-transform: lowercase; width: 25%" required="true"
+						requiredMessage="O campo 'SMTP' é obrigatório."
+						value="#{cadastroConfigEmailBean.configEmail.smtp}" />
+
+					<p:outputLabel value="Porta" for="porta" />
+					<p:inputText id="porta" style="width:15%" maxlength="80"
+						required="true" requiredMessage="O campo 'PORTA' é obrigatório."
+						value="#{cadastroConfigEmailBean.configEmail.porta}" />
+
+					<p:outputLabel value="SSL" />
+					<p:selectBooleanCheckbox
+						value="#{cadastroConfigEmailBean.configEmail.ssl}" />
+
+					<p:outputLabel value="Login" for="login" />
+					<p:inputText id="login"
+						style="text-transform: lowercase; width:25%" maxlength="80"
+						required="true" requiredMessage="O campo 'LOGIN' é obrigatório."
+						value="#{cadastroConfigEmailBean.configEmail.login}" />
+
+					<p:outputLabel value="Senha" for="password" />
+					<p:password id="password" required="true" redisplay="true"
+						value="#{cadastroConfigEmailBean.configEmail.senha}"
+						match="confirmacaoSenha"
+						validatorMessage="Os campos 'SENHA' não são iguais."
+						requiredMessage="O campo 'SENHA' é obrigatório."
+						style="width: 15%" maxlength="12" />
+
+					<p:outputLabel value="Confirmação" for="confirmacaoSenha" />
+					<p:password id="confirmacaoSenha" required="true"
+						requiredMessage="O campo 'CONFIRMAÇÃO' é obrigatório."
+						style="width: 15%" maxlength="12" />
+
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

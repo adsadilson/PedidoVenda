@@ -1,0 +1,115 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Configuração de Envio de E-mail</ui:define>
+
+	<ui:define name="corpo">
+
+		<h:form prependId="false">
+
+			<h1>Configuração de envio de e-mail</h1>
+
+			<p:growl autoUpdate="true" showDetail="3000" />
+
+			<p:focus />
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+				<p:toolbarGroup>
+					<p:button value="Novo" icon="fa fa-file-o"
+						outcome="/pages/cadastros/configEmail/cadastroConfigEmail" />
+
+					<p:commandButton icon="fa fa-download" title="Exportar para XLS"
+						ajax="false" immediate="true">
+						<p:dataExporter type="xls" target="tblConfigEmail"
+							fileName="configEmails" />
+					</p:commandButton>
+
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" icon="fa fa-power-off" outcome="/home" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="tblConfigEmail"
+				value="#{listaConfigEmailBean.emais}" var="configEmail"
+				style="margin-top: 20px" lazy="true"
+				emptyMessage="Nenhum registro encontrado." rows="11"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
+				{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}">
+
+				<p:column headerText="Ação" style="width: 70px; text-align: center"
+					exportable="false">
+					<p:button icon="ui-icon-pencil" title="Editar"
+						outcome="/pages/cadastros/configEmail/cadastroConfigEmail"
+						styleClass="semPreenchimento">
+						<f:param name="codigo" value="#{configEmail.id}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						styleClass="semPreenchimento"
+						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
+						update="confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{listaConfigEmailBean.configEmailSelecionada}"
+							value="#{configEmail}" />
+					</p:commandButton>
+				</p:column>
+
+				<p:column headerText="Código"
+					style="text-align: center; width: 70px" sortBy="#{configEmail.id}">
+					<h:outputText value="#{configEmail.id}" />
+				</p:column>
+
+				<p:column headerText="SMTP" style="width: 250px"
+					sortBy="#{configEmail.smtp}">
+					<h:outputText value="#{configEmail.smtp}" />
+				</p:column>
+
+				<p:column headerText="Porta" style="text-align: center; width: 60px"
+					sortBy="#{configEmail.porta}">
+					<h:outputText value="#{configEmail.porta}" />
+				</p:column>
+
+				<p:column headerText="SSL" style="text-align: center; width: 60px"
+					sortBy="#{configEmail.ssl}">
+					<h:outputText value="#{configEmail.ssl ? 'SIM' : 'NÃO'}" />
+				</p:column>
+
+				<p:column headerText="Login" sortBy="#{configEmail.login}" style="width: 350px">
+					<h:outputText value="#{configEmail.login}" />
+				</p:column>
+
+				<p:column headerText="Status"
+					style="text-align: center; width: 100px">
+					<h:outputText value="#{configEmail.status ? 'Em uso' : 'Livre'}" />
+				</p:column>
+
+				<p:column headerText="">
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog header="Confirmação de Exclusão"
+				widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+				<f:facet name="message">
+					<h:outputText value="Tem certeza que deseja excluir o registro:" />
+					<br />
+					<h:outputText
+						value="#{listaConfigEmailBean.configEmailSelecionada.login}  ?" />
+				</f:facet>
+				<p:button value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					update="tblConfigEmail" action="#{listaConfigEmailBean.excluir()}"
+					process="@this" />
+			</p:confirmDialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
