@@ -14,8 +14,8 @@ public class Email {
 	            email.setSSL(true); 
 	            email.setAuthentication("adilson.paraguai.31@gmail.com","*news2016*");   
 	              
-	            email.addTo("suporte@redereforco.com.br");  //aqui voce coloca o seu email de remetente.
-	            email.setFrom("Adilson.paraguai.31@gmail.com");   
+	            email.addTo("suporte@redereforco.com.br");  //aqui voce coloca o seu email de destinatario.
+	            email.setFrom("adilson.paraguai.31@gmail.com");   
 	            email.setSubject("Rescuperação de Senha SimuladoOnline");   
 	            email.setMsg("Olá, "   
 	                        + "BUSCA NO BANCO"+"\n"   

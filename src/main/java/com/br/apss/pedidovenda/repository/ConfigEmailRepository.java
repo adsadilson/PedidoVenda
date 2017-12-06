@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import com.br.apss.pedidovenda.model.Categoria;
 import com.br.apss.pedidovenda.model.ConfigEmail;
 import com.br.apss.pedidovenda.util.NegocioException;
 
@@ -41,9 +40,9 @@ public class ConfigEmailRepository implements Serializable {
 		return manager.createQuery("from ConfigEmail order by login", ConfigEmail.class).getResultList();
 	}
 
-	public Categoria emailEmUso() {
+	public ConfigEmail emailEmUso() {
 		try {
-			return manager.createQuery("from ConfigEmail where status = 'true'", Categoria.class).getSingleResult();
+			return manager.createQuery("from ConfigEmail where status = 'true'", ConfigEmail.class).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}

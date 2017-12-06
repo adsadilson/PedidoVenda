@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.br.apss.pedidovenda.model.Categoria;
 import com.br.apss.pedidovenda.model.ConfigEmail;
 import com.br.apss.pedidovenda.repository.ConfigEmailRepository;
 import com.br.apss.pedidovenda.util.Transacional;
@@ -36,7 +35,7 @@ public class ConfigEmailService implements Serializable {
 		return dao.porId(id);
 	}
 	
-	public Categoria emailEmUso() {
+	public ConfigEmail emailEmUso() {
 		return dao.emailEmUso();
 	}
 

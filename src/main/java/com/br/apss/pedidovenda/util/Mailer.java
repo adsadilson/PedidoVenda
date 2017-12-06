@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmAnyValueMappingType;
-
 import com.outjected.email.api.MailMessage;
 import com.outjected.email.api.SessionConfig;
 import com.outjected.email.impl.MailMessageImpl;

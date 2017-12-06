@@ -1,35 +1,34 @@
 package com.br.apss.pedidovenda.util;
 
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
+import com.br.apss.pedidovenda.model.ConfigEmail;
+import com.br.apss.pedidovenda.service.ConfigEmailService;
 import com.outjected.email.api.SessionConfig;
 import com.outjected.email.impl.SimpleMailConfig;
 
 public class MailConfigProducer {
 
+	@Inject
+	private ConfigEmailService configEmailService;
+
 	@Produces
 	@ApplicationScoped
 	public SessionConfig getMailConfig() throws IOException {
-		Properties props = new Properties();
-		props.load(getClass().getResourceAsStream("/mail.properties"));
-		
-		System.out.println("host: "+props.getProperty("mail.server.host"));
-		System.out.println("porta: "+props.getProperty("mail.server.port"));
-		System.out.println("user: "+props.getProperty("mail.username"));
-		System.out.println("senha: "+props.getProperty("mail.password"));
-		
+
+		ConfigEmail conf = configEmailService.emailEmUso();
 
 		SimpleMailConfig config = new SimpleMailConfig();
-		config.setServerHost(props.getProperty("mail.server.host"));
-		config.setServerPort(Integer.parseInt(props.getProperty("mail.server.port")));
-		config.setEnableSsl(Boolean.parseBoolean(props.getProperty("mail.enable.ssl")));
-		config.setAuth(Boolean.parseBoolean(props.getProperty("mail.auth")));
-		config.setUsername(props.getProperty("mail.username"));
-		config.setPassword(props.getProperty("mail.password"));
+		config.setServerHost(conf.getSmtp());
+		config.setServerPort(conf.getPorta());
+		config.setEnableSsl(conf.getSsl());
+		config.setAuth(true);
+		config.setUsername(conf.getLogin());
+		config.setPassword(conf.getSenha());
 
 		return config;
 	}
