@@ -12,6 +12,7 @@ import org.apache.commons.mail.SimpleEmail;
 import org.apache.velocity.tools.generic.NumberTool;
 
 import com.br.apss.pedidovenda.model.Pedido;
+import com.br.apss.pedidovenda.service.PedidoService;
 import com.br.apss.pedidovenda.util.ConfigEnvioEmail;
 import com.br.apss.pedidovenda.util.FacesUtil;
 import com.br.apss.pedidovenda.util.Mailer;
@@ -29,7 +30,10 @@ public class EnvioPedidoEmailBean implements Serializable {
 
 	@Inject
 	private Mailer mailer;
-
+	
+	@Inject
+	private PedidoService pedidoService;
+	
 	@Inject
 	@PedidoEdicao
 	private Pedido pedido;
@@ -53,11 +57,23 @@ public class EnvioPedidoEmailBean implements Serializable {
 	public void enviarPedido() {
 		MailMessage message = mailer.novaMensagem();
 
-		message.to(this.pedido.getCliente().getEmail())
-				.subject("Pedido " + this.pedido.getId())
+		message.to(this.pedido.getCliente().getEmail()).subject("Pedido " + this.pedido.getId())
 				.bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/pedido.template")))
 				.put("pedido", this.pedido).put("numberTool", new NumberTool()).put("locale", new Locale("pt", "BR"))
 				.send();
+
+		FacesUtil.addInfoMessage("Pedido enviado por e-mail com sucesso!");
+	}
+
+	public void enviarPedidoPorEmail(Pedido p) {
+
+		Pedido pedido = pedidoService.buscarPeidoComItens(p.getId());
+		
+		MailMessage message = mailer.novaMensagem();
+
+		message.to(pedido.getCliente().getEmail()).subject("Pedido " + pedido.getId())
+				.bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/pedido.template")))
+				.put("pedido", pedido).put("numberTool", new NumberTool()).put("locale", new Locale("pt", "BR")).send();
 
 		FacesUtil.addInfoMessage("Pedido enviado por e-mail com sucesso!");
 	}

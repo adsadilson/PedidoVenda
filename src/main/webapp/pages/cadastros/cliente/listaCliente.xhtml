@@ -99,14 +99,16 @@
 					width="130">
 					<h:outputText value="#{cliente.cpfCnpj}" />
 				</p:column>
+				
+				<p:column headerText="E-mail" style="width: 300px" sortBy="#{cliente.email}">
+					<h:outputText value="#{cliente.email}" />
+				</p:column>
 
 				<p:column headerText="Status" sortBy="#{cliente.status}"
 					style="text-align: center; width: 100px">
 					<h:outputText value="#{cliente.status ? 'ATIVO' : 'INATIVO'}" />
 				</p:column>
 
-				<p:column headerText="">
-				</p:column>
 			</p:dataTable>
 
 			<p:confirmDialog header="Confirmação de Exclusão"

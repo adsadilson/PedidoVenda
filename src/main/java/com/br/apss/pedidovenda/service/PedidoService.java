@@ -75,5 +75,9 @@ public class PedidoService implements Serializable {
 	public int qtdeFiltrados(PedidoFilter filtro) {
 		return dao.qtdeFiltrados(filtro);
 	}
+	
+	public Pedido buscarPeidoComItens(Long id) {
+		return dao.buscarPeidoComItens(id);
+	}
 
 }

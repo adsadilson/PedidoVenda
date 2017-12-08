@@ -11,25 +11,27 @@
             </tr>
             <tr>
                 <td>Valor total:</td>
-                <td>$numberTool.format("¤ #0.00", $pedido.valorTotal, $locale)</td>
+                <td><span style="color:#FF0000; font-size:18px">$numberTool.format("¤ #0.00", $pedido.valorTotal, $locale)</span></td>
             </tr>
         </table>
         
         <br/>
         <table border="1" cellspacing="0" cellpadding="3">
             <tr>
-                <th>Produto</th>
-                <th>Valor unitário</th>
-                <th>Quantidade</th>
-                <th>Valor total</th>
+                <th width="101">Código Barra</th>
+                <th width="60%">Produto</th>
+                <th width="101">Valor unitário</th>
+                <th width="101" align=center>Quantidade</th>
+                <th width="101">Valor total</th>
             </tr>
             #foreach ($item in $pedido.itens)
             	#if ($item.produto.id)
 	            <tr>
+	                <td>$item.produto.codigoBarra</td>
 	                <td>$item.produto.nome</td>
-	                <td>$numberTool.format("¤ #0.00", $item.produto.vlrVenda, $locale)</td>
-	                <td>$item.quantidade</td>
-	                <td>$numberTool.format("¤ #0.00", $item.valorTotal, $locale)</td>
+	                <td align=right>$numberTool.format("¤ #0.00", $item.produto.vlrVenda, $locale)</td>
+	                <td align=center>$item.quantidade</td>
+	                <td align=right>$numberTool.format("¤ #0.00", $item.valorTotal, $locale)</td>
 	            </tr>
 	            #end
             #end

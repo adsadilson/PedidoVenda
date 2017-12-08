@@ -35,7 +35,7 @@ public class ListaPedidoBean implements Serializable {
 	public void excluir() {
 		pedidoService.excluir(this.pedidoSelecionada);
 		pesquisar();
-		FacesUtil.addInfoMessage("Pedido excluÃ­do com sucesso!");
+		FacesUtil.addInfoMessage("Pedido excluído com sucesso!");
 	}
 
 	@PostConstruct
@@ -75,6 +75,10 @@ public class ListaPedidoBean implements Serializable {
 
 		};
 
+	}
+	
+	public void enviarPedidoPorEmail(){
+		new EnvioPedidoEmailBean().enviarPedidoPorEmail(this.pedidoSelecionada);	
 	}
 
 	public void novoFiltro() {

@@ -38,7 +38,7 @@ public class PedidoRepository implements Serializable {
 			manager.flush();
 
 		} catch (Exception e) {
-			throw new NegocioException("Pedido n√£o pode ser exclu√≠do");
+			throw new NegocioException("Pedido n„o pode ser excluÌdo");
 		}
 	}
 
@@ -53,6 +53,11 @@ public class PedidoRepository implements Serializable {
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+	
+	public Pedido buscarPeidoComItens(Long id) {
+		return (Pedido) manager.createQuery("select p from Pedido p JOIN p.itens i where p.id =:id")
+				.setParameter("id", id).getSingleResult();
 	}
 
 	public Pedido porNomeEstado(String nome, Estado uf) {
