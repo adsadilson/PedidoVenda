@@ -38,7 +38,7 @@ public class UsuarioRepository implements Serializable {
 			manager.flush();
 
 		} catch (Exception e) {
-			throw new NegocioException("Usuï¿½rio nï¿½o pode ser excluï¿½da");
+			throw new NegocioException("Usuario não pode ser excluído");
 		}
 	}
 
@@ -69,7 +69,7 @@ public class UsuarioRepository implements Serializable {
 			return manager.createQuery("from Usuario where email = :email", Usuario.class)
 					.setParameter("email", email.toLowerCase()).getSingleResult();
 		} catch (NoResultException e) {
-			return null;
+			 throw new NegocioException("Usuario não localizado ser excluído");
 		}
 	}
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,11 +14,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.br.apss.pedidovenda.model.GrupoUsuario;
 import com.br.apss.pedidovenda.model.Usuario;
 import com.br.apss.pedidovenda.service.UsuarioService;
+import com.br.apss.pedidovenda.util.cdi.CDIServiceLocator;
 
 public class AppUserDetailsService implements UserDetailsService {
-	
-	@Inject
-	private UsuarioService usuarioService;
+
+	private UsuarioService usuarioService = CDIServiceLocator.getBean(UsuarioService.class);
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

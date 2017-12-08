@@ -6,7 +6,7 @@
 	
 	<factory>
 		<exception-handler-factory>
-			com.br.apss.pedidovenda.util.JsfExceptionHandlerFactory
+			com.br.apss.pedidovenda.util.jsf.JsfExceptionHandlerFactory
 		</exception-handler-factory>
 	</factory>
 

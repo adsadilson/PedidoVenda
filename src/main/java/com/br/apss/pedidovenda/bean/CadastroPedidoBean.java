@@ -25,6 +25,7 @@ import com.br.apss.pedidovenda.model.Produto;
 import com.br.apss.pedidovenda.model.Usuario;
 import com.br.apss.pedidovenda.model.filter.PessoaFilter;
 import com.br.apss.pedidovenda.model.filter.ProdutoFilter;
+import com.br.apss.pedidovenda.security.Seguranca;
 import com.br.apss.pedidovenda.service.CidadeService;
 import com.br.apss.pedidovenda.service.PedidoService;
 import com.br.apss.pedidovenda.service.PessoaService;
@@ -51,6 +52,9 @@ public class CadastroPedidoBean implements Serializable {
 
 	@Inject
 	private ProdutoService produtoService;
+	
+	@Inject
+	private Seguranca userLogado;
 
 	@Produces
 	@PedidoEdicao
@@ -93,6 +97,7 @@ public class CadastroPedidoBean implements Serializable {
 
 	private void limpar() {
 		pedido = new Pedido();
+		pedido.setVendedor(userLogado.getUsuarioLogado());
 	}
 	
 	public void pedidoAlterado(@Observes PedidoAlteradoEvent event) {
