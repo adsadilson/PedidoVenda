@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.br.apss.pedidovenda.model.Pessoa;
 import com.br.apss.pedidovenda.model.filter.PessoaFilter;
 import com.br.apss.pedidovenda.repository.PessoaRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class PessoaService implements Serializable {
 

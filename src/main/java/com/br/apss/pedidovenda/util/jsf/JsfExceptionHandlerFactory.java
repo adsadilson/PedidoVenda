@@ -1,4 +1,4 @@
-package com.br.apss.pedidovenda.util;
+package com.br.apss.pedidovenda.util.jsf;
 
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;

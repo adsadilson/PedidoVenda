@@ -1,4 +1,4 @@
-package com.br.apss.pedidovenda.util;
+package com.br.apss.pedidovenda.util.jpa;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.br.apss.pedidovenda.util;
+package com.br.apss.pedidovenda.util.jsf;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -15,6 +15,8 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.omnifaces.util.Messages;
+
+import com.br.apss.pedidovenda.util.NegocioException;
 
 
 public class JsfExceptionHandler extends ExceptionHandlerWrapper {

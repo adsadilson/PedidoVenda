@@ -9,7 +9,7 @@ import com.br.apss.pedidovenda.enums.TipoConta;
 import com.br.apss.pedidovenda.model.PlanoConta;
 import com.br.apss.pedidovenda.model.filter.PlanoContaFilter;
 import com.br.apss.pedidovenda.repository.PlanoContaRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class PlanoContaService implements Serializable {
 

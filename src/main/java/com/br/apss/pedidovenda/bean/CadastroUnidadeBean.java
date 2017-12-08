@@ -8,8 +8,8 @@ import javax.inject.Named;
 
 import com.br.apss.pedidovenda.model.UnidadeMedida;
 import com.br.apss.pedidovenda.service.UnidadeMedidaService;
-import com.br.apss.pedidovenda.util.FacesUtil;
 import com.br.apss.pedidovenda.util.NegocioException;
+import com.br.apss.pedidovenda.util.jsf.FacesUtil;
 
 @Named
 @ViewScoped

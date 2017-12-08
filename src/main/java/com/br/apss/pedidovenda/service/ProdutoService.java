@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.br.apss.pedidovenda.model.Produto;
 import com.br.apss.pedidovenda.model.filter.ProdutoFilter;
 import com.br.apss.pedidovenda.repository.ProdutoRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class ProdutoService implements Serializable {
 

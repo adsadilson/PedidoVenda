@@ -15,7 +15,7 @@ import org.primefaces.model.SortOrder;
 import com.br.apss.pedidovenda.model.Cidade;
 import com.br.apss.pedidovenda.model.filter.CidadeFilter;
 import com.br.apss.pedidovenda.service.CidadeService;
-import com.br.apss.pedidovenda.util.FacesUtil;
+import com.br.apss.pedidovenda.util.jsf.FacesUtil;
 
 @Named
 @ViewScoped

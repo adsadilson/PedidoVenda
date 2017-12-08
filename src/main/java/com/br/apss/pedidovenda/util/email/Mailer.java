@@ -1,4 +1,4 @@
-package com.br.apss.pedidovenda.util;
+package com.br.apss.pedidovenda.util.email;
 
 import java.io.Serializable;
 

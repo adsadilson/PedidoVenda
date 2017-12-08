@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import com.br.apss.pedidovenda.model.Usuario;
 import com.br.apss.pedidovenda.model.filter.UsuarioFilter;
 import com.br.apss.pedidovenda.repository.UsuarioRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class UsuarioService implements Serializable {
 

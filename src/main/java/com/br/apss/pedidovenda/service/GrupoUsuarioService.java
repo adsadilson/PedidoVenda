@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.br.apss.pedidovenda.model.GrupoUsuario;
 import com.br.apss.pedidovenda.model.filter.GrupoUsuarioFilter;
 import com.br.apss.pedidovenda.repository.GrupoUsuarioRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class GrupoUsuarioService implements Serializable {
 

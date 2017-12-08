@@ -8,7 +8,7 @@ import javax.inject.Named;
 
 import com.br.apss.pedidovenda.model.ConfigEmail;
 import com.br.apss.pedidovenda.service.ConfigEmailService;
-import com.br.apss.pedidovenda.util.FacesUtil;
+import com.br.apss.pedidovenda.util.jsf.FacesUtil;
 
 @Named
 @ViewScoped
@@ -34,7 +34,7 @@ public class CadastroConfigEmailBean implements Serializable {
 		 * configEmailService.porNome(configEmail.getNome()); if
 		 * (configEmailExistente != null &&
 		 * !configEmailExistente.equals(configEmail)) { throw new
-		 * NegocioException("Já existe uma Unidade de Medida com esse nome informado."
+		 * NegocioException("Jï¿½ existe uma Unidade de Medida com esse nome informado."
 		 * ); }
 		 */
 

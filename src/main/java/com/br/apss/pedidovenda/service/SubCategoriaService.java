@@ -9,7 +9,7 @@ import com.br.apss.pedidovenda.model.Categoria;
 import com.br.apss.pedidovenda.model.SubCategoria;
 import com.br.apss.pedidovenda.model.filter.SubCategoriaFilter;
 import com.br.apss.pedidovenda.repository.SubCategoriaRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class SubCategoriaService implements Serializable {
 

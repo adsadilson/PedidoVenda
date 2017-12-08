@@ -1,4 +1,4 @@
-package com.br.apss.pedidovenda.util;
+package com.br.apss.pedidovenda.util.jsf;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

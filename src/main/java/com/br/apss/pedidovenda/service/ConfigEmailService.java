@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import com.br.apss.pedidovenda.model.ConfigEmail;
 import com.br.apss.pedidovenda.repository.ConfigEmailRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class ConfigEmailService implements Serializable {
 

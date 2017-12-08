@@ -15,7 +15,7 @@ import org.primefaces.model.SortOrder;
 import com.br.apss.pedidovenda.model.Pedido;
 import com.br.apss.pedidovenda.model.filter.PedidoFilter;
 import com.br.apss.pedidovenda.service.PedidoService;
-import com.br.apss.pedidovenda.util.FacesUtil;
+import com.br.apss.pedidovenda.util.jsf.FacesUtil;
 
 @Named
 @ViewScoped
@@ -35,7 +35,7 @@ public class ListaPedidoBean implements Serializable {
 	public void excluir() {
 		pedidoService.excluir(this.pedidoSelecionada);
 		pesquisar();
-		FacesUtil.addInfoMessage("Pedido excluído com sucesso!");
+		FacesUtil.addInfoMessage("Pedido excluï¿½do com sucesso!");
 	}
 
 	@PostConstruct

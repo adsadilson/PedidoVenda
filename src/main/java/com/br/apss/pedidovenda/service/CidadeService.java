@@ -9,7 +9,7 @@ import com.br.apss.pedidovenda.enums.Estado;
 import com.br.apss.pedidovenda.model.Cidade;
 import com.br.apss.pedidovenda.model.filter.CidadeFilter;
 import com.br.apss.pedidovenda.repository.CidadeRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class CidadeService implements Serializable {
 

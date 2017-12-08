@@ -13,9 +13,9 @@ import org.apache.velocity.tools.generic.NumberTool;
 
 import com.br.apss.pedidovenda.model.Pedido;
 import com.br.apss.pedidovenda.service.PedidoService;
-import com.br.apss.pedidovenda.util.ConfigEnvioEmail;
-import com.br.apss.pedidovenda.util.FacesUtil;
-import com.br.apss.pedidovenda.util.Mailer;
+import com.br.apss.pedidovenda.util.email.ConfigEnvioEmail;
+import com.br.apss.pedidovenda.util.email.Mailer;
+import com.br.apss.pedidovenda.util.jsf.FacesUtil;
 import com.outjected.email.api.MailMessage;
 import com.outjected.email.impl.templating.velocity.VelocityTemplate;
 

@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import com.br.apss.pedidovenda.model.ItemPedido;
 import com.br.apss.pedidovenda.model.Pedido;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class EstoqueService implements Serializable {
 

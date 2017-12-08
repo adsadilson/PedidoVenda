@@ -20,8 +20,8 @@ import com.br.apss.pedidovenda.model.Pessoa;
 import com.br.apss.pedidovenda.model.Telefone;
 import com.br.apss.pedidovenda.service.CidadeService;
 import com.br.apss.pedidovenda.service.PessoaService;
-import com.br.apss.pedidovenda.util.FacesUtil;
 import com.br.apss.pedidovenda.util.NegocioException;
+import com.br.apss.pedidovenda.util.jsf.FacesUtil;
 
 @Named
 @ViewScoped

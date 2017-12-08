@@ -1,4 +1,4 @@
-package com.br.apss.pedidovenda.util;
+package com.br.apss.pedidovenda.util.email;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
@@ -16,17 +16,17 @@ public class Email {
 	              
 	            email.addTo("suporte@redereforco.com.br");  //aqui voce coloca o seu email de destinatario.
 	            email.setFrom("adilson.paraguai.31@gmail.com");   
-	            email.setSubject("Rescuperação de Senha SimuladoOnline");   
-	            email.setMsg("Olá, "   
+	            email.setSubject("Rescuperaï¿½ï¿½o de Senha SimuladoOnline");   
+	            email.setMsg("Olï¿½, "   
 	                        + "BUSCA NO BANCO"+"\n"   
-	                        + "Estamos enviando conforme solicitação seu Login e senha para acesso ao sistema. \n"   
+	                        + "Estamos enviando conforme solicitaï¿½ï¿½o seu Login e senha para acesso ao sistema. \n"   
 	                        +"\n"+ "Login:" + "BUSCA DO BANCO"+"\n" + "Senha:"   
 	                        + "NOVA SENHA");   
 	            email.send();   
 			System.out.println("Email enviado.");
 		} catch (EmailException ex) {
 			ex.printStackTrace();
-			System.out.println("Email não enviado.");
+			System.out.println("Email nï¿½o enviado.");
 		}
 	}
 }

@@ -11,7 +11,7 @@ import com.br.apss.pedidovenda.model.Pedido;
 import com.br.apss.pedidovenda.model.filter.PedidoFilter;
 import com.br.apss.pedidovenda.repository.PedidoRepository;
 import com.br.apss.pedidovenda.util.NegocioException;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class PedidoService implements Serializable {
 
@@ -29,7 +29,7 @@ public class PedidoService implements Serializable {
 		obj.recalcularValorTotal();
 		
 		if (obj.isNaoAlteravel()) {
-			throw new NegocioException("Pedido não pode ser alterado no status "
+			throw new NegocioException("Pedido nï¿½o pode ser alterado no status "
 					+ obj.getStatus().getDescricao() + ".");
 		}
 

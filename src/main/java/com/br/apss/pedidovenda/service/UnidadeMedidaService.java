@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.br.apss.pedidovenda.model.UnidadeMedida;
 import com.br.apss.pedidovenda.model.filter.UnidadeMedidaFilter;
 import com.br.apss.pedidovenda.repository.UnidadeMedidaRepository;
-import com.br.apss.pedidovenda.util.Transacional;
+import com.br.apss.pedidovenda.util.jpa.Transacional;
 
 public class UnidadeMedidaService implements Serializable {
 
