@@ -85,7 +85,8 @@
 			</p:panel>
 
 			<h:panelGrid columns="2">
-				<p:selectOneMenu id="grupo" value="#{cadastroUsuarioBean.grupo}">
+				<p:selectOneMenu id="grupo" value="#{cadastroUsuarioBean.grupo}"
+				converter="omnifaces.SelectItemsConverter">
 					<f:selectItem itemLabel="Selecione" value="#{null}" />
 					<f:selectItems value="#{cadastroUsuarioBean.grupos}" var="grupo"
 						itemValue="#{grupo}" itemLabel="#{grupo.nome}" />

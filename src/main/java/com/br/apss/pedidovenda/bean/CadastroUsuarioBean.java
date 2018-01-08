@@ -46,7 +46,7 @@ public class CadastroUsuarioBean implements Serializable {
 	public void salvar() {
 		Usuario usuarioExistente = usuarioService.porEmail(usuario.getEmail());
 		if (usuarioExistente != null && !usuarioExistente.equals(usuario)) {
-			throw new NegocioException("J� existe uma Usu�rio com esse 'E-MAIL' informado.");
+			throw new NegocioException("Já existe uma Usuário com esse 'E-MAIL' informado.");
 		}
 		usuarioService.salvar(usuario);
 		Messages.addGlobalInfo("Registro salvor com sucesso.");
