@@ -8,25 +8,23 @@ public class Email {
 		SimpleEmail email = new SimpleEmail();
 		try {
 			System.out.println("Enviando...");
-			   // email.setDebug(true);   
-	            email.setHostName("smtp.gmail.com");  
-	            email.setSmtpPort(465);
-	            email.setSSL(true); 
-	            email.setAuthentication("adilson.paraguai.31@gmail.com","*news2016*");   
-	              
-	            email.addTo("suporte@redereforco.com.br");  //aqui voce coloca o seu email de destinatario.
-	            email.setFrom("adilson.paraguai.31@gmail.com");   
-	            email.setSubject("Rescupera��o de Senha SimuladoOnline");   
-	            email.setMsg("Ol�, "   
-	                        + "BUSCA NO BANCO"+"\n"   
-	                        + "Estamos enviando conforme solicita��o seu Login e senha para acesso ao sistema. \n"   
-	                        +"\n"+ "Login:" + "BUSCA DO BANCO"+"\n" + "Senha:"   
-	                        + "NOVA SENHA");   
-	            email.send();   
+			// email.setDebug(true);
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(465);
+			email.setSSL(true);
+			email.setAuthentication("adilson.paraguai.31@gmail.com", "*news2016*");
+
+			email.addTo("adilson.paraguai@yahoo.com.br"); // aqui voce coloca o seu email de destinatario.
+			email.setFrom("adilson.paraguai.31@gmail.com");
+			email.setSubject("Rescupera��o de Senha SimuladoOnline");
+			email.setMsg("Ol�, " + "BUSCA NO BANCO" + "\n"
+					+ "Estamos enviando conforme solicitação seu Login e senha para acesso ao sistema. \n" + "\n"
+					+ "Login:" + "BUSCA DO BANCO" + "\n" + "Senha:" + "NOVA SENHA");
+			email.send();
 			System.out.println("Email enviado.");
 		} catch (EmailException ex) {
 			ex.printStackTrace();
-			System.out.println("Email n�o enviado.");
+			System.out.println("Email não enviado.");
 		}
 	}
 }

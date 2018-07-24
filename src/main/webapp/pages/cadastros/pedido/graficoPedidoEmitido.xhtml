@@ -1,0 +1,61 @@
+<ui:composition template="/WEB-INF/template/layout-padrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Gráfico Pedido Emitido</ui:define>
+
+	<ui:define name="corpo">
+
+		<style type="text/css">
+<!--
+.rotulo {
+	width: 100px;
+}
+-->
+</style>
+
+		<h:form prependId="false">
+
+			<h1>Gráfico Pedido Emitido</h1>
+
+			<p:growl autoUpdate="true" showDetail="3000" />
+
+			<p:toolbar style="margin-top: 20px" styleClass="semPreenchimento">
+
+				<p:toolbarGroup>
+				
+					<p:outputLabel value="INFORME O PERIODO"/>
+
+					<p:calendar size="8" pattern="dd/MM/yyyy" locale="pt_BR"
+						style="margin-left:5px;" id="dtInicio"
+						onfocus="mascaraDtCalendar('dtInicio')" styleClass="cssCalender">
+					</p:calendar>
+
+					<p:outputLabel value="ATÉ"
+						style="margin-left:5px; margin-right:5px; color:black" />
+
+					<p:calendar size="8" pattern="dd/MM/yyyy" locale="pt_BR" id="dtFim"
+						onfocus="mascaraDtCalendar('dtFim')" styleClass="cssCalender">
+						<p:ajax event="dateSelect" process="@this" />
+					</p:calendar>
+
+					<p:commandButton icon="fa fa-search" value="PESQUISA"
+						style="margin-left:10px;" />
+
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:button value="Fechar" icon="fa fa-power-off" outcome="/home" />
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+		</h:form>
+
+
+
+	</ui:define>
+</ui:composition>

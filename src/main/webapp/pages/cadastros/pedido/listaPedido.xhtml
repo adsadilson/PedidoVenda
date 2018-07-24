@@ -71,7 +71,7 @@
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} 
 				{LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {JumpToPageDropdown}">
 
-				<p:column headerText="Ação" style="width: 115px; text-align: center"
+				<p:column headerText="Ação" style="width: 170px; text-align: center"
 					exportable="false">
 					<p:button icon="ui-icon-pencil" title="Editar"
 						outcome="/pages/cadastros/pedido/cadastroPedido"
@@ -84,6 +84,16 @@
 						update="confirmacaoExclusaoDialog">
 						<f:setPropertyActionListener
 							target="#{listaPedidoBean.pedidoSelecionada}" value="#{pedido}" />
+					</p:commandButton>
+					<p:commandButton icon="fa fa-ban" title="Cancelar"
+						disabled="#{pedido.status=='CANCELADO'}" process="@this"
+						action="#{envioPedidoEmailBean.enviarPedidoPorEmail(pedido)}"
+						styleClass="semPreenchimento">
+					</p:commandButton>
+					<p:commandButton icon="fa fa-print" title="Emitir"
+						disabled="true" process="@this"
+						action="#{envioPedidoEmailBean.enviarPedidoPorEmail(pedido)}"
+						styleClass="semPreenchimento">
 					</p:commandButton>
 					<p:commandButton icon="fa fa-envelope-o" title="Enviar por e-mail"
 						disabled="#{pedido.status=='CANCELADO'}" process="@this"

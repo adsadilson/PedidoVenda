@@ -30,10 +30,10 @@ public class EnvioPedidoEmailBean implements Serializable {
 
 	@Inject
 	private Mailer mailer;
-	
+
 	@Inject
 	private PedidoService pedidoService;
-	
+
 	@Inject
 	@PedidoEdicao
 	private Pedido pedido;
@@ -68,7 +68,7 @@ public class EnvioPedidoEmailBean implements Serializable {
 	public void enviarPedidoPorEmail(Pedido p) {
 
 		Pedido pedido = pedidoService.buscarPeidoComItens(p.getId());
-		
+
 		MailMessage message = mailer.novaMensagem();
 
 		message.to(pedido.getCliente().getEmail()).subject("Pedido " + pedido.getId())
